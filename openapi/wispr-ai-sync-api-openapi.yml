@@ -40,42 +40,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    IncidentStatusDetail:
-      properties:
-        state:
-          type: string
-          enum:
-          - degraded
-          - outage
-          title: State
-        message:
-          type: string
-          title: Message
-        affected_regions:
-          items:
-            type: string
-            enum:
-            - us
-            - europe
-            - apac
-          type: array
-          title: Affected Regions
-        started_at:
-          type: string
-          format: date-time
-          title: Started At
-        incident_url:
-          type: string
-          title: Incident Url
-      type: object
-      required:
-      - state
-      - message
-      - affected_regions
-      - started_at
-      - incident_url
-      title: IncidentStatusDetail
-      description: Active incident details returned in the status response.
     SyncCheckResponse:
       properties:
         changed:
@@ -112,6 +76,42 @@ components:
       - client_region
       title: SyncCheckResponse
       description: Response from ``GET /api/v1/sync/check``.
+    IncidentStatusDetail:
+      properties:
+        state:
+          type: string
+          enum:
+          - degraded
+          - outage
+          title: State
+        message:
+          type: string
+          title: Message
+        affected_regions:
+          items:
+            type: string
+            enum:
+            - us
+            - europe
+            - apac
+          type: array
+          title: Affected Regions
+        started_at:
+          type: string
+          format: date-time
+          title: Started At
+        incident_url:
+          type: string
+          title: Incident Url
+      type: object
+      required:
+      - state
+      - message
+      - affected_regions
+      - started_at
+      - incident_url
+      title: IncidentStatusDetail
+      description: Active incident details returned in the status response.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

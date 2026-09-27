@@ -259,6 +259,25 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CheckoutUrlResponse:
+      properties:
+        url:
+          type: string
+          title: Url
+      type: object
+      required:
+      - url
+      title: CheckoutUrlResponse
+      description: A Stripe checkout URL for the client to redirect to.
     BreakAwayPreview:
       properties:
         team_name:
@@ -330,6 +349,87 @@ components:
         null so the frontend can show a precise explanation instead of a generic
 
         "try again" fallback.'
+    UpdateCostCenterRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Name
+      type: object
+      required:
+      - name
+      title: UpdateCostCenterRequest
+      description: Request to rename a cost center.
+    CostCenterResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        enterprise_id:
+          type: string
+          format: uuid
+          title: Enterprise Id
+        name:
+          type: string
+          title: Name
+        status:
+          type: string
+          title: Status
+        billing_owner_user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Billing Owner User Id
+        num_seats:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Num Seats
+        plan_ends_at:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Plan Ends At
+        cancel_at_period_end:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Cancel At Period End
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        team_count:
+          type: integer
+          title: Team Count
+          default: 0
+      type: object
+      required:
+      - id
+      - enterprise_id
+      - name
+      - status
+      - billing_owner_user_id
+      - num_seats
+      - plan_ends_at
+      - cancel_at_period_end
+      - created_at
+      title: CostCenterResponse
+      description: A cost center's core billing and membership fields.
+    CostCenterListResponse:
+      properties:
+        cost_centers:
+          items:
+            $ref: '#/components/schemas/CostCenterResponse'
+          type: array
+          title: Cost Centers
+      type: object
+      required:
+      - cost_centers
+      title: CostCenterListResponse
+      description: A list of cost centers for an enterprise.
     CostCenterDetailResponse:
       properties:
         id:
@@ -425,73 +525,6 @@ components:
       - cancel_at
       title: CostCenterDetailResponse
       description: A cost center with additional Stripe and billing-cycle detail.
-    CostCenterResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        enterprise_id:
-          type: string
-          format: uuid
-          title: Enterprise Id
-        name:
-          type: string
-          title: Name
-        status:
-          type: string
-          title: Status
-        billing_owner_user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Billing Owner User Id
-        num_seats:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Num Seats
-        plan_ends_at:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Plan Ends At
-        cancel_at_period_end:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Cancel At Period End
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        team_count:
-          type: integer
-          title: Team Count
-          default: 0
-      type: object
-      required:
-      - id
-      - enterprise_id
-      - name
-      - status
-      - billing_owner_user_id
-      - num_seats
-      - plan_ends_at
-      - cancel_at_period_end
-      - created_at
-      title: CostCenterResponse
-      description: A cost center's core billing and membership fields.
-    CheckoutUrlResponse:
-      properties:
-        url:
-          type: string
-          title: Url
-      type: object
-      required:
-      - url
-      title: CheckoutUrlResponse
-      description: A Stripe checkout URL for the client to redirect to.
     ValidationError:
       properties:
         loc:
@@ -518,39 +551,6 @@ components:
       - msg
       - type
       title: ValidationError
-    UpdateCostCenterRequest:
-      properties:
-        name:
-          type: string
-          maxLength: 120
-          minLength: 1
-          title: Name
-      type: object
-      required:
-      - name
-      title: UpdateCostCenterRequest
-      description: Request to rename a cost center.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    CostCenterListResponse:
-      properties:
-        cost_centers:
-          items:
-            $ref: '#/components/schemas/CostCenterResponse'
-          type: array
-          title: Cost Centers
-      type: object
-      required:
-      - cost_centers
-      title: CostCenterListResponse
-      description: A list of cost centers for an enterprise.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

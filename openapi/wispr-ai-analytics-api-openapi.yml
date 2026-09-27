@@ -89,6 +89,59 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UserMetadataQueryRequest:
+      properties:
+        uuids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Uuids
+        start_time:
+          type: string
+          title: Start Time
+        end_time:
+          type: string
+          title: End Time
+        page_size:
+          type: integer
+          title: Page Size
+          default: 100
+        page_number:
+          type: integer
+          title: Page Number
+          default: 1
+      type: object
+      required:
+      - start_time
+      - end_time
+      title: UserMetadataQueryRequest
+      description: Request body for querying user metadata with large UUID lists.
+    UserMetadataListResponse:
+      properties:
+        rows:
+          items:
+            $ref: '#/components/schemas/UserMetadataResponse'
+          type: array
+          title: Rows
+        pagination:
+          $ref: '#/components/schemas/PaginationMetadata'
+      type: object
+      required:
+      - rows
+      - pagination
+      title: UserMetadataListResponse
     UserMetadataResponse:
       properties:
         created_at:
@@ -174,28 +227,27 @@ components:
       - event_type
       - id
       title: UserMetadataResponse
-    src__backend_service__schemas__api__clickhouse__Source:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - web
-      - landing
-      title: Source
-    UserMetadataListResponse:
+    PaginationMetadata:
       properties:
-        rows:
-          items:
-            $ref: '#/components/schemas/UserMetadataResponse'
-          type: array
-          title: Rows
-        pagination:
-          $ref: '#/components/schemas/PaginationMetadata'
+        page_size:
+          type: integer
+          title: Page Size
+        page_number:
+          type: integer
+          title: Page Number
+        total_pages:
+          type: integer
+          title: Total Pages
+        total_rows:
+          type: integer
+          title: Total Rows
       type: object
       required:
-      - rows
-      - pagination
-      title: UserMetadataListResponse
+      - page_size
+      - page_number
+      - total_pages
+      - total_rows
+      title: PaginationMetadata
     UserMetadataRequest:
       properties:
         id:
@@ -302,36 +354,14 @@ components:
       - email
       title: UserMetadataRequest
       description: Request model for ingesting user metadata into ClickHouse
-    UserMetadataQueryRequest:
-      properties:
-        uuids:
-          anyOf:
-          - items:
-              type: string
-              format: uuid
-            type: array
-          - type: 'null'
-          title: Uuids
-        start_time:
-          type: string
-          title: Start Time
-        end_time:
-          type: string
-          title: End Time
-        page_size:
-          type: integer
-          title: Page Size
-          default: 100
-        page_number:
-          type: integer
-          title: Page Number
-          default: 1
-      type: object
-      required:
-      - start_time
-      - end_time
-      title: UserMetadataQueryRequest
-      description: Request body for querying user metadata with large UUID lists.
+    src__backend_service__schemas__api__clickhouse__Source:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - web
+      - landing
+      title: Source
     TrackEventRequest:
       properties:
         event:
@@ -380,36 +410,6 @@ components:
       - msg
       - type
       title: ValidationError
-    PaginationMetadata:
-      properties:
-        page_size:
-          type: integer
-          title: Page Size
-        page_number:
-          type: integer
-          title: Page Number
-        total_pages:
-          type: integer
-          title: Total Pages
-        total_rows:
-          type: integer
-          title: Total Rows
-      type: object
-      required:
-      - page_size
-      - page_number
-      - total_pages
-      - total_rows
-      title: PaginationMetadata
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

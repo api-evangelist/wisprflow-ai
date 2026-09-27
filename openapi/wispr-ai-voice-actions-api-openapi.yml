@@ -34,6 +34,248 @@ paths:
                 $ref: '#/components/schemas/VoiceActionsClientFrameEnvelope'
 components:
   schemas:
+    VoiceActionsSessionUpdate:
+      properties:
+        type:
+          type: string
+          const: session.update
+          title: Type
+        context:
+          type: object
+          title: Context
+      type: object
+      required:
+      - type
+      title: VoiceActionsSessionUpdate
+      description: Refresh the desktop context mid-session (app/textbox/AX context lands after session.start).
+    VoiceActionsClientFrameEnvelope:
+      properties:
+        voice_action_frame:
+          oneOf:
+          - $ref: '#/components/schemas/VoiceActionsSessionStart'
+          - $ref: '#/components/schemas/VoiceActionsSessionUpdate'
+          - $ref: '#/components/schemas/VoiceActionsAudioAppend'
+          - $ref: '#/components/schemas/VoiceActionsAudioCommit'
+          - $ref: '#/components/schemas/VoiceActionsTextInput'
+          - $ref: '#/components/schemas/VoiceActionsToolResult'
+          - $ref: '#/components/schemas/VoiceActionsPing'
+          - $ref: '#/components/schemas/VoiceActionsSessionClose'
+          title: Voice Action Frame
+          discriminator:
+            propertyName: type
+            mapping:
+              audio.append: '#/components/schemas/VoiceActionsAudioAppend'
+              audio.commit: '#/components/schemas/VoiceActionsAudioCommit'
+              ping: '#/components/schemas/VoiceActionsPing'
+              session.close: '#/components/schemas/VoiceActionsSessionClose'
+              session.start: '#/components/schemas/VoiceActionsSessionStart'
+              session.update: '#/components/schemas/VoiceActionsSessionUpdate'
+              text.input: '#/components/schemas/VoiceActionsTextInput'
+              tool.result: '#/components/schemas/VoiceActionsToolResult'
+      type: object
+      required:
+      - voice_action_frame
+      title: VoiceActionsClientFrameEnvelope
+      description: Envelope wrapping a single discriminated client frame.
+    VoiceActionsServerFrameEnvelope:
+      properties:
+        voice_action_event:
+          oneOf:
+          - $ref: '#/components/schemas/VoiceActionsSessionReady'
+          - $ref: '#/components/schemas/VoiceActionsTranscriptDelta'
+          - $ref: '#/components/schemas/VoiceActionsTranscriptFinal'
+          - $ref: '#/components/schemas/VoiceActionsToolCall'
+          - $ref: '#/components/schemas/VoiceActionsTextDelta'
+          - $ref: '#/components/schemas/VoiceActionsTextFinal'
+          - $ref: '#/components/schemas/VoiceActionsDone'
+          - $ref: '#/components/schemas/VoiceActionsPong'
+          - $ref: '#/components/schemas/VoiceActionsError'
+          title: Voice Action Event
+          discriminator:
+            propertyName: type
+            mapping:
+              done: '#/components/schemas/VoiceActionsDone'
+              error: '#/components/schemas/VoiceActionsError'
+              pong: '#/components/schemas/VoiceActionsPong'
+              session.ready: '#/components/schemas/VoiceActionsSessionReady'
+              text.delta: '#/components/schemas/VoiceActionsTextDelta'
+              text.final: '#/components/schemas/VoiceActionsTextFinal'
+              tool.call: '#/components/schemas/VoiceActionsToolCall'
+              transcript.delta: '#/components/schemas/VoiceActionsTranscriptDelta'
+              transcript.final: '#/components/schemas/VoiceActionsTranscriptFinal'
+      type: object
+      required:
+      - voice_action_event
+      title: VoiceActionsServerFrameEnvelope
+      description: Envelope wrapping a single discriminated server frame.
+    VoiceActionsTextDelta:
+      properties:
+        type:
+          type: string
+          const: text.delta
+          title: Type
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - type
+      - text
+      title: VoiceActionsTextDelta
+      description: Server frame carrying an incremental chunk of the model's text response.
+    VoiceActionToolDefinition:
+      properties:
+        name:
+          type: string
+          maxLength: 128
+          title: Name
+        description:
+          type: string
+          maxLength: 4096
+          title: Description
+          default: ''
+        parameters:
+          type: object
+          title: Parameters
+      type: object
+      required:
+      - name
+      title: VoiceActionToolDefinition
+      description: A tool the client exposes to the model for this voice-actions session.
+    VoiceActionsAudioAppend:
+      properties:
+        type:
+          type: string
+          const: audio.append
+          title: Type
+        audio:
+          type: string
+          maxLength: 1000000
+          title: Audio
+        encoding:
+          type: string
+          const: pcm16
+          title: Encoding
+          default: pcm16
+        sample_rate:
+          type: integer
+          const: 24000
+          title: Sample Rate
+          default: 24000
+        channels:
+          type: integer
+          const: 1
+          title: Channels
+          default: 1
+        position:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Position
+      type: object
+      required:
+      - type
+      - audio
+      title: VoiceActionsAudioAppend
+      description: Client frame appending a chunk of PCM16 audio to the session's input buffer.
+    VoiceActionsTranscriptFinal:
+      properties:
+        type:
+          type: string
+          const: transcript.final
+          title: Type
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - type
+      - text
+      title: VoiceActionsTranscriptFinal
+      description: Server frame carrying the finalized input transcript.
+    VoiceActionsSessionClose:
+      properties:
+        type:
+          type: string
+          const: session.close
+          title: Type
+      type: object
+      required:
+      - type
+      title: VoiceActionsSessionClose
+      description: Client frame that closes the voice-actions session.
+    VoiceActionsAudioCommit:
+      properties:
+        type:
+          type: string
+          const: audio.commit
+          title: Type
+      type: object
+      required:
+      - type
+      title: VoiceActionsAudioCommit
+      description: Client frame committing the buffered audio and requesting a model response.
+    VoiceActionsError:
+      properties:
+        type:
+          type: string
+          const: error
+          title: Type
+        message:
+          type: string
+          title: Message
+        code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Code
+      type: object
+      required:
+      - type
+      - message
+      title: VoiceActionsError
+      description: Server frame reporting an error during the session.
+    VoiceActionsTranscriptDelta:
+      properties:
+        type:
+          type: string
+          const: transcript.delta
+          title: Type
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - type
+      - text
+      title: VoiceActionsTranscriptDelta
+      description: Server frame carrying an incremental chunk of the input transcript.
+    VoiceActionsTextFinal:
+      properties:
+        type:
+          type: string
+          const: text.final
+          title: Type
+        text:
+          type: string
+          title: Text
+      type: object
+      required:
+      - type
+      - text
+      title: VoiceActionsTextFinal
+      description: Server frame carrying the finalized model text response.
+    VoiceActionsDone:
+      properties:
+        type:
+          type: string
+          const: done
+          title: Type
+      type: object
+      required:
+      - type
+      title: VoiceActionsDone
+      description: Server frame signaling the model response turn is complete.
     VoiceActionsTextInput:
       properties:
         type:
@@ -50,17 +292,6 @@ components:
       - text
       title: VoiceActionsTextInput
       description: Final transcript from the client's own ASR pipeline; triggers a model response.
-    VoiceActionsAudioCommit:
-      properties:
-        type:
-          type: string
-          const: audio.commit
-          title: Type
-      type: object
-      required:
-      - type
-      title: VoiceActionsAudioCommit
-      description: Client frame committing the buffered audio and requesting a model response.
     VoiceActionsToolResult:
       properties:
         type:
@@ -102,130 +333,26 @@ components:
       - arguments
       title: VoiceActionsToolCall
       description: Server frame requesting the client invoke a tool with the given arguments.
-    VoiceActionsSessionUpdate:
+    VoiceActionsSessionReady:
       properties:
         type:
           type: string
-          const: session.update
+          const: session.ready
           title: Type
-        context:
-          type: object
-          title: Context
+        provider:
+          type: string
+          const: openai
+          title: Provider
+          default: openai
+        model:
+          type: string
+          title: Model
       type: object
       required:
       - type
-      title: VoiceActionsSessionUpdate
-      description: Refresh the desktop context mid-session (app/textbox/AX context lands after session.start).
-    VoiceActionsError:
-      properties:
-        type:
-          type: string
-          const: error
-          title: Type
-        message:
-          type: string
-          title: Message
-        code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Code
-      type: object
-      required:
-      - type
-      - message
-      title: VoiceActionsError
-      description: Server frame reporting an error during the session.
-    VoiceActionToolDefinition:
-      properties:
-        name:
-          type: string
-          maxLength: 128
-          title: Name
-        description:
-          type: string
-          maxLength: 4096
-          title: Description
-          default: ''
-        parameters:
-          type: object
-          title: Parameters
-      type: object
-      required:
-      - name
-      title: VoiceActionToolDefinition
-      description: A tool the client exposes to the model for this voice-actions session.
-    VoiceActionsClientFrameEnvelope:
-      properties:
-        voice_action_frame:
-          oneOf:
-          - $ref: '#/components/schemas/VoiceActionsSessionStart'
-          - $ref: '#/components/schemas/VoiceActionsSessionUpdate'
-          - $ref: '#/components/schemas/VoiceActionsAudioAppend'
-          - $ref: '#/components/schemas/VoiceActionsAudioCommit'
-          - $ref: '#/components/schemas/VoiceActionsTextInput'
-          - $ref: '#/components/schemas/VoiceActionsToolResult'
-          - $ref: '#/components/schemas/VoiceActionsPing'
-          - $ref: '#/components/schemas/VoiceActionsSessionClose'
-          title: Voice Action Frame
-          discriminator:
-            propertyName: type
-            mapping:
-              audio.append: '#/components/schemas/VoiceActionsAudioAppend'
-              audio.commit: '#/components/schemas/VoiceActionsAudioCommit'
-              ping: '#/components/schemas/VoiceActionsPing'
-              session.close: '#/components/schemas/VoiceActionsSessionClose'
-              session.start: '#/components/schemas/VoiceActionsSessionStart'
-              session.update: '#/components/schemas/VoiceActionsSessionUpdate'
-              text.input: '#/components/schemas/VoiceActionsTextInput'
-              tool.result: '#/components/schemas/VoiceActionsToolResult'
-      type: object
-      required:
-      - voice_action_frame
-      title: VoiceActionsClientFrameEnvelope
-      description: Envelope wrapping a single discriminated client frame.
-    VoiceActionsPing:
-      properties:
-        type:
-          type: string
-          const: ping
-          title: Type
-        ts:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ts
-      type: object
-      required:
-      - type
-      title: VoiceActionsPing
-      description: Client keepalive frame; the server answers with a pong.
-    VoiceActionsTextDelta:
-      properties:
-        type:
-          type: string
-          const: text.delta
-          title: Type
-        text:
-          type: string
-          title: Text
-      type: object
-      required:
-      - type
-      - text
-      title: VoiceActionsTextDelta
-      description: Server frame carrying an incremental chunk of the model's text response.
-    VoiceActionsDone:
-      properties:
-        type:
-          type: string
-          const: done
-          title: Type
-      type: object
-      required:
-      - type
-      title: VoiceActionsDone
-      description: Server frame signaling the model response turn is complete.
+      - model
+      title: VoiceActionsSessionReady
+      description: Server frame confirming the session is open, naming the provider and model.
     VoiceActionsSessionStart:
       properties:
         type:
@@ -256,62 +383,6 @@ components:
       - type
       title: VoiceActionsSessionStart
       description: Client frame that opens a voice-actions session with instructions, tools, and context.
-    VoiceActionsTranscriptFinal:
-      properties:
-        type:
-          type: string
-          const: transcript.final
-          title: Type
-        text:
-          type: string
-          title: Text
-      type: object
-      required:
-      - type
-      - text
-      title: VoiceActionsTranscriptFinal
-      description: Server frame carrying the finalized input transcript.
-    VoiceActionsTextFinal:
-      properties:
-        type:
-          type: string
-          const: text.final
-          title: Type
-        text:
-          type: string
-          title: Text
-      type: object
-      required:
-      - type
-      - text
-      title: VoiceActionsTextFinal
-      description: Server frame carrying the finalized model text response.
-    VoiceActionsSessionClose:
-      properties:
-        type:
-          type: string
-          const: session.close
-          title: Type
-      type: object
-      required:
-      - type
-      title: VoiceActionsSessionClose
-      description: Client frame that closes the voice-actions session.
-    VoiceActionsTranscriptDelta:
-      properties:
-        type:
-          type: string
-          const: transcript.delta
-          title: Type
-        text:
-          type: string
-          title: Text
-      type: object
-      required:
-      - type
-      - text
-      title: VoiceActionsTranscriptDelta
-      description: Server frame carrying an incremental chunk of the input transcript.
     VoiceActionsPong:
       properties:
         type:
@@ -328,93 +399,22 @@ components:
       - type
       title: VoiceActionsPong
       description: Server keepalive frame answering a client ping.
-    VoiceActionsAudioAppend:
+    VoiceActionsPing:
       properties:
         type:
           type: string
-          const: audio.append
+          const: ping
           title: Type
-        audio:
-          type: string
-          maxLength: 1000000
-          title: Audio
-        encoding:
-          type: string
-          const: pcm16
-          title: Encoding
-          default: pcm16
-        sample_rate:
-          type: integer
-          const: 24000
-          title: Sample Rate
-          default: 24000
-        channels:
-          type: integer
-          const: 1
-          title: Channels
-          default: 1
-        position:
+        ts:
           anyOf:
-          - type: integer
+          - type: string
           - type: 'null'
-          title: Position
+          title: Ts
       type: object
       required:
       - type
-      - audio
-      title: VoiceActionsAudioAppend
-      description: Client frame appending a chunk of PCM16 audio to the session's input buffer.
-    VoiceActionsSessionReady:
-      properties:
-        type:
-          type: string
-          const: session.ready
-          title: Type
-        provider:
-          type: string
-          const: openai
-          title: Provider
-          default: openai
-        model:
-          type: string
-          title: Model
-      type: object
-      required:
-      - type
-      - model
-      title: VoiceActionsSessionReady
-      description: Server frame confirming the session is open, naming the provider and model.
-    VoiceActionsServerFrameEnvelope:
-      properties:
-        voice_action_event:
-          oneOf:
-          - $ref: '#/components/schemas/VoiceActionsSessionReady'
-          - $ref: '#/components/schemas/VoiceActionsTranscriptDelta'
-          - $ref: '#/components/schemas/VoiceActionsTranscriptFinal'
-          - $ref: '#/components/schemas/VoiceActionsToolCall'
-          - $ref: '#/components/schemas/VoiceActionsTextDelta'
-          - $ref: '#/components/schemas/VoiceActionsTextFinal'
-          - $ref: '#/components/schemas/VoiceActionsDone'
-          - $ref: '#/components/schemas/VoiceActionsPong'
-          - $ref: '#/components/schemas/VoiceActionsError'
-          title: Voice Action Event
-          discriminator:
-            propertyName: type
-            mapping:
-              done: '#/components/schemas/VoiceActionsDone'
-              error: '#/components/schemas/VoiceActionsError'
-              pong: '#/components/schemas/VoiceActionsPong'
-              session.ready: '#/components/schemas/VoiceActionsSessionReady'
-              text.delta: '#/components/schemas/VoiceActionsTextDelta'
-              text.final: '#/components/schemas/VoiceActionsTextFinal'
-              tool.call: '#/components/schemas/VoiceActionsToolCall'
-              transcript.delta: '#/components/schemas/VoiceActionsTranscriptDelta'
-              transcript.final: '#/components/schemas/VoiceActionsTranscriptFinal'
-      type: object
-      required:
-      - voice_action_event
-      title: VoiceActionsServerFrameEnvelope
-      description: Envelope wrapping a single discriminated server frame.
+      title: VoiceActionsPing
+      description: Client keepalive frame; the server answers with a pong.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

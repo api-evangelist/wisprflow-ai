@@ -157,6 +157,87 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    AnalyticsLifecycleState:
+      type: string
+      enum:
+      - draft
+      - active
+      - deprecated
+      title: AnalyticsLifecycleState
+      description: Lifecycle stage of an analytics event definition.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    BatchSaveRequest:
+      properties:
+        creates:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventBase'
+          type: array
+          title: Creates
+          description: New events to create
+        updates:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventUpdate'
+          type: array
+          title: Updates
+          description: Existing events to update
+      type: object
+      title: BatchSaveRequest
+      description: Batch of event creates and updates to apply in one request.
+    BatchSaveResponse:
+      properties:
+        created:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventResponse'
+          type: array
+          title: Created
+          description: Newly created events
+        updated:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventResponse'
+          type: array
+          title: Updated
+          description: Updated events
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+          description: Any errors encountered
+      type: object
+      title: BatchSaveResponse
+      description: 'Result of a batch save: created and updated events plus any errors.'
+    AnalyticsEventStatus:
+      type: string
+      enum:
+      - needs_publish
+      - not_implemented
+      - implemented
+      title: AnalyticsEventStatus
+      description: Client-implementation status of an analytics event.
+    AnalyticsPlatform:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - android
+      title: AnalyticsPlatform
+      description: Client platform an analytics event is emitted from.
+    ChangeSetStatus:
+      type: string
+      enum:
+      - created
+      - published
+      - merged
+      title: ChangeSetStatus
+      description: Status of a change set within the publish pipeline.
     ChangeSetResponse:
       properties:
         change_set_id:
@@ -203,141 +284,6 @@ components:
       - modified_at
       title: ChangeSetResponse
       description: A registry change set with its status, snapshot, and audit fields.
-    AnalyticsLifecycleState:
-      type: string
-      enum:
-      - draft
-      - active
-      - deprecated
-      title: AnalyticsLifecycleState
-      description: Lifecycle stage of an analytics event definition.
-    AnalyticsEventResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        event_key:
-          type: string
-          title: Event Key
-        name:
-          type: string
-          title: Name
-        description:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Description
-        trigger:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Trigger
-        properties_schema:
-          type: object
-          title: Properties Schema
-        platforms:
-          items:
-            $ref: '#/components/schemas/AnalyticsPlatform'
-          type: array
-          title: Platforms
-        lifecycle_state:
-          $ref: '#/components/schemas/AnalyticsLifecycleState'
-          default: draft
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        modified_at:
-          type: string
-          format: date-time
-          title: Modified At
-        created_by:
-          type: string
-          title: Created By
-        updated_by:
-          type: string
-          title: Updated By
-        created_by_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By Name
-          description: Full name of the user who created this event
-        updated_by_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Updated By Name
-          description: Full name of the user who last updated this event
-        last_published_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Published At
-        status:
-          $ref: '#/components/schemas/AnalyticsEventStatus'
-          description: Implementation status of the event
-      type: object
-      required:
-      - id
-      - event_key
-      - name
-      - created_at
-      - modified_at
-      - created_by
-      - updated_by
-      - status
-      title: AnalyticsEventResponse
-      description: A fully hydrated analytics event, including audit and status fields.
-    ChangeSetStatus:
-      type: string
-      enum:
-      - created
-      - published
-      - merged
-      title: ChangeSetStatus
-      description: Status of a change set within the publish pipeline.
-    AnalyticsPlatform:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - android
-      title: AnalyticsPlatform
-      description: Client platform an analytics event is emitted from.
-    BatchSaveResponse:
-      properties:
-        created:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventResponse'
-          type: array
-          title: Created
-          description: Newly created events
-        updated:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventResponse'
-          type: array
-          title: Updated
-          description: Updated events
-        errors:
-          items:
-            type: string
-          type: array
-          title: Errors
-          description: Any errors encountered
-      type: object
-      title: BatchSaveResponse
-      description: 'Result of a batch save: created and updated events plus any errors.'
-    AnalyticsEventStatus:
-      type: string
-      enum:
-      - needs_publish
-      - not_implemented
-      - implemented
-      title: AnalyticsEventStatus
-      description: Client-implementation status of an analytics event.
     ValidationError:
       properties:
         loc:
@@ -364,32 +310,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BatchSaveRequest:
-      properties:
-        creates:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventBase'
-          type: array
-          title: Creates
-          description: New events to create
-        updates:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventUpdate'
-          type: array
-          title: Updates
-          description: Existing events to update
-      type: object
-      title: BatchSaveRequest
-      description: Batch of event creates and updates to apply in one request.
     AnalyticsEventBase:
       properties:
         event_key:
@@ -488,6 +408,86 @@ components:
       - id
       title: AnalyticsEventUpdate
       description: Partial-update payload for an existing analytics event, keyed by id.
+    AnalyticsEventResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        event_key:
+          type: string
+          title: Event Key
+        name:
+          type: string
+          title: Name
+        description:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Description
+        trigger:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Trigger
+        properties_schema:
+          type: object
+          title: Properties Schema
+        platforms:
+          items:
+            $ref: '#/components/schemas/AnalyticsPlatform'
+          type: array
+          title: Platforms
+        lifecycle_state:
+          $ref: '#/components/schemas/AnalyticsLifecycleState'
+          default: draft
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        created_by:
+          type: string
+          title: Created By
+        updated_by:
+          type: string
+          title: Updated By
+        created_by_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By Name
+          description: Full name of the user who created this event
+        updated_by_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Updated By Name
+          description: Full name of the user who last updated this event
+        last_published_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Published At
+        status:
+          $ref: '#/components/schemas/AnalyticsEventStatus'
+          description: Implementation status of the event
+      type: object
+      required:
+      - id
+      - event_key
+      - name
+      - created_at
+      - modified_at
+      - created_by
+      - updated_by
+      - status
+      title: AnalyticsEventResponse
+      description: A fully hydrated analytics event, including audit and status fields.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

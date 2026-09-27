@@ -179,25 +179,72 @@ components:
       required:
       - connection_id
       title: InitiateConnectionResponse
-    ConnectorKey:
-      type: string
-      enum:
-      - calendar
-      - github
-      - gmail
-      - linear
-      - notion
-      - slack
-      - wispr
-      title: ConnectorKey
-      x-enum-varnames:
-      - Calendar
-      - Github
-      - GoogleAutomations
-      - Linear
-      - Notion
-      - Slack
-      - Wispr
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ConnectorInfo:
+      properties:
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+        label:
+          type: string
+          title: Label
+        connected:
+          type: boolean
+          title: Connected
+        incomplete_scopes:
+          type: boolean
+          title: Incomplete Scopes
+          default: false
+        connected_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Connected Email
+      type: object
+      required:
+      - key
+      - label
+      - connected
+      title: ConnectorInfo
+    ConnectorsResponse:
+      properties:
+        connectors:
+          items:
+            $ref: '#/components/schemas/ConnectorInfo'
+          type: array
+          title: Connectors
+      type: object
+      required:
+      - connectors
+      title: ConnectorsResponse
+      description: The list of connectors and their status for the user.
+    ConnectionStatusResponse:
+      properties:
+        connection_id:
+          type: string
+          title: Connection Id
+        status:
+          $ref: '#/components/schemas/ConnectorStatus'
+        toolkit_slug:
+          type: string
+          title: Toolkit Slug
+        incomplete_scopes:
+          type: boolean
+          title: Incomplete Scopes
+          default: false
+      type: object
+      required:
+      - connection_id
+      - status
+      - toolkit_slug
+      title: ConnectionStatusResponse
     GoogleCalendarEvent:
       properties:
         summary:
@@ -236,36 +283,32 @@ components:
       - start
       - end
       title: GoogleCalendarEvent
-    ListCalendarEventsRequest:
-      properties:
-        time_min:
-          type: string
-          format: date-time
-          title: Time Min
-        time_max:
-          type: string
-          format: date-time
-          title: Time Max
-        max_results:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Results
-      type: object
-      required:
-      - time_min
-      - time_max
-      title: ListCalendarEventsRequest
-      description: Request to list calendar events within a time window.
-    DisconnectRequest:
-      properties:
-        key:
-          $ref: '#/components/schemas/ConnectorKey'
-      type: object
-      required:
-      - key
-      title: DisconnectRequest
-      description: Request to disconnect a connector identified by its key.
+    ConnectorStatus:
+      type: string
+      enum:
+      - pending
+      - active
+      - failed
+      title: ConnectorStatus
+    ConnectorKey:
+      type: string
+      enum:
+      - calendar
+      - github
+      - gmail
+      - linear
+      - notion
+      - slack
+      - wispr
+      title: ConnectorKey
+      x-enum-varnames:
+      - Calendar
+      - Github
+      - GoogleAutomations
+      - Linear
+      - Notion
+      - Slack
+      - Wispr
     RawInitiateConnectionRequest:
       properties:
         app:
@@ -314,38 +357,45 @@ components:
       required:
       - successful
       title: ListCalendarEventsResponse
-    ConnectorInfo:
+    ListCalendarEventsRequest:
+      properties:
+        time_min:
+          type: string
+          format: date-time
+          title: Time Min
+        time_max:
+          type: string
+          format: date-time
+          title: Time Max
+        max_results:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Results
+      type: object
+      required:
+      - time_min
+      - time_max
+      title: ListCalendarEventsRequest
+      description: Request to list calendar events within a time window.
+    DisconnectRequest:
       properties:
         key:
           $ref: '#/components/schemas/ConnectorKey'
-        label:
-          type: string
-          title: Label
-        connected:
-          type: boolean
-          title: Connected
-        incomplete_scopes:
-          type: boolean
-          title: Incomplete Scopes
-          default: false
-        connected_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Connected Email
       type: object
       required:
       - key
-      - label
-      - connected
-      title: ConnectorInfo
-    ConnectorStatus:
-      type: string
-      enum:
-      - pending
-      - active
-      - failed
-      title: ConnectorStatus
+      title: DisconnectRequest
+      description: Request to disconnect a connector identified by its key.
+    DisconnectResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+      type: object
+      required:
+      - successful
+      title: DisconnectResponse
     ValidationError:
       properties:
         loc:
@@ -372,56 +422,6 @@ components:
       - msg
       - type
       title: ValidationError
-    DisconnectResponse:
-      properties:
-        successful:
-          type: boolean
-          title: Successful
-      type: object
-      required:
-      - successful
-      title: DisconnectResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ConnectorsResponse:
-      properties:
-        connectors:
-          items:
-            $ref: '#/components/schemas/ConnectorInfo'
-          type: array
-          title: Connectors
-      type: object
-      required:
-      - connectors
-      title: ConnectorsResponse
-      description: The list of connectors and their status for the user.
-    ConnectionStatusResponse:
-      properties:
-        connection_id:
-          type: string
-          title: Connection Id
-        status:
-          $ref: '#/components/schemas/ConnectorStatus'
-        toolkit_slug:
-          type: string
-          title: Toolkit Slug
-        incomplete_scopes:
-          type: boolean
-          title: Incomplete Scopes
-          default: false
-      type: object
-      required:
-      - connection_id
-      - status
-      - toolkit_slug
-      title: ConnectionStatusResponse
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

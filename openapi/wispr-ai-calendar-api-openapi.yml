@@ -354,6 +354,36 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ResyncResponse:
+      properties:
+        eventsCount:
+          type: integer
+          title: Eventscount
+        success:
+          type: boolean
+          title: Success
+      type: object
+      required:
+      - eventsCount
+      - success
+      title: ResyncResponse
+      description: 'Response shape for ``POST /api/v1/calendar/resync``.
+
+
+        Returned by the manual-resync debug endpoint. ``events_count`` is the
+
+        number of ``calendar_event`` rows present for the user after the
+
+        backfill completes.'
     SyncResponse:
       properties:
         events:
@@ -390,91 +420,50 @@ components:
         fits in a single page and the desktop advances to ``server_time`` as the next
 
         ``since`` value.'
-    ResyncResponse:
+    CalendarEventBatchResponse:
       properties:
-        eventsCount:
-          type: integer
-          title: Eventscount
-        success:
-          type: boolean
-          title: Success
+        events:
+          items:
+            $ref: '#/components/schemas/CalendarEventDTO'
+          type: array
+          title: Events
       type: object
       required:
-      - eventsCount
-      - success
-      title: ResyncResponse
-      description: 'Response shape for ``POST /api/v1/calendar/resync``.
+      - events
+      title: CalendarEventBatchResponse
+      description: 'Response shape for ``GET /api/v1/calendar/events/batch``.
 
 
-        Returned by the manual-resync debug endpoint. ``events_count`` is the
+        Returns events matching the requested ``externalId`` values. Missing ids
 
-        number of ``calendar_event`` rows present for the user after the
-
-        backfill completes.'
-    AgenticPrereadSyncResponse:
+        (not in the DB, or belonging to another user) are simply absent.'
+    AgenticPrereadSyncItemDTO:
       properties:
-        agenticPrereads:
-          items:
-            $ref: '#/components/schemas/AgenticPrereadSyncItemDTO'
-          type: array
-          title: Agenticprereads
-        serverTime:
+        title:
+          type: string
+          title: Title
+        summary:
+          type: string
+          title: Summary
+        contentMd:
+          type: string
+          title: Contentmd
+        generatedAt:
           type: string
           format: date-time
-          title: Servertime
-        nextCursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nextcursor
-      type: object
-      required:
-      - agenticPrereads
-      - serverTime
-      title: AgenticPrereadSyncResponse
-      description: 'Response shape for ``GET /api/v1/calendar/prereads/agentic_sync``.
-
-
-        Mirrors the calendar sync cursor contract: desktop advances ``since`` to
-
-        ``serverTime`` once ``nextCursor`` is null.'
-    PrereadFeedbackRequest:
-      properties:
+          title: Generatedat
         externalId:
           type: string
           title: Externalid
-        rating:
-          type: string
-          enum:
-          - up
-          - down
-          title: Rating
-        feedback:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Feedback
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-        reporterName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Reportername
-        preread:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Preread
       type: object
       required:
+      - title
+      - summary
+      - contentMd
+      - generatedAt
       - externalId
-      - rating
-      title: PrereadFeedbackRequest
-      description: Request shape for ``POST /api/v1/calendar/preread/feedback``.
+      title: AgenticPrereadSyncItemDTO
+      description: One agentic pre-read deliverable keyed by the calendar event's ``external_id``.
     PrereadResponse:
       properties:
         title:
@@ -512,6 +501,43 @@ components:
         describes what the meeting is about — surfaced under the calendar
 
         event title on the desktop hub.'
+    PrereadFeedbackRequest:
+      properties:
+        externalId:
+          type: string
+          title: Externalid
+        rating:
+          type: string
+          enum:
+          - up
+          - down
+          title: Rating
+        feedback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        reporterName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Reportername
+        preread:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Preread
+      type: object
+      required:
+      - externalId
+      - rating
+      title: PrereadFeedbackRequest
+      description: Request shape for ``POST /api/v1/calendar/preread/feedback``.
     CalendarEventDTO:
       properties:
         externalId:
@@ -578,23 +604,57 @@ components:
         Field aliases serialize to camelCase for the desktop client. `populate_by_name=True`
 
         accepts both snake_case and camelCase on input.'
-    CalendarEventBatchResponse:
+    AgenticPrereadSyncResponse:
       properties:
-        events:
+        agenticPrereads:
           items:
-            $ref: '#/components/schemas/CalendarEventDTO'
+            $ref: '#/components/schemas/AgenticPrereadSyncItemDTO'
           type: array
-          title: Events
+          title: Agenticprereads
+        serverTime:
+          type: string
+          format: date-time
+          title: Servertime
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextcursor
       type: object
       required:
-      - events
-      title: CalendarEventBatchResponse
-      description: 'Response shape for ``GET /api/v1/calendar/events/batch``.
+      - agenticPrereads
+      - serverTime
+      title: AgenticPrereadSyncResponse
+      description: 'Response shape for ``GET /api/v1/calendar/prereads/agentic_sync``.
 
 
-        Returns events matching the requested ``externalId`` values. Missing ids
+        Mirrors the calendar sync cursor contract: desktop advances ``since`` to
 
-        (not in the DB, or belonging to another user) are simply absent.'
+        ``serverTime`` once ``nextCursor`` is null.'
+    ParticipantDTO:
+      properties:
+        name:
+          type: string
+          title: Name
+        photoUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Photourl
+        isSelf:
+          type: boolean
+          title: Isself
+          default: false
+      type: object
+      required:
+      - name
+      title: ParticipantDTO
+      description: 'Per-attendee detail for the desktop: display name, optional real profile photo, and self flag.
+
+
+        Carried alongside the legacy ``participants: list[str]`` (display-name-only) field so existing
+
+        consumers keep working; the desktop reads ``photoUrl`` / ``isSelf`` to render meeting avatars.'
     ValidationError:
       properties:
         loc:
@@ -621,66 +681,6 @@ components:
       - msg
       - type
       title: ValidationError
-    ParticipantDTO:
-      properties:
-        name:
-          type: string
-          title: Name
-        photoUrl:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Photourl
-        isSelf:
-          type: boolean
-          title: Isself
-          default: false
-      type: object
-      required:
-      - name
-      title: ParticipantDTO
-      description: 'Per-attendee detail for the desktop: display name, optional real profile photo, and self flag.
-
-
-        Carried alongside the legacy ``participants: list[str]`` (display-name-only) field so existing
-
-        consumers keep working; the desktop reads ``photoUrl`` / ``isSelf`` to render meeting avatars.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AgenticPrereadSyncItemDTO:
-      properties:
-        title:
-          type: string
-          title: Title
-        summary:
-          type: string
-          title: Summary
-        contentMd:
-          type: string
-          title: Contentmd
-        generatedAt:
-          type: string
-          format: date-time
-          title: Generatedat
-        externalId:
-          type: string
-          title: Externalid
-      type: object
-      required:
-      - title
-      - summary
-      - contentMd
-      - generatedAt
-      - externalId
-      title: AgenticPrereadSyncItemDTO
-      description: One agentic pre-read deliverable keyed by the calendar event's ``external_id``.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

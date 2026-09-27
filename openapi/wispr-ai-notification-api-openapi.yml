@@ -270,104 +270,15 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    NotificationType:
-      type: string
-      enum:
-      - achievement
-      - referral
-      - announcement
-      title: NotificationType
-      description: Category of a user notification.
-    BulkAnnouncementCreateRequest:
+    HTTPValidationError:
       properties:
-        key:
-          type: string
-          title: Key
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-        ios_title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ios Title
-        ios_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ios Text
-        platform_type:
-          $ref: '#/components/schemas/NotificationPlatformType'
-          default: desktop
-      type: object
-      required:
-      - key
-      title: BulkAnnouncementCreateRequest
-      description: Internal admin request to broadcast an announcement notification to all users.
-    ArchiveNotificationRequest:
-      properties:
-        notification_ids:
+        detail:
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Notification Ids
+          title: Detail
       type: object
-      required:
-      - notification_ids
-      title: ArchiveNotificationRequest
-      description: Request to archive a set of notifications by id.
-    NotificationCreateRequest:
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationType'
-        key:
-          type: string
-          title: Key
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-        ios_title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ios Title
-        ios_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ios Text
-        platform_type:
-          $ref: '#/components/schemas/NotificationPlatformType'
-          default: desktop
-      type: object
-      required:
-      - type
-      - key
-      title: NotificationCreateRequest
-      description: Request body describing a notification to create.
-    NotificationPlatformType:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - both
-      title: NotificationPlatformType
-      description: Client platform(s) a notification targets.
+      title: HTTPValidationError
     SendSMSRequest:
       properties:
         country_code:
@@ -381,6 +292,47 @@ components:
       - country_code
       - number
       title: SendSMSRequest
+    NotificationPlatformType:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - both
+      title: NotificationPlatformType
+      description: Client platform(s) a notification targets.
+    ArchiveNotificationRequest:
+      properties:
+        notification_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Notification Ids
+      type: object
+      required:
+      - notification_ids
+      title: ArchiveNotificationRequest
+      description: Request to archive a set of notifications by id.
+    NotificationListResponse:
+      properties:
+        notifications:
+          items:
+            $ref: '#/components/schemas/NotificationResponse'
+          type: array
+          title: Notifications
+        unread_count:
+          type: integer
+          title: Unread Count
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - notifications
+      - unread_count
+      - total
+      title: NotificationListResponse
+      description: A page of notifications with unread and total counts.
     ValidationError:
       properties:
         loc:
@@ -407,51 +359,6 @@ components:
       - msg
       - type
       title: ValidationError
-    NotificationListResponse:
-      properties:
-        notifications:
-          items:
-            $ref: '#/components/schemas/NotificationResponse'
-          type: array
-          title: Notifications
-        unread_count:
-          type: integer
-          title: Unread Count
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - notifications
-      - unread_count
-      - total
-      title: NotificationListResponse
-      description: A page of notifications with unread and total counts.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    InternalNotificationCreateRequest:
-      properties:
-        emails:
-          items:
-            type: string
-            format: email
-          type: array
-          title: Emails
-        notification:
-          $ref: '#/components/schemas/NotificationCreateRequest'
-      type: object
-      required:
-      - emails
-      - notification
-      title: InternalNotificationCreateRequest
-      description: Internal admin request to send a notification to specific email addresses.
     NotificationResponse:
       properties:
         id:
@@ -506,6 +413,99 @@ components:
       - is_archived
       title: NotificationResponse
       description: A single notification as returned to the client.
+    InternalNotificationCreateRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          title: Emails
+        notification:
+          $ref: '#/components/schemas/NotificationCreateRequest'
+      type: object
+      required:
+      - emails
+      - notification
+      title: InternalNotificationCreateRequest
+      description: Internal admin request to send a notification to specific email addresses.
+    BulkAnnouncementCreateRequest:
+      properties:
+        key:
+          type: string
+          title: Key
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        ios_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Title
+        ios_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Text
+        platform_type:
+          $ref: '#/components/schemas/NotificationPlatformType'
+          default: desktop
+      type: object
+      required:
+      - key
+      title: BulkAnnouncementCreateRequest
+      description: Internal admin request to broadcast an announcement notification to all users.
+    NotificationCreateRequest:
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationType'
+        key:
+          type: string
+          title: Key
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+        ios_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Title
+        ios_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ios Text
+        platform_type:
+          $ref: '#/components/schemas/NotificationPlatformType'
+          default: desktop
+      type: object
+      required:
+      - type
+      - key
+      title: NotificationCreateRequest
+      description: Request body describing a notification to create.
+    NotificationType:
+      type: string
+      enum:
+      - achievement
+      - referral
+      - announcement
+      title: NotificationType
+      description: Category of a user notification.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

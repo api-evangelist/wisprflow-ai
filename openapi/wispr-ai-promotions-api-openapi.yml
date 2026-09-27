@@ -194,6 +194,15 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     BoostActionResponse:
       properties:
         success:
@@ -225,6 +234,55 @@ components:
       - total_boost
       title: BoostActionResponse
       description: Generic response for boost action endpoints
+    ApplyPromoCodeRequest:
+      properties:
+        code:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Code
+      type: object
+      required:
+      - code
+      title: ApplyPromoCodeRequest
+      description: Request to apply a promo code by its string.
+    CampaignPromoDetails:
+      properties:
+        trial_days:
+          type: integer
+          title: Trial Days
+        source_name:
+          type: string
+          title: Source Name
+        attribution_message:
+          type: string
+          title: Attribution Message
+        code_id:
+          type: string
+          title: Code Id
+        campaign_id:
+          type: string
+          title: Campaign Id
+      type: object
+      required:
+      - trial_days
+      - source_name
+      - attribution_message
+      - code_id
+      - campaign_id
+      title: CampaignPromoDetails
+      description: Resolved promo details for a validated code and its campaign.
+    PhoneNumberSubmitRequest:
+      properties:
+        phone_number:
+          type: string
+          pattern: ^\+[1-9]\d{6,14}$
+          title: Phone Number
+      type: object
+      required:
+      - phone_number
+      title: PhoneNumberSubmitRequest
+      description: Request schema for phone number boost submission
     AndroidWaitlistRankResponse:
       properties:
         referral_code:
@@ -283,43 +341,16 @@ components:
       - verified_share_discord
       title: AndroidWaitlistRankResponse
       description: Response schema for GET /promos/android_waitlist_rank
-    PhoneNumberSubmitRequest:
+    Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post:
       properties:
-        phone_number:
+        screenshot:
           type: string
-          pattern: ^\+[1-9]\d{6,14}$
-          title: Phone Number
+          contentMediaType: application/octet-stream
+          title: Screenshot
       type: object
       required:
-      - phone_number
-      title: PhoneNumberSubmitRequest
-      description: Request schema for phone number boost submission
-    CampaignPromoDetails:
-      properties:
-        trial_days:
-          type: integer
-          title: Trial Days
-        source_name:
-          type: string
-          title: Source Name
-        attribution_message:
-          type: string
-          title: Attribution Message
-        code_id:
-          type: string
-          title: Code Id
-        campaign_id:
-          type: string
-          title: Campaign Id
-      type: object
-      required:
-      - trial_days
-      - source_name
-      - attribution_message
-      - code_id
-      - campaign_id
-      title: CampaignPromoDetails
-      description: Resolved promo details for a validated code and its campaign.
+      - screenshot
+      title: Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post
     ValidationError:
       properties:
         loc:
@@ -346,37 +377,6 @@ components:
       - msg
       - type
       title: ValidationError
-    Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post:
-      properties:
-        screenshot:
-          type: string
-          contentMediaType: application/octet-stream
-          title: Screenshot
-      type: object
-      required:
-      - screenshot
-      title: Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ApplyPromoCodeRequest:
-      properties:
-        code:
-          type: string
-          maxLength: 80
-          minLength: 1
-          title: Code
-      type: object
-      required:
-      - code
-      title: ApplyPromoCodeRequest
-      description: Request to apply a promo code by its string.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

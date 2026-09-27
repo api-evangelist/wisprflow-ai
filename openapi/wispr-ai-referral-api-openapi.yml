@@ -228,54 +228,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    src__backend_service__schemas__api__referral__Platform:
-      type: string
-      enum:
-      - ios
-      - mac-apple
-      - mac-intel
-      - windows
-      title: Platform
-      description: Valid platforms for download links
-    SelfReferRequest:
-      properties:
-        refer_to:
-          type: string
-          title: Refer To
-      type: object
-      required:
-      - refer_to
-      title: SelfReferRequest
-    ReferralCodeResponse:
-      properties:
-        referral_code:
-          type: string
-          title: Referral Code
-      type: object
-      required:
-      - referral_code
-      title: ReferralCodeResponse
-    ReferralInfoResponse:
-      properties:
-        referral_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Referral Code
-        referer_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Referer Name
-        referrals:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/Referral'
-            type: array
-          - type: 'null'
-          title: Referrals
-      type: object
-      title: ReferralInfoResponse
     Referral:
       properties:
         email:
@@ -314,30 +266,81 @@ components:
       - status
       - credits
       title: Referral
-    StudentChallengeLeaderboardResponse:
+    HTTPValidationError:
       properties:
-        members:
+        detail:
           items:
-            $ref: '#/components/schemas/StudentChallengeLeaderboardMember'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Members
+          title: Detail
       type: object
-      required:
-      - members
-      title: StudentChallengeLeaderboardResponse
-    DirectDownloadLinkRequest:
+      title: HTTPValidationError
+    src__backend_service__schemas__api__referral__Platform:
+      type: string
+      enum:
+      - ios
+      - mac-apple
+      - mac-intel
+      - windows
+      title: Platform
+      description: Valid platforms for download links
+    ApplyReferralCodeRequest:
       properties:
-        platform:
-          $ref: '#/components/schemas/src__backend_service__schemas__api__referral__Platform'
-        recipient_email:
+        referrer_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referrer Code
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        check_credits:
+          type: boolean
+          title: Check Credits
+          default: false
+      type: object
+      title: ApplyReferralCodeRequest
+    ReferralCodeResponse:
+      properties:
+        referral_code:
           type: string
-          format: email
-          title: Recipient Email
+          title: Referral Code
       type: object
       required:
-      - platform
-      - recipient_email
-      title: DirectDownloadLinkRequest
+      - referral_code
+      title: ReferralCodeResponse
+    ReferralInfoResponse:
+      properties:
+        referral_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referral Code
+        referer_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referer Name
+        referrals:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/Referral'
+            type: array
+          - type: 'null'
+          title: Referrals
+      type: object
+      title: ReferralInfoResponse
+    SelfReferRequest:
+      properties:
+        refer_to:
+          type: string
+          title: Refer To
+      type: object
+      required:
+      - refer_to
+      title: SelfReferRequest
     ValidationError:
       properties:
         loc:
@@ -364,6 +367,19 @@ components:
       - msg
       - type
       title: ValidationError
+    DirectDownloadLinkRequest:
+      properties:
+        platform:
+          $ref: '#/components/schemas/src__backend_service__schemas__api__referral__Platform'
+        recipient_email:
+          type: string
+          format: email
+          title: Recipient Email
+      type: object
+      required:
+      - platform
+      - recipient_email
+      title: DirectDownloadLinkRequest
     ReferEmailsRequest:
       properties:
         emails:
@@ -376,33 +392,6 @@ components:
       required:
       - emails
       title: ReferEmailsRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ApplyReferralCodeRequest:
-      properties:
-        referrer_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Referrer Code
-        dub_click_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Dub Click Id
-        check_credits:
-          type: boolean
-          title: Check Credits
-          default: false
-      type: object
-      title: ApplyReferralCodeRequest
     StudentChallengeLeaderboardMember:
       properties:
         first_name:
@@ -426,6 +415,17 @@ components:
       - referral_count
       - is_current_user
       title: StudentChallengeLeaderboardMember
+    StudentChallengeLeaderboardResponse:
+      properties:
+        members:
+          items:
+            $ref: '#/components/schemas/StudentChallengeLeaderboardMember'
+          type: array
+          title: Members
+      type: object
+      required:
+      - members
+      title: StudentChallengeLeaderboardResponse
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

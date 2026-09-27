@@ -180,81 +180,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    CreateTeamDictionaryItem:
-      properties:
-        word:
-          type: string
-          maxLength: 255
-          title: Word
-        replacement:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Replacement
-        replacement_html:
-          anyOf:
-          - type: string
-            maxLength: 4000
-          - type: 'null'
-          title: Replacement Html
-        is_manual:
-          type: boolean
-          title: Is Manual
-        frequency_used:
-          type: integer
-          title: Frequency Used
-        last_used:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Used
-        source:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Source
-        is_snippet:
-          type: boolean
-          title: Is Snippet
-      type: object
-      required:
-      - word
-      - is_manual
-      - frequency_used
-      - source
-      - is_snippet
-      title: CreateTeamDictionaryItem
-      description: Request payload for creating a single team dictionary item.
-    UpdateTeamDictionaryItem:
-      properties:
-        word_id:
-          type: string
-          format: uuid
-          title: Word Id
-        word:
-          type: string
-          title: Word
-        replacement:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Replacement
-        replacement_html:
-          anyOf:
-          - type: string
-            maxLength: 4000
-          - type: 'null'
-          title: Replacement Html
-        is_snippet:
-          type: boolean
-          title: Is Snippet
-      type: object
-      required:
-      - word_id
-      - word
-      - is_snippet
-      title: UpdateTeamDictionaryItem
-      description: Request payload for updating an existing team dictionary item.
     BulkCreateTeamDictionaryResult:
       properties:
         success:
@@ -273,41 +198,6 @@ components:
       - duplicate_count
       title: BulkCreateTeamDictionaryResult
       description: Result summary of a bulk team dictionary import (imported and duplicate counts).
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     DictionaryItem:
       properties:
         id:
@@ -377,6 +267,116 @@ components:
       - is_snippet
       title: DictionaryItem
       description: A team dictionary word or snippet entry as returned to clients.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UpdateTeamDictionaryItem:
+      properties:
+        word_id:
+          type: string
+          format: uuid
+          title: Word Id
+        word:
+          type: string
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        replacement_html:
+          anyOf:
+          - type: string
+            maxLength: 4000
+          - type: 'null'
+          title: Replacement Html
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+      type: object
+      required:
+      - word_id
+      - word
+      - is_snippet
+      title: UpdateTeamDictionaryItem
+      description: Request payload for updating an existing team dictionary item.
+    CreateTeamDictionaryItem:
+      properties:
+        word:
+          type: string
+          maxLength: 255
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        replacement_html:
+          anyOf:
+          - type: string
+            maxLength: 4000
+          - type: 'null'
+          title: Replacement Html
+        is_manual:
+          type: boolean
+          title: Is Manual
+        frequency_used:
+          type: integer
+          title: Frequency Used
+        last_used:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Used
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+      type: object
+      required:
+      - word
+      - is_manual
+      - frequency_used
+      - source
+      - is_snippet
+      title: CreateTeamDictionaryItem
+      description: Request payload for creating a single team dictionary item.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

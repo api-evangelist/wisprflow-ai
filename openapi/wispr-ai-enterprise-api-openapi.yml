@@ -1351,77 +1351,42 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    DomainVerificationInitiateResponse:
+    AuditLogTableResponse:
       properties:
-        domain_id:
-          type: string
-          title: Domain Id
-        enterprise_id:
-          type: string
-          title: Enterprise Id
-        domain:
-          type: string
-          title: Domain
-        verified:
-          type: boolean
-          title: Verified
-        verified_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Verified At
-        verification_initiated_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Verification Initiated At
-        record:
-          anyOf:
-          - $ref: '#/components/schemas/DomainVerificationRecord'
-          - type: 'null'
-      type: object
-      required:
-      - domain_id
-      - enterprise_id
-      - domain
-      - verified
-      - verified_at
-      - verification_initiated_at
-      - record
-      title: DomainVerificationInitiateResponse
-      description: 'Response returned by the superadmin ``initiate-verification`` endpoint.
-
-
-        Narrower than :class:`DomainVerificationStatus` — does not expose check
-
-        counters or capture policy, only what is needed to issue the TXT record.'
-    EnterpriseRole:
-      type: string
-      enum:
-      - admin
-      - member
-      - superadmin
-      - it_admin
-      title: EnterpriseRole
-    EnterpriseMembersCountResponse:
-      properties:
+        rows:
+          items:
+            $ref: '#/components/schemas/AuditLogEntry'
+          type: array
+          title: Rows
         total:
           type: integer
           title: Total
       type: object
       required:
+      - rows
       - total
-      title: EnterpriseMembersCountResponse
-      description: 'Payload for ``GET /api/v1/enterprise/members/count``.
-
-
-        ``total`` ignores search/status/team filters. It still respects the
-
-        protected-enterprise admin-roles restriction so a non-admin viewer of a
-
-        protected enterprise sees the same reduced denominator the table query
-
-        enforces.'
+      title: AuditLogTableResponse
+      description: Paginated audit-log payload. `total` is the filtered event count before pagination.
+    UpdateDomainCapturePolicyRequest:
+      properties:
+        policy:
+          $ref: '#/components/schemas/DomainCapturePolicy'
+      type: object
+      required:
+      - policy
+      title: UpdateDomainCapturePolicyRequest
+    MembersResponse:
+      properties:
+        members:
+          items:
+            $ref: '#/components/schemas/MemberResponse'
+          type: array
+          title: Members
+      type: object
+      required:
+      - members
+      title: MembersResponse
+      description: Response model for list of enterprise members
     AcceptTeamInviteLinkRequest:
       properties:
         code:
@@ -1431,132 +1396,98 @@ components:
       required:
       - code
       title: AcceptTeamInviteLinkRequest
-    EnterpriseMemberDetailResponse:
+    RevokeInvitationRequest:
       properties:
-        userId:
+        enterprise_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enterprise Id
+      type: object
+      title: RevokeInvitationRequest
+    DeleteJoinRequestRequest:
+      properties:
+        join_request_id:
           type: string
-          title: Userid
-        firstName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Firstname
-        lastName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Lastname
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-        role:
-          anyOf:
-          - $ref: '#/components/schemas/EnterpriseRole'
-          - type: 'null'
-        status:
-          type: string
-          enum:
-          - active
-          - trialing
-          title: Status
-        trialEndsAt:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Trialendsat
-        teamId:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Teamid
-        teamName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Teamname
-        teamRole:
-          anyOf:
-          - $ref: '#/components/schemas/TeamMemberRole'
-          - type: 'null'
-          description: The user's per-team membership role on the joined ``teamId``. ``admin`` or ``member`` when the user has an active team membership; ``null`` when they have no active membership (pending) or the stored role is an unrecognized legacy value. Distinct from the enterprise-level ``role`` field above.
-        totalWords:
-          type: integer
-          title: Totalwords
-        wordsInWindow:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Wordsinwindow
-        wpm:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Wpm
-        lastUsedAt:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Lastusedat
-        joinedAt:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Joinedat
+          title: Join Request Id
       type: object
       required:
-      - userId
-      - firstName
-      - lastName
-      - email
-      - role
-      - status
-      - trialEndsAt
-      - teamId
-      - teamName
-      - totalWords
-      - wordsInWindow
-      - wpm
-      - lastUsedAt
-      - joinedAt
-      title: EnterpriseMemberDetailResponse
-      description: 'Payload for ``GET /api/v1/enterprise/members/{user_id}``.
+      - join_request_id
+      title: DeleteJoinRequestRequest
+    EnterpriseMembersTableResponse:
+      properties:
+        rows:
+          items:
+            $ref: '#/components/schemas/EnterpriseMemberRowResponse'
+          type: array
+          title: Rows
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - rows
+      - total
+      title: EnterpriseMembersTableResponse
+      description: 'Paginated payload for ``GET /api/v1/enterprise/members/table``.
 
 
-        Inherits the full row shape (so a frontend can populate the detail header
+        ``total`` reflects the count *after* search/status/team filters but
 
-        from a cached row optimistically). No extra fields today — the dictation
-
-        rank that previously lived here was removed; the filter-aware chart totals
-
-        come from ``/insights/words-dictated`` and ``/insights/desktop-apps``.'
-    DomainCapturePolicy:
+        *before* pagination — the frontend uses it for the page-count widget.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InviteStatus:
       type: string
       enum:
-      - unset
-      - 'off'
-      - require
-      title: DomainCapturePolicy
-      description: 'Whether unclaimed users on a verified domain are required to request to join the enterprise.
-
-
-        ``unset`` indicates the admin has not chosen a policy — distinct from explicitly ``off``.
-
-        Both ``off`` and ``require`` require a DNS-verified domain before they may be set;
-
-        ``unset`` is the only value allowed when no domain has been verified yet.
-
-        ``off`` means that they have intentionally turned off domain capture so users can keep using flow without being prompted to join the enterprise.'
-    CheckEnterpriseEligibilityRequest:
+      - pending
+      - accepted
+      - expired
+      - error
+      - removed
+      - revoked
+      - admin_removed
+      - scim_removed
+      title: InviteStatus
+      description: Status of an enterprise invitation
+    BulkInviteFailedItem:
       properties:
         email:
           type: string
           title: Email
+        error:
+          type: string
+          title: Error
       type: object
       required:
       - email
-      title: CheckEnterpriseEligibilityRequest
+      - error
+      title: BulkInviteFailedItem
+      description: Response model for a failed bulk invite item
     ContactAdminRequest:
       properties:
         invite_email:
@@ -1572,137 +1503,144 @@ components:
       - message
       title: ContactAdminRequest
       description: Request model for contacting enterprise admins
-    TeamMemberRole:
-      type: string
-      enum:
-      - admin
-      - member
-      title: TeamMemberRole
-      description: 'Per-team membership role stored in ``UserTeamMembership.role``.
-
-
-        Distinct from the enterprise-level role on ``User.enterprise_role`` — a user
-
-        can be an enterprise ``superadmin`` while being a team-level ``member``, or
-
-        vice versa.'
-    MembersResponse:
-      properties:
-        members:
-          items:
-            $ref: '#/components/schemas/MemberResponse'
-          type: array
-          title: Members
-      type: object
-      required:
-      - members
-      title: MembersResponse
-      description: Response model for list of enterprise members
-    BulkInviteFailedItem:
-      properties:
-        email:
-          type: string
-          title: Email
-        error:
-          type: string
-          title: Error
-      type: object
-      required:
-      - email
-      - error
-      title: BulkInviteFailedItem
-      description: Response model for a failed bulk invite item
-    MyCurrentIpResponse:
-      properties:
-        ip:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ip
-      type: object
-      required:
-      - ip
-      title: MyCurrentIpResponse
-      description: Response for GET /api/v1/enterprise/my-current-ip — returns the caller's anti-spoofed egress IP.
-    BulkInviteResponse:
-      properties:
-        successful:
-          items:
-            $ref: '#/components/schemas/InviteResponse'
-          type: array
-          title: Successful
-        failed:
-          items:
-            $ref: '#/components/schemas/BulkInviteFailedItem'
-          type: array
-          title: Failed
-      type: object
-      required:
-      - successful
-      - failed
-      title: BulkInviteResponse
-      description: Response model for bulk invite operation
-    SelfInviteRequest:
-      properties:
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: SelfInviteRequest
-      description: Request model for self-invite to enterprise
-    InviteResponse:
+    JoinRequest:
       properties:
         id:
           type: string
           title: Id
-        email:
+        user_id:
           type: string
-          title: Email
-        status:
-          $ref: '#/components/schemas/InviteStatus'
-        expiresAt:
-          type: string
-          title: Expiresat
-        role:
-          $ref: '#/components/schemas/EnterpriseRole'
+          title: User Id
+        user_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Email
+        user_first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User First Name
+        user_last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Last Name
+        user_avatar_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Avatar Url
         enterprise_id:
           type: string
           title: Enterprise Id
-        invitedBy:
+        status:
+          type: string
+          enum:
+          - pending
+          - approved
+          - rejected
+          title: Status
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        approved_by_user_id:
           anyOf:
           - type: string
           - type: 'null'
-          title: Invitedby
-        acceptedAt:
+          title: Approved By User Id
+        approved_at:
           anyOf:
           - type: string
-            format: date-time
           - type: 'null'
-          title: Acceptedat
-        revokedAt:
+          title: Approved At
+        rejected_by_user_id:
           anyOf:
           - type: string
-            format: date-time
           - type: 'null'
-          title: Revokedat
-        removedAt:
+          title: Rejected By User Id
+        rejected_at:
           anyOf:
           - type: string
-            format: date-time
           - type: 'null'
-          title: Removedat
+          title: Rejected At
+        teamTrialGiven:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Teamtrialgiven
+        trialEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trialendsat
+        hasIndividualSubscription:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Hasindividualsubscription
       type: object
       required:
       - id
-      - email
-      - status
-      - expiresAt
-      - role
+      - user_id
+      - user_email
+      - user_first_name
+      - user_last_name
+      - user_avatar_url
       - enterprise_id
-      title: InviteResponse
-      description: Response model for a single invitation
+      - status
+      - created_at
+      - modified_at
+      title: JoinRequest
+      description: Response model for an enterprise join request
+    BulkInviteRequest:
+      properties:
+        invites:
+          items:
+            $ref: '#/components/schemas/InviteRequest'
+          type: array
+          title: Invites
+      type: object
+      required:
+      - invites
+      title: BulkInviteRequest
+    EnterpriseRole:
+      type: string
+      enum:
+      - admin
+      - member
+      - superadmin
+      - it_admin
+      title: EnterpriseRole
+    UpdateMemberRoleRequest:
+      properties:
+        role:
+          type: string
+          title: Role
+          default: admin
+      type: object
+      title: UpdateMemberRoleRequest
+    SignHipaaBaaRequest:
+      properties:
+        legal_name:
+          type: string
+          title: Legal Name
+      type: object
+      required:
+      - legal_name
+      title: SignHipaaBaaRequest
+    UpdateEnterpriseSettingsRequest:
+      properties:
+        settings:
+          type: object
+          title: Settings
+      type: object
+      required:
+      - settings
+      title: UpdateEnterpriseSettingsRequest
     AuditLogEntry:
       properties:
         event_id:
@@ -1772,157 +1710,6 @@ components:
       - source
       title: AuditLogEntry
       description: One derived audit event for the enterprise admin audit log.
-    InvitesResponse:
-      properties:
-        invitations:
-          items:
-            $ref: '#/components/schemas/InviteResponse'
-          type: array
-          title: Invitations
-      type: object
-      required:
-      - invitations
-      title: InvitesResponse
-      description: Response model for list of invitations
-    MemberResponse:
-      properties:
-        userId:
-          type: string
-          title: Userid
-        firstName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Firstname
-        lastName:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Lastname
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-        role:
-          anyOf:
-          - $ref: '#/components/schemas/EnterpriseRole'
-          - type: 'null'
-        avatarUrl:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Avatarurl
-        enterpriseId:
-          type: string
-          title: Enterpriseid
-        teamTrialGiven:
-          type: boolean
-          title: Teamtrialgiven
-        trialEndsAt:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Trialendsat
-        gracePeriodEndsAt:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Graceperiodendsat
-        hasIndividualSubscription:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Hasindividualsubscription
-      type: object
-      required:
-      - userId
-      - firstName
-      - lastName
-      - email
-      - role
-      - avatarUrl
-      - enterpriseId
-      - teamTrialGiven
-      - trialEndsAt
-      title: MemberResponse
-      description: 'Response model for a single enterprise member.
-
-
-        NOTE: ``firstName``, ``lastName``, ``email``, ``role``, and ``avatarUrl`` are
-
-        Optional because the underlying ``User`` columns (``first_name``, ``last_name``,
-
-        ``email``, ``enterprise_role``, ``avatar_url`` in ``models/user.py``) are all
-
-        nullable. Prior to switching this endpoint to ``MembersResponse.model_validate``,
-
-        a runtime no-op ``cast()`` let nulls flow through to clients, so any user with a
-
-        partial profile would 500 the endpoint if these were declared non-Optional here.'
-    CreateEnterpriseRequestNew:
-      properties:
-        name:
-          type: string
-          title: Name
-        autoInviteUsers:
-          type: boolean
-          title: Autoinviteusers
-          default: true
-      type: object
-      required:
-      - name
-      title: CreateEnterpriseRequestNew
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    UpdateDomainCapturePolicyRequest:
-      properties:
-        policy:
-          $ref: '#/components/schemas/DomainCapturePolicy'
-      type: object
-      required:
-      - policy
-      title: UpdateDomainCapturePolicyRequest
-    AuditLogTableResponse:
-      properties:
-        rows:
-          items:
-            $ref: '#/components/schemas/AuditLogEntry'
-          type: array
-          title: Rows
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - rows
-      - total
-      title: AuditLogTableResponse
-      description: Paginated audit-log payload. `total` is the filtered event count before pagination.
     EnterpriseMemberRowResponse:
       properties:
         userId:
@@ -2029,168 +1816,15 @@ components:
       - message
       title: SelfInviteResponse
       description: Response model for self-invite endpoint
-    AcceptJoinRequestRequest:
+    AcceptEnterpriseInviteRequest:
       properties:
-        join_request_id:
+        invite_id:
           type: string
-          title: Join Request Id
+          title: Invite Id
       type: object
       required:
-      - join_request_id
-      title: AcceptJoinRequestRequest
-    AuditAction:
-      type: string
-      enum:
-      - member.added
-      - member.removed
-      - join_request.approved
-      - join_request.rejected
-      title: AuditAction
-      description: The audit events v1 derives at read time from existing enterprise tables.
-    EnterpriseMembersTableResponse:
-      properties:
-        rows:
-          items:
-            $ref: '#/components/schemas/EnterpriseMemberRowResponse'
-          type: array
-          title: Rows
-        total:
-          type: integer
-          title: Total
-      type: object
-      required:
-      - rows
-      - total
-      title: EnterpriseMembersTableResponse
-      description: 'Paginated payload for ``GET /api/v1/enterprise/members/table``.
-
-
-        ``total`` reflects the count *after* search/status/team filters but
-
-        *before* pagination — the frontend uses it for the page-count widget.'
-    JoinRequest:
-      properties:
-        id:
-          type: string
-          title: Id
-        user_id:
-          type: string
-          title: User Id
-        user_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Email
-        user_first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User First Name
-        user_last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Last Name
-        user_avatar_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Avatar Url
-        enterprise_id:
-          type: string
-          title: Enterprise Id
-        status:
-          type: string
-          enum:
-          - pending
-          - approved
-          - rejected
-          title: Status
-        created_at:
-          type: string
-          title: Created At
-        modified_at:
-          type: string
-          title: Modified At
-        approved_by_user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Approved By User Id
-        approved_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Approved At
-        rejected_by_user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Rejected By User Id
-        rejected_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Rejected At
-        teamTrialGiven:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Teamtrialgiven
-        trialEndsAt:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Trialendsat
-        hasIndividualSubscription:
-          anyOf:
-          - type: boolean
-          - type: 'null'
-          title: Hasindividualsubscription
-      type: object
-      required:
-      - id
-      - user_id
-      - user_email
-      - user_first_name
-      - user_last_name
-      - user_avatar_url
-      - enterprise_id
-      - status
-      - created_at
-      - modified_at
-      title: JoinRequest
-      description: Response model for an enterprise join request
-    UpdateMemberRoleRequest:
-      properties:
-        role:
-          type: string
-          title: Role
-          default: admin
-      type: object
-      title: UpdateMemberRoleRequest
-    ListDomainVerificationsResponse:
-      properties:
-        domains:
-          items:
-            $ref: '#/components/schemas/DomainVerificationStatus'
-          type: array
-          title: Domains
-      type: object
-      required:
-      - domains
-      title: ListDomainVerificationsResponse
-      description: Response returned by the admin ``GET /domains/verifications`` endpoint.
-    ContactAdminResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: ContactAdminResponse
-      description: Response model for contact admin endpoint
+      - invite_id
+      title: AcceptEnterpriseInviteRequest
     InviteRequest:
       properties:
         email:
@@ -2204,24 +1838,15 @@ components:
       required:
       - email
       title: InviteRequest
-    TeamInviteLinkResponse:
-      properties:
-        code:
-          type: string
-          title: Code
-        invite_url:
-          type: string
-          title: Invite Url
-        enterprise_id:
-          type: string
-          title: Enterprise Id
-      type: object
-      required:
-      - code
-      - invite_url
-      - enterprise_id
-      title: TeamInviteLinkResponse
-      description: Response model for a team invite link
+    AuditAction:
+      type: string
+      enum:
+      - member.added
+      - member.removed
+      - join_request.approved
+      - join_request.rejected
+      title: AuditAction
+      description: The audit events v1 derives at read time from existing enterprise tables.
     UpdateEnterpriseRequest:
       properties:
         name:
@@ -2236,33 +1861,94 @@ components:
           title: Logo
       type: object
       title: UpdateEnterpriseRequest
-    AcceptEnterpriseInviteRequest:
+    SelfInviteRequest:
       properties:
-        invite_id:
+        message:
           type: string
-          title: Invite Id
+          title: Message
       type: object
       required:
-      - invite_id
-      title: AcceptEnterpriseInviteRequest
-    HTTPValidationError:
+      - message
+      title: SelfInviteRequest
+      description: Request model for self-invite to enterprise
+    BulkInviteResponse:
       properties:
-        detail:
+        successful:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            $ref: '#/components/schemas/InviteResponse'
           type: array
-          title: Detail
+          title: Successful
+        failed:
+          items:
+            $ref: '#/components/schemas/BulkInviteFailedItem'
+          type: array
+          title: Failed
       type: object
-      title: HTTPValidationError
-    RevokeInvitationRequest:
+      required:
+      - successful
+      - failed
+      title: BulkInviteResponse
+      description: Response model for bulk invite operation
+    InviteResponse:
       properties:
+        id:
+          type: string
+          title: Id
+        email:
+          type: string
+          title: Email
+        status:
+          $ref: '#/components/schemas/InviteStatus'
+        expiresAt:
+          type: string
+          title: Expiresat
+        role:
+          $ref: '#/components/schemas/EnterpriseRole'
         enterprise_id:
+          type: string
+          title: Enterprise Id
+        invitedBy:
           anyOf:
           - type: string
           - type: 'null'
-          title: Enterprise Id
+          title: Invitedby
+        acceptedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Acceptedat
+        revokedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Revokedat
+        removedAt:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Removedat
       type: object
-      title: RevokeInvitationRequest
+      required:
+      - id
+      - email
+      - status
+      - expiresAt
+      - role
+      - enterprise_id
+      title: InviteResponse
+      description: Response model for a single invitation
+    AcceptJoinRequestRequest:
+      properties:
+        join_request_id:
+          type: string
+          title: Join Request Id
+      type: object
+      required:
+      - join_request_id
+      title: AcceptJoinRequestRequest
     DomainVerificationRecord:
       properties:
         type:
@@ -2284,39 +1970,32 @@ components:
       - value
       title: DomainVerificationRecord
       description: TXT record the customer must publish to prove ownership of a domain.
-    InviteStatus:
+    InvitesResponse:
+      properties:
+        invitations:
+          items:
+            $ref: '#/components/schemas/InviteResponse'
+          type: array
+          title: Invitations
+      type: object
+      required:
+      - invitations
+      title: InvitesResponse
+      description: Response model for list of invitations
+    TeamMemberRole:
       type: string
       enum:
-      - pending
-      - accepted
-      - expired
-      - error
-      - removed
-      - revoked
-      - admin_removed
-      - scim_removed
-      title: InviteStatus
-      description: Status of an enterprise invitation
-    BulkAcceptJoinRequestRequest:
-      properties:
-        join_request_ids:
-          items:
-            type: string
-          type: array
-          title: Join Request Ids
-      type: object
-      required:
-      - join_request_ids
-      title: BulkAcceptJoinRequestRequest
-    SignHipaaBaaRequest:
-      properties:
-        legal_name:
-          type: string
-          title: Legal Name
-      type: object
-      required:
-      - legal_name
-      title: SignHipaaBaaRequest
+      - admin
+      - member
+      title: TeamMemberRole
+      description: 'Per-team membership role stored in ``UserTeamMembership.role``.
+
+
+        Distinct from the enterprise-level role on ``User.enterprise_role`` — a user
+
+        can be an enterprise ``superadmin`` while being a team-level ``member``, or
+
+        vice versa.'
     DomainVerificationStatus:
       properties:
         domain_id:
@@ -2385,35 +2064,356 @@ components:
         The ``record`` field is populated only on superadmin (internal) reads while
 
         the domain is still unverified. Admin-facing reads always set it to ``None``.'
-    DeleteJoinRequestRequest:
+    DomainVerificationInitiateResponse:
       properties:
-        join_request_id:
+        domain_id:
           type: string
-          title: Join Request Id
+          title: Domain Id
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+        domain:
+          type: string
+          title: Domain
+        verified:
+          type: boolean
+          title: Verified
+        verified_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verified At
+        verification_initiated_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Verification Initiated At
+        record:
+          anyOf:
+          - $ref: '#/components/schemas/DomainVerificationRecord'
+          - type: 'null'
       type: object
       required:
-      - join_request_id
-      title: DeleteJoinRequestRequest
-    UpdateEnterpriseSettingsRequest:
+      - domain_id
+      - enterprise_id
+      - domain
+      - verified
+      - verified_at
+      - verification_initiated_at
+      - record
+      title: DomainVerificationInitiateResponse
+      description: 'Response returned by the superadmin ``initiate-verification`` endpoint.
+
+
+        Narrower than :class:`DomainVerificationStatus` — does not expose check
+
+        counters or capture policy, only what is needed to issue the TXT record.'
+    CheckEnterpriseEligibilityRequest:
       properties:
-        settings:
-          type: object
-          title: Settings
+        email:
+          type: string
+          title: Email
       type: object
       required:
-      - settings
-      title: UpdateEnterpriseSettingsRequest
-    BulkInviteRequest:
+      - email
+      title: CheckEnterpriseEligibilityRequest
+    EnterpriseMembersCountResponse:
       properties:
-        invites:
+        total:
+          type: integer
+          title: Total
+      type: object
+      required:
+      - total
+      title: EnterpriseMembersCountResponse
+      description: 'Payload for ``GET /api/v1/enterprise/members/count``.
+
+
+        ``total`` ignores search/status/team filters. It still respects the
+
+        protected-enterprise admin-roles restriction so a non-admin viewer of a
+
+        protected enterprise sees the same reduced denominator the table query
+
+        enforces.'
+    CreateEnterpriseRequestNew:
+      properties:
+        name:
+          type: string
+          title: Name
+        autoInviteUsers:
+          type: boolean
+          title: Autoinviteusers
+          default: true
+      type: object
+      required:
+      - name
+      title: CreateEnterpriseRequestNew
+    HTTPValidationError:
+      properties:
+        detail:
           items:
-            $ref: '#/components/schemas/InviteRequest'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Invites
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    MyCurrentIpResponse:
+      properties:
+        ip:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ip
       type: object
       required:
-      - invites
-      title: BulkInviteRequest
+      - ip
+      title: MyCurrentIpResponse
+      description: Response for GET /api/v1/enterprise/my-current-ip — returns the caller's anti-spoofed egress IP.
+    TeamInviteLinkResponse:
+      properties:
+        code:
+          type: string
+          title: Code
+        invite_url:
+          type: string
+          title: Invite Url
+        enterprise_id:
+          type: string
+          title: Enterprise Id
+      type: object
+      required:
+      - code
+      - invite_url
+      - enterprise_id
+      title: TeamInviteLinkResponse
+      description: Response model for a team invite link
+    ListDomainVerificationsResponse:
+      properties:
+        domains:
+          items:
+            $ref: '#/components/schemas/DomainVerificationStatus'
+          type: array
+          title: Domains
+      type: object
+      required:
+      - domains
+      title: ListDomainVerificationsResponse
+      description: Response returned by the admin ``GET /domains/verifications`` endpoint.
+    MemberResponse:
+      properties:
+        userId:
+          type: string
+          title: Userid
+        firstName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Firstname
+        lastName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpriseRole'
+          - type: 'null'
+        avatarUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Avatarurl
+        enterpriseId:
+          type: string
+          title: Enterpriseid
+        teamTrialGiven:
+          type: boolean
+          title: Teamtrialgiven
+        trialEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trialendsat
+        gracePeriodEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Graceperiodendsat
+        hasIndividualSubscription:
+          anyOf:
+          - type: boolean
+          - type: 'null'
+          title: Hasindividualsubscription
+      type: object
+      required:
+      - userId
+      - firstName
+      - lastName
+      - email
+      - role
+      - avatarUrl
+      - enterpriseId
+      - teamTrialGiven
+      - trialEndsAt
+      title: MemberResponse
+      description: 'Response model for a single enterprise member.
+
+
+        NOTE: ``firstName``, ``lastName``, ``email``, ``role``, and ``avatarUrl`` are
+
+        Optional because the underlying ``User`` columns (``first_name``, ``last_name``,
+
+        ``email``, ``enterprise_role``, ``avatar_url`` in ``models/user.py``) are all
+
+        nullable. Prior to switching this endpoint to ``MembersResponse.model_validate``,
+
+        a runtime no-op ``cast()`` let nulls flow through to clients, so any user with a
+
+        partial profile would 500 the endpoint if these were declared non-Optional here.'
+    DomainCapturePolicy:
+      type: string
+      enum:
+      - unset
+      - 'off'
+      - require
+      title: DomainCapturePolicy
+      description: 'Whether unclaimed users on a verified domain are required to request to join the enterprise.
+
+
+        ``unset`` indicates the admin has not chosen a policy — distinct from explicitly ``off``.
+
+        Both ``off`` and ``require`` require a DNS-verified domain before they may be set;
+
+        ``unset`` is the only value allowed when no domain has been verified yet.
+
+        ``off`` means that they have intentionally turned off domain capture so users can keep using flow without being prompted to join the enterprise.'
+    ContactAdminResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: ContactAdminResponse
+      description: Response model for contact admin endpoint
+    EnterpriseMemberDetailResponse:
+      properties:
+        userId:
+          type: string
+          title: Userid
+        firstName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Firstname
+        lastName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Lastname
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/EnterpriseRole'
+          - type: 'null'
+        status:
+          type: string
+          enum:
+          - active
+          - trialing
+          title: Status
+        trialEndsAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Trialendsat
+        teamId:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Teamid
+        teamName:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Teamname
+        teamRole:
+          anyOf:
+          - $ref: '#/components/schemas/TeamMemberRole'
+          - type: 'null'
+          description: The user's per-team membership role on the joined ``teamId``. ``admin`` or ``member`` when the user has an active team membership; ``null`` when they have no active membership (pending) or the stored role is an unrecognized legacy value. Distinct from the enterprise-level ``role`` field above.
+        totalWords:
+          type: integer
+          title: Totalwords
+        wordsInWindow:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Wordsinwindow
+        wpm:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Wpm
+        lastUsedAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Lastusedat
+        joinedAt:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Joinedat
+      type: object
+      required:
+      - userId
+      - firstName
+      - lastName
+      - email
+      - role
+      - status
+      - trialEndsAt
+      - teamId
+      - teamName
+      - totalWords
+      - wordsInWindow
+      - wpm
+      - lastUsedAt
+      - joinedAt
+      title: EnterpriseMemberDetailResponse
+      description: 'Payload for ``GET /api/v1/enterprise/members/{user_id}``.
+
+
+        Inherits the full row shape (so a frontend can populate the detail header
+
+        from a cached row optimistically). No extra fields today — the dictation
+
+        rank that previously lived here was removed; the filter-aware chart totals
+
+        come from ``/insights/words-dictated`` and ``/insights/desktop-apps``.'
+    BulkAcceptJoinRequestRequest:
+      properties:
+        join_request_ids:
+          items:
+            type: string
+          type: array
+          title: Join Request Ids
+      type: object
+      required:
+      - join_request_ids
+      title: BulkAcceptJoinRequestRequest
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

@@ -47,62 +47,66 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    TodoStatus:
-      type: string
-      enum:
-      - open
-      - in_progress
-      - done
-      title: TodoStatus
-    TodoSyncResponse:
+    HTTPValidationError:
       properties:
-        acked:
+        detail:
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Acked
-        todos:
-          items:
-            $ref: '#/components/schemas/SyncTodo'
-          type: array
-          title: Todos
-        sync_time:
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SyncTodo:
+      properties:
+        id:
           type: string
-          title: Sync Time
-        next_page_cursor:
+          format: uuid
+          title: Id
+        meeting_id:
           anyOf:
           - type: string
+            format: uuid
           - type: 'null'
-          title: Next Page Cursor
+          title: Meeting Id
+        title:
+          type: string
+          title: Title
+        status:
+          $ref: '#/components/schemas/TodoStatus'
+        is_archived:
+          type: boolean
+          title: Is Archived
+          default: false
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          default: false
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
       type: object
       required:
-      - acked
-      - todos
-      - sync_time
-      title: TodoSyncResponse
-      description: 'Response for ``POST /api/v1/todos/sync``.
+      - id
+      - title
+      - status
+      - created_at
+      - modified_at
+      title: SyncTodo
+      description: 'One todo on the ``/todos/sync`` pull. The whole row travels (existence,
+
+        title, status, archive, tombstone) — todos are not projected from note content,
+
+        so the row is the single source of truth.
 
 
-        ``acked`` is the subset of pushed ids the server accepted: a created/updated
+        ``meeting_id`` is nullable: set ⟹ from that meeting; NULL ⟹ ad-hoc. Timestamps
 
-        row, OR an existing-and-owned row that lost LWW (it exists, so the client stops
+        are Unix ms strings (symmetric with the request side). The pull includes
 
-        retrying and lets the newer server value pull down). An id that could NOT be
-
-        adopted — it exists under another user, or its non-null ``meeting_id`` isn''t the
-
-        caller''s (FK race) — is omitted so the client retries. ``todos`` is the
-
-        server→client pull. ``sync_time`` is the server snapshot high-water mark (Unix
-
-        ms); the client persists it as the next ``last_sync_time`` only when
-
-        ``next_page_cursor`` is null. While ``next_page_cursor`` is non-null, the
-
-        client keeps its previous ``last_sync_time`` and sends ``next_page_cursor`` to
-
-        continue the same capped pull.'
+        ``is_deleted`` rows so the client can converge a tombstone.'
     TodoSyncRequest:
       properties:
         last_sync_time:
@@ -132,6 +136,13 @@ components:
       - todos
       title: TodoSyncRequest
       description: Envelope for ``POST /api/v1/todos/sync``.
+    TodoStatus:
+      type: string
+      enum:
+      - open
+      - in_progress
+      - done
+      title: TodoStatus
     SyncTodoRequest:
       properties:
         id:
@@ -195,6 +206,55 @@ components:
         constrained to :class:`TodoStatus` and rejected at parse time (422) on a bad
 
         value — a closed set, unlike the lenient open-ended fields.'
+    TodoSyncResponse:
+      properties:
+        acked:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Acked
+        todos:
+          items:
+            $ref: '#/components/schemas/SyncTodo'
+          type: array
+          title: Todos
+        sync_time:
+          type: string
+          title: Sync Time
+        next_page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Page Cursor
+      type: object
+      required:
+      - acked
+      - todos
+      - sync_time
+      title: TodoSyncResponse
+      description: 'Response for ``POST /api/v1/todos/sync``.
+
+
+        ``acked`` is the subset of pushed ids the server accepted: a created/updated
+
+        row, OR an existing-and-owned row that lost LWW (it exists, so the client stops
+
+        retrying and lets the newer server value pull down). An id that could NOT be
+
+        adopted — it exists under another user, or its non-null ``meeting_id`` isn''t the
+
+        caller''s (FK race) — is omitted so the client retries. ``todos`` is the
+
+        server→client pull. ``sync_time`` is the server snapshot high-water mark (Unix
+
+        ms); the client persists it as the next ``last_sync_time`` only when
+
+        ``next_page_cursor`` is null. While ``next_page_cursor`` is non-null, the
+
+        client keeps its previous ``last_sync_time`` and sends ``next_page_cursor`` to
+
+        continue the same capped pull.'
     ValidationError:
       properties:
         loc:
@@ -221,66 +281,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    SyncTodo:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        meeting_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Meeting Id
-        title:
-          type: string
-          title: Title
-        status:
-          $ref: '#/components/schemas/TodoStatus'
-        is_archived:
-          type: boolean
-          title: Is Archived
-          default: false
-        is_deleted:
-          type: boolean
-          title: Is Deleted
-          default: false
-        created_at:
-          type: string
-          title: Created At
-        modified_at:
-          type: string
-          title: Modified At
-      type: object
-      required:
-      - id
-      - title
-      - status
-      - created_at
-      - modified_at
-      title: SyncTodo
-      description: 'One todo on the ``/todos/sync`` pull. The whole row travels (existence,
-
-        title, status, archive, tombstone) — todos are not projected from note content,
-
-        so the row is the single source of truth.
-
-
-        ``meeting_id`` is nullable: set ⟹ from that meeting; NULL ⟹ ad-hoc. Timestamps
-
-        are Unix ms strings (symmetric with the request side). The pull includes
-
-        ``is_deleted`` rows so the client can converge a tombstone.'
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

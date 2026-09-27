@@ -38,58 +38,29 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    UploadInstructHistoryResponse:
+    HTTPValidationError:
       properties:
-        num_rows_saved:
-          type: integer
-          title: Num Rows Saved
-        ids:
+        detail:
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Ids
-        session_ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Session Ids
+          title: Detail
       type: object
-      required:
-      - num_rows_saved
-      - ids
-      title: UploadInstructHistoryResponse
-    InstructToolCall:
-      properties:
-        name:
-          type: string
-          title: Name
-        input:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Input
-        output:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Output
-        latency_ms:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Latency Ms
-      type: object
-      required:
-      - name
-      title: InstructToolCall
-      description: 'One tool/route invocation within a dictation turn, in execution order.
-
-
-        ``input``/``output`` shapes are owned by the desktop per tool; server-side
-
-        enforcement would block adding a tool without a coordinated deploy.'
+      title: HTTPValidationError
+    InstructHistoryStatus:
+      type: string
+      enum:
+      - succeeded
+      - classifier_failed
+      - classifier_timeout
+      - short_circuit_used
+      - route_error
+      - paste_failed
+      - cancelled
+      - no_text
+      - not_editable
+      title: InstructHistoryStatus
+      description: End-to-end outcome of the resolved dictation route.
     ClassifierStatus:
       type: string
       enum:
@@ -100,33 +71,21 @@ components:
       - not_invoked
       title: ClassifierStatus
       description: Outcome of the /llm/classify_intent call (null when classify-intent was not invoked).
-    ClassificationMode:
-      type: string
-      enum:
-      - autoClassify
-      - instructShortcut
-      title: ClassificationMode
-      description: How the dictation entered the classification flow.
-    UploadInstructHistoryRequest:
+    InstructChatSessionRecord:
       properties:
-        user_id:
+        id:
           type: string
-          title: User Id
-        instruct_chat_sessions:
-          items:
-            $ref: '#/components/schemas/InstructChatSessionRecord'
-          type: array
-          title: Instruct Chat Sessions
-        instruct_history_records:
-          items:
-            $ref: '#/components/schemas/InstructHistoryRecord'
-          type: array
-          title: Instruct History Records
+          format: uuid
+          title: Id
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
       type: object
       required:
-      - user_id
-      - instruct_history_records
-      title: UploadInstructHistoryRequest
+      - id
+      title: InstructChatSessionRecord
     InstructHistoryRecord:
       properties:
         id:
@@ -254,6 +213,102 @@ components:
         has no separate classifier). ``instruct_session_id``/``session_turn_index``
 
         group turns of one instruct chat back-and-forth.'
+    ClassificationMode:
+      type: string
+      enum:
+      - autoClassify
+      - instructShortcut
+      title: ClassificationMode
+      description: How the dictation entered the classification flow.
+    InstructHistoryFeedback:
+      properties:
+        rating:
+          type: string
+          enum:
+          - up
+          - down
+          title: Rating
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+      type: object
+      required:
+      - rating
+      title: InstructHistoryFeedback
+    UploadInstructHistoryRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        instruct_chat_sessions:
+          items:
+            $ref: '#/components/schemas/InstructChatSessionRecord'
+          type: array
+          title: Instruct Chat Sessions
+        instruct_history_records:
+          items:
+            $ref: '#/components/schemas/InstructHistoryRecord'
+          type: array
+          title: Instruct History Records
+      type: object
+      required:
+      - user_id
+      - instruct_history_records
+      title: UploadInstructHistoryRequest
+    UploadInstructHistoryResponse:
+      properties:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Ids
+        session_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Session Ids
+      type: object
+      required:
+      - num_rows_saved
+      - ids
+      title: UploadInstructHistoryResponse
+    InstructToolCall:
+      properties:
+        name:
+          type: string
+          title: Name
+        input:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Input
+        output:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Output
+        latency_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latency Ms
+      type: object
+      required:
+      - name
+      title: InstructToolCall
+      description: 'One tool/route invocation within a dictation turn, in execution order.
+
+
+        ``input``/``output`` shapes are owned by the desktop per tool; server-side
+
+        enforcement would block adding a tool without a coordinated deploy.'
     ValidationError:
       properties:
         loc:
@@ -280,61 +335,6 @@ components:
       - msg
       - type
       title: ValidationError
-    InstructHistoryFeedback:
-      properties:
-        rating:
-          type: string
-          enum:
-          - up
-          - down
-          title: Rating
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-      type: object
-      required:
-      - rating
-      title: InstructHistoryFeedback
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    InstructChatSessionRecord:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-      type: object
-      required:
-      - id
-      title: InstructChatSessionRecord
-    InstructHistoryStatus:
-      type: string
-      enum:
-      - succeeded
-      - classifier_failed
-      - classifier_timeout
-      - short_circuit_used
-      - route_error
-      - paste_failed
-      - cancelled
-      - no_text
-      - not_editable
-      title: InstructHistoryStatus
-      description: End-to-end outcome of the resolved dictation route.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

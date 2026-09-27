@@ -120,74 +120,35 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    SendEmailResponse:
+    AutomationSyncRequest:
       properties:
-        successful:
+        last_sync_time:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Sync Time
+          description: Unix timestamp in ms of the most recent server change the client has seen
+        page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page Cursor
+          description: Opaque cursor from a previous paged response. While this is set, keep last_sync_time unchanged and pass this value to continue the same pull snapshot.
+        hard_refresh:
           type: boolean
-          title: Successful
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
+          title: Hard Refresh
+          description: When true, ignore last_sync_time and pull all of the user's automations regardless of it
+          default: false
       type: object
-      required:
-      - successful
-      title: SendEmailResponse
-      description: 'Result of sending mail via a connector. ``successful`` is the only payload;
-
-        ``error`` carries a stable code the client maps to a toast (see ``GoogleAutomationsConnector.send_email``).'
-    AddCalendarEventResponse:
-      properties:
-        successful:
-          type: boolean
-          title: Successful
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-      type: object
-      required:
-      - successful
-      title: AddCalendarEventResponse
-      description: 'Result of creating a calendar event via a connector. ``successful`` is the only
-
-        payload; ``error`` carries a stable code the client maps to a toast (see
-
-        ``GoogleAutomationsConnector.add_calendar_event``).'
-    AutomationSyncResponse:
-      properties:
-        automations:
-          items:
-            $ref: '#/components/schemas/AutomationOut'
-          type: array
-          title: Automations
-        sync_time:
-          type: string
-          title: Sync Time
-        next_page_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Page Cursor
-      type: object
-      required:
-      - automations
-      - sync_time
-      title: AutomationSyncResponse
-      description: 'Response for ``POST /api/v1/automations/sync``.
+      title: AutomationSyncRequest
+      description: 'Envelope for ``POST /api/v1/automations/sync``.
 
 
-        ``automations`` is the server→client pull. ``sync_time`` is the server snapshot
+        Pull-only: automations are server-authored (written by the managed-agent
 
-        high-water mark (Unix ms); the client persists it as the next ``last_sync_time``
+        completion handler), so there is NO pushed-items field — the client only ever
 
-        only when ``next_page_cursor`` is null. While ``next_page_cursor`` is non-null,
-
-        the client keeps its previous ``last_sync_time`` and sends ``next_page_cursor``
-
-        to continue the same capped pull.'
+        pulls. Mirrors the cursor/paging shape of ``TodoSyncRequest`` minus the push.'
     AutomationOut:
       properties:
         id:
@@ -228,32 +189,47 @@ components:
         kind-specific data as stored; ``kind`` mirrors ``payload[''kind'']``. ``created_at`` is
 
         Unix ms (symmetric with the todo timestamps).'
-    ValidationError:
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AutomationSyncResponse:
+      properties:
+        automations:
+          items:
+            $ref: '#/components/schemas/AutomationOut'
+          type: array
+          title: Automations
+        sync_time:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Sync Time
+        next_page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Page Cursor
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - automations
+      - sync_time
+      title: AutomationSyncResponse
+      description: 'Response for ``POST /api/v1/automations/sync``.
+
+
+        ``automations`` is the server→client pull. ``sync_time`` is the server snapshot
+
+        high-water mark (Unix ms); the client persists it as the next ``last_sync_time``
+
+        only when ``next_page_cursor`` is null. While ``next_page_cursor`` is non-null,
+
+        the client keeps its previous ``last_sync_time`` and sends ``next_page_cursor``
+
+        to continue the same capped pull.'
     AutomationAddCalendarRequest:
       properties:
         title:
@@ -297,6 +273,42 @@ components:
         Attendees and description are optional; the organizer is always the
 
         authenticated principal.'
+    AddCalendarEventResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - successful
+      title: AddCalendarEventResponse
+      description: 'Result of creating a calendar event via a connector. ``successful`` is the only
+
+        payload; ``error`` carries a stable code the client maps to a toast (see
+
+        ``GoogleAutomationsConnector.add_calendar_event``).'
+    SendEmailResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - successful
+      title: SendEmailResponse
+      description: 'Result of sending mail via a connector. ``successful`` is the only payload;
+
+        ``error`` carries a stable code the client maps to a toast (see ``GoogleAutomationsConnector.send_email``).'
     AutomationSendEmailRequest:
       properties:
         to:
@@ -328,44 +340,32 @@ components:
         *sender* is always the authenticated principal''s connected account (never taken
 
         from the body).'
-    AutomationSyncRequest:
+    ValidationError:
       properties:
-        last_sync_time:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Sync Time
-          description: Unix timestamp in ms of the most recent server change the client has seen
-        page_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Page Cursor
-          description: Opaque cursor from a previous paged response. While this is set, keep last_sync_time unchanged and pass this value to continue the same pull snapshot.
-        hard_refresh:
-          type: boolean
-          title: Hard Refresh
-          description: When true, ignore last_sync_time and pull all of the user's automations regardless of it
-          default: false
-      type: object
-      title: AutomationSyncRequest
-      description: 'Envelope for ``POST /api/v1/automations/sync``.
-
-
-        Pull-only: automations are server-authored (written by the managed-agent
-
-        completion handler), so there is NO pushed-items field — the client only ever
-
-        pulls. Mirrors the cursor/paging shape of ``TodoSyncRequest`` minus the push.'
-    HTTPValidationError:
-      properties:
-        detail:
+        loc:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Detail
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
-      title: HTTPValidationError
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

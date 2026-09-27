@@ -102,6 +102,43 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    UserTypingTestStats:
+      properties:
+        typing_wpm:
+          type: integer
+          title: Typing Wpm
+        typing_accuracy:
+          type: number
+          title: Typing Accuracy
+        voice_wpm:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Voice Wpm
+        voice_accuracy:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Voice Accuracy
+        is_new_best:
+          type: boolean
+          title: Is New Best
+      type: object
+      required:
+      - typing_wpm
+      - typing_accuracy
+      - is_new_best
+      title: UserTypingTestStats
+      description: Caller's stats from their most recent attempt (or just-submitted attempt).
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     PassageResponse:
       properties:
         id:
@@ -137,6 +174,24 @@ components:
       - time
       title: Keystroke
       description: A single keystroke event with key and timestamp.
+    LeaderboardEntry:
+      properties:
+        rank:
+          type: integer
+          title: Rank
+        display_name:
+          type: string
+          title: Display Name
+        typing_wpm:
+          type: integer
+          title: Typing Wpm
+      type: object
+      required:
+      - rank
+      - display_name
+      - typing_wpm
+      title: LeaderboardEntry
+      description: A single leaderboard entry.
     TypingTestResponse:
       properties:
         stats:
@@ -160,52 +215,6 @@ components:
       - leaderboard
       title: TypingTestResponse
       description: Response for the submit-score endpoint.
-    UserTypingTestStats:
-      properties:
-        typing_wpm:
-          type: integer
-          title: Typing Wpm
-        typing_accuracy:
-          type: number
-          title: Typing Accuracy
-        voice_wpm:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Voice Wpm
-        voice_accuracy:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Voice Accuracy
-        is_new_best:
-          type: boolean
-          title: Is New Best
-      type: object
-      required:
-      - typing_wpm
-      - typing_accuracy
-      - is_new_best
-      title: UserTypingTestStats
-      description: Caller's stats from their most recent attempt (or just-submitted attempt).
-    LeaderboardEntry:
-      properties:
-        rank:
-          type: integer
-          title: Rank
-        display_name:
-          type: string
-          title: Display Name
-        typing_wpm:
-          type: integer
-          title: Typing Wpm
-      type: object
-      required:
-      - rank
-      - display_name
-      - typing_wpm
-      title: LeaderboardEntry
-      description: A single leaderboard entry.
     LeaderboardResponse:
       properties:
         top_ranked:
@@ -222,41 +231,6 @@ components:
       - top_ranked
       title: LeaderboardResponse
       description: Leaderboard with top ranked users and the caller's best.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     SubmitScoreRequest:
       properties:
         email:
@@ -312,6 +286,32 @@ components:
       - keystrokes
       title: SubmitScoreRequest
       description: Request schema for POST /typing-test/submit-score
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

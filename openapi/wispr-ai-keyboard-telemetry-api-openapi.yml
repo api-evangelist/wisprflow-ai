@@ -56,6 +56,15 @@ components:
       - cells
       title: KbTouchBatch
       description: A batch of keyboard touch aggregate cells uploaded by the client.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     KbTouchCell:
       properties:
         device_diag:
@@ -160,6 +169,16 @@ components:
       - sum_t2
       title: KbTouchCell
       description: A single per-key moment-counter cell aggregated on-device.
+    KbTouchIngestResponse:
+      properties:
+        accepted:
+          type: integer
+          title: Accepted
+      type: object
+      required:
+      - accepted
+      title: KbTouchIngestResponse
+      description: Response reporting how many touch cells were accepted for ingestion.
     ValidationError:
       properties:
         loc:
@@ -186,25 +205,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    KbTouchIngestResponse:
-      properties:
-        accepted:
-          type: integer
-          title: Accepted
-      type: object
-      required:
-      - accepted
-      title: KbTouchIngestResponse
-      description: Response reporting how many touch cells were accepted for ingestion.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

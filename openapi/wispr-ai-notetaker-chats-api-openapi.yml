@@ -228,13 +228,21 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    NotetakerChatKind:
-      type: string
-      enum:
-      - L2
-      - meeting_chat
-      title: NotetakerChatKind
-      description: Product surface that owns a persisted Notetaker chat session.
+    NotetakerChatMessageAck:
+      properties:
+        message_id:
+          type: string
+          format: uuid
+          title: Message Id
+        sequence_index:
+          type: integer
+          title: Sequence Index
+      type: object
+      required:
+      - message_id
+      - sequence_index
+      title: NotetakerChatMessageAck
+      description: Canonical sequence index acknowledged for a message.
     NotetakerChatScope:
       type: string
       enum:
@@ -242,7 +250,71 @@ components:
       - meeting
       title: NotetakerChatScope
       description: History filtering mode for listing Notetaker chat sessions.
-    JsonValue: {}
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UploadNotetakerChatsRequest:
+      properties:
+        chats:
+          items:
+            $ref: '#/components/schemas/NotetakerChatUpload'
+          type: array
+          maxItems: 20
+          minItems: 1
+          title: Chats
+      type: object
+      required:
+      - chats
+      title: UploadNotetakerChatsRequest
+      description: 'Bounded upload batch with an independent commit per chat.
+
+
+        Meeting ownership is validated for the whole batch before any write. A
+
+        mid-batch conflict can leave earlier chats persisted; retry the whole
+
+        batch (revisions are idempotent).'
+    NotetakerChatUpload:
+      properties:
+        chat_id:
+          type: string
+          format: uuid
+          title: Chat Id
+        kind:
+          $ref: '#/components/schemas/NotetakerChatKind'
+        meeting_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Meeting Id
+        title:
+          anyOf:
+          - type: string
+            maxLength: 120
+          - type: 'null'
+          title: Title
+        deleted:
+          type: boolean
+          title: Deleted
+          default: false
+        messages:
+          items:
+            $ref: '#/components/schemas/NotetakerChatMessageUpload'
+          type: array
+          title: Messages
+      type: object
+      required:
+      - chat_id
+      - kind
+      title: NotetakerChatUpload
+      description: One atomic chat mutation and its bounded message batch.
     NotetakerChatMessageStatus:
       type: string
       enum:
@@ -258,6 +330,13 @@ components:
       - interrupted
       title: NotetakerChatMessageStatus
       description: Notetaker-specific terminal and in-flight message outcomes.
+    NotetakerChatMessageRole:
+      type: string
+      enum:
+      - user
+      - assistant
+      title: NotetakerChatMessageRole
+      description: Participant role for a persisted Notetaker chat message.
     NotetakerChatRecord:
       properties:
         chat_id:
@@ -301,77 +380,6 @@ components:
       - modified_at
       title: NotetakerChatRecord
       description: One active Notetaker chat session.
-    NotetakerChatMessageRole:
-      type: string
-      enum:
-      - user
-      - assistant
-      title: NotetakerChatMessageRole
-      description: Participant role for a persisted Notetaker chat message.
-    NotetakerChatUploadAck:
-      properties:
-        chat_id:
-          type: string
-          format: uuid
-          title: Chat Id
-        messages:
-          items:
-            $ref: '#/components/schemas/NotetakerChatMessageAck'
-          type: array
-          title: Messages
-      type: object
-      required:
-      - chat_id
-      - messages
-      title: NotetakerChatUploadAck
-      description: Canonical state acknowledged for one uploaded chat.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    UploadNotetakerChatsRequest:
-      properties:
-        chats:
-          items:
-            $ref: '#/components/schemas/NotetakerChatUpload'
-          type: array
-          maxItems: 20
-          minItems: 1
-          title: Chats
-      type: object
-      required:
-      - chats
-      title: UploadNotetakerChatsRequest
-      description: 'Bounded upload batch with an independent commit per chat.
-
-
-        Meeting ownership is validated for the whole batch before any write. A
-
-        mid-batch conflict can leave earlier chats persisted; retry the whole
-
-        batch (revisions are idempotent).'
     NotetakerChatMessageRecord:
       properties:
         message_id:
@@ -422,87 +430,23 @@ components:
       - created_at
       title: NotetakerChatMessageRecord
       description: One canonical server-ordered chat message.
-    NotetakerChatMessageAck:
-      properties:
-        message_id:
-          type: string
-          format: uuid
-          title: Message Id
-        sequence_index:
-          type: integer
-          title: Sequence Index
-      type: object
-      required:
-      - message_id
-      - sequence_index
-      title: NotetakerChatMessageAck
-      description: Canonical sequence index acknowledged for a message.
-    NotetakerChatUpload:
+    NotetakerChatUploadAck:
       properties:
         chat_id:
           type: string
           format: uuid
           title: Chat Id
-        kind:
-          $ref: '#/components/schemas/NotetakerChatKind'
-        meeting_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Meeting Id
-        title:
-          anyOf:
-          - type: string
-            maxLength: 120
-          - type: 'null'
-          title: Title
-        deleted:
-          type: boolean
-          title: Deleted
-          default: false
         messages:
           items:
-            $ref: '#/components/schemas/NotetakerChatMessageUpload'
+            $ref: '#/components/schemas/NotetakerChatMessageAck'
           type: array
           title: Messages
       type: object
       required:
       - chat_id
-      - kind
-      title: NotetakerChatUpload
-      description: One atomic chat mutation and its bounded message batch.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ListNotetakerChatsResponse:
-      properties:
-        chats:
-          items:
-            $ref: '#/components/schemas/NotetakerChatRecord'
-          type: array
-          title: Chats
-        next_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Cursor
-      type: object
-      required:
-      - chats
-      title: ListNotetakerChatsResponse
-      description: 'Keyset-paginated Notetaker chat sessions (newest first).
-
-
-        ``next_cursor`` anchors the oldest row of this page and loads still-older
-
-        chats on the next request. ``null`` means there is no older page.'
+      - messages
+      title: NotetakerChatUploadAck
+      description: Canonical state acknowledged for one uploaded chat.
     NotetakerChatMessageUpload:
       properties:
         message_id:
@@ -542,25 +486,40 @@ components:
       - content
       title: NotetakerChatMessageUpload
       description: One client message mutation.
-    NotetakerChatFeedback:
+    ListNotetakerChatsResponse:
       properties:
-        rating:
-          type: string
-          enum:
-          - up
-          - down
-          title: Rating
-        text:
+        chats:
+          items:
+            $ref: '#/components/schemas/NotetakerChatRecord'
+          type: array
+          title: Chats
+        next_cursor:
           anyOf:
           - type: string
-            maxLength: 2000
           - type: 'null'
-          title: Text
+          title: Next Cursor
       type: object
       required:
-      - rating
-      title: NotetakerChatFeedback
-      description: Optional assistant-message rating and explanation.
+      - chats
+      title: ListNotetakerChatsResponse
+      description: 'Keyset-paginated Notetaker chat sessions (newest first).
+
+
+        ``next_cursor`` anchors the oldest row of this page and loads still-older
+
+        chats on the next request. ``null`` means there is no older page.'
+    UploadNotetakerChatsResponse:
+      properties:
+        chats:
+          items:
+            $ref: '#/components/schemas/NotetakerChatUploadAck'
+          type: array
+          title: Chats
+      type: object
+      required:
+      - chats
+      title: UploadNotetakerChatsResponse
+      description: Per-chat acknowledgements for an upload batch.
     ListNotetakerChatMessagesResponse:
       properties:
         messages:
@@ -585,18 +544,59 @@ components:
         can append the first page at the bottom and prepend later pages when
 
         scrolling up. ``next_cursor`` is the oldest sequence index on this page.'
-    UploadNotetakerChatsResponse:
+    NotetakerChatFeedback:
       properties:
-        chats:
-          items:
-            $ref: '#/components/schemas/NotetakerChatUploadAck'
-          type: array
-          title: Chats
+        rating:
+          type: string
+          enum:
+          - up
+          - down
+          title: Rating
+        text:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Text
       type: object
       required:
-      - chats
-      title: UploadNotetakerChatsResponse
-      description: Per-chat acknowledgements for an upload batch.
+      - rating
+      title: NotetakerChatFeedback
+      description: Optional assistant-message rating and explanation.
+    NotetakerChatKind:
+      type: string
+      enum:
+      - L2
+      - meeting_chat
+      title: NotetakerChatKind
+      description: Product surface that owns a persisted Notetaker chat session.
+    JsonValue: {}
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
