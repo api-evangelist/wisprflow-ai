@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Sandbox User API
+  title: Wispr Backend Sandbox User API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged sandbox-user across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-sandbox-user-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: sandbox-user
 paths:
@@ -104,6 +104,46 @@ components:
       - msg
       - type
       title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    CreateSandboxUserResponse:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+          description: Access token for authentication
+        refresh_token:
+          type: string
+          title: Refresh Token
+          description: Refresh token
+        email:
+          type: string
+          title: Email
+          description: The sandbox user's email
+        user_id:
+          type: string
+          title: User Id
+          description: The sandbox user's ID
+        password:
+          type: string
+          title: Password
+          description: The sandbox user's password (use with email to sign into client apps)
+      type: object
+      required:
+      - access_token
+      - refresh_token
+      - email
+      - user_id
+      - password
+      title: CreateSandboxUserResponse
+      description: Response model for sandbox user creation.
     CreateSandboxUserRequest:
       properties:
         plan:
@@ -153,37 +193,6 @@ components:
       type: object
       title: CreateSandboxUserRequest
       description: Request model for creating a sandbox user.
-    CreateSandboxUserResponse:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-          description: Access token for authentication
-        refresh_token:
-          type: string
-          title: Refresh Token
-          description: Refresh token
-        email:
-          type: string
-          title: Email
-          description: The sandbox user's email
-        user_id:
-          type: string
-          title: User Id
-          description: The sandbox user's ID
-        password:
-          type: string
-          title: Password
-          description: The sandbox user's password (use with email to sign into client apps)
-      type: object
-      required:
-      - access_token
-      - refresh_token
-      - email
-      - user_id
-      - password
-      title: CreateSandboxUserResponse
-      description: Response model for sandbox user creation.
     DestroySandboxUserResponse:
       properties:
         message:
@@ -201,15 +210,6 @@ components:
       - message
       title: DestroySandboxUserResponse
       description: Response model for sandbox user destruction.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -219,6 +219,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-sandbox-user-api-openapi.yml

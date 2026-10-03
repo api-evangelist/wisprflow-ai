@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Support API
+  title: Wispr Backend Support API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Support across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-support-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Support
 paths:
@@ -532,97 +532,27 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    NPSScoreRequest:
+    SyncMobileSubscriptionRequest:
       properties:
-        customer_id:
-          type: string
-          title: Customer Id
-        score:
-          type: integer
-          title: Score
-        campaign:
-          type: string
-          title: Campaign
-      type: object
-      required:
-      - customer_id
-      - score
-      - campaign
-      title: NPSScoreRequest
-    ImageType:
-      type: string
-      enum:
-      - image/png
-      - image/jpeg
-      - image/bmp
-      - image/webp
-      title: ImageType
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    SyncSubscriptionRequest:
-      properties:
-        stripe_subscription_id:
+        user_id:
           anyOf:
           - type: string
           - type: 'null'
-          title: Stripe Subscription Id
-          description: Stripe subscription ID (e.g. sub_xxx)
+          title: User Id
+          description: User UUID (same as RevenueCat app_user_id)
         email:
           anyOf:
           - type: string
           - type: 'null'
           title: Email
-          description: User email — used to look up the Stripe customer
+          description: User email — used to look up the user
         dry_run:
           type: boolean
           title: Dry Run
           description: Preview changes without committing. Set to false to apply.
           default: true
       type: object
-      title: SyncSubscriptionRequest
-    ErasureStartResponse:
-      properties:
-        workflow_id:
-          type: string
-          title: Workflow Id
-        skipped_no_email:
-          type: boolean
-          title: Skipped No Email
-      type: object
-      required:
-      - workflow_id
-      - skipped_no_email
-      title: ErasureStartResponse
-      description: 'Response for a started (or attached-to-existing) erasure.
-
-
-        Carries only the derived workflow id (non-PII; `usage-erasure:{user_id}`) and a
-
-        flag for whether the email-keyed ClickHouse legs will be skipped (the orphan path).'
+      title: SyncMobileSubscriptionRequest
     Body_frontapp_feedback_api_v1_support_feedback_post:
       properties:
         to:
@@ -655,16 +585,39 @@ components:
       - to
       - body
       title: Body_frontapp_feedback_api_v1_support_feedback_post
-    Body_create_pylon_feedback_api_v1_support_pylon_feedback_post:
+    ErasureStartResponse:
       properties:
+        workflow_id:
+          type: string
+          title: Workflow Id
+        skipped_no_email:
+          type: boolean
+          title: Skipped No Email
+      type: object
+      required:
+      - workflow_id
+      - skipped_no_email
+      title: ErasureStartResponse
+      description: 'Response for a started (or attached-to-existing) erasure.
+
+
+        Carries only the derived workflow id (non-PII; `usage-erasure:{user_id}`) and a
+
+        flag for whether the email-keyed ClickHouse legs will be skipped (the orphan path).'
+    SupportFeedbackRequest:
+      properties:
+        to:
+          type: string
+          title: To
         body:
           type: string
           title: Body
         attachments:
-          items:
-            type: string
-            contentMediaType: application/octet-stream
-          type: array
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
           title: Attachments
         subject:
           anyOf:
@@ -676,22 +629,55 @@ components:
           - type: string
           - type: 'null'
           title: Comment
+        imageData:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Imagedata
+        imageType:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
         platform:
           $ref: '#/components/schemas/src__common__constants__Platform'
           default: desktop
       type: object
       required:
+      - to
       - body
-      title: Body_create_pylon_feedback_api_v1_support_pylon_feedback_post
-    ErasureStatusState:
-      type: string
-      enum:
-      - not_found
-      - in_flight
-      - completed
-      - failed
-      title: ErasureStatusState
-      description: Coarse, non-PII status of an erasure for the redacted status response.
+      title: SupportFeedbackRequest
+    NPSFeedbackRequest:
+      properties:
+        customer_id:
+          type: string
+          title: Customer Id
+        feedback:
+          type: string
+          title: Feedback
+        campaign:
+          type: string
+          title: Campaign
+      type: object
+      required:
+      - customer_id
+      - feedback
+      - campaign
+      title: NPSFeedbackRequest
+    CancelSubscriptionRequest:
+      properties:
+        email:
+          type: string
+          title: Email
+          description: User email
+        refund:
+          type: string
+          title: Refund
+          description: 'Refund type: "full", "partial", or "no"'
+      type: object
+      required:
+      - email
+      - refund
+      title: CancelSubscriptionRequest
     Body_send_feedback_slack_api_v1_support_slack__platform__post:
       properties:
         audio:
@@ -731,99 +717,41 @@ components:
           - type: 'null'
       type: object
       title: Body_send_feedback_slack_api_v1_support_slack__platform__post
-    CancelSubscriptionRequest:
+    HTTPValidationError:
       properties:
-        email:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Email
-          description: User email
-        refund:
+          title: Message
+        type:
           type: string
-          title: Refund
-          description: 'Refund type: "full", "partial", or "no"'
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - email
-      - refund
-      title: CancelSubscriptionRequest
-    NPSFeedbackRequest:
-      properties:
-        customer_id:
-          type: string
-          title: Customer Id
-        feedback:
-          type: string
-          title: Feedback
-        campaign:
-          type: string
-          title: Campaign
-      type: object
-      required:
-      - customer_id
-      - feedback
-      - campaign
-      title: NPSFeedbackRequest
-    SyncMobileSubscriptionRequest:
-      properties:
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-          description: User UUID (same as RevenueCat app_user_id)
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-          description: User email — used to look up the user
-        dry_run:
-          type: boolean
-          title: Dry Run
-          description: Preview changes without committing. Set to false to apply.
-          default: true
-      type: object
-      title: SyncMobileSubscriptionRequest
-    PreLoginFeedbackRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-        email:
-          type: string
-          format: email
-          title: Email
-        body:
-          type: string
-          title: Body
-        subject:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Subject
-        comment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Comment
-        imageData:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Imagedata
-        imageType:
-          anyOf:
-          - $ref: '#/components/schemas/ImageType'
-          - type: 'null'
-        platform:
-          $ref: '#/components/schemas/src__common__constants__Platform'
-          default: desktop
-      type: object
-      required:
-      - name
-      - email
-      - body
-      title: PreLoginFeedbackRequest
+      - loc
+      - msg
+      - type
+      title: ValidationError
     ErasureStatusResponse:
       properties:
         state:
@@ -870,15 +798,120 @@ components:
       - state
       title: ErasureStatusResponse
       description: "REDACTED status of an erasure — ids / enums / counts / timestamps only.\n\nNever carries the raw email, row content, or a raw exception. `per_store` is the\nworkflow's `{store: StepState}` progress map for an in-flight run (bounded enum\nstrings) or omitted for a terminal/not-found read. `last_error` is a sanitized\nbounded code (e.g. `clickhouse_verification_timed_out`), never a stack/raw error.\n\nAttributes:\n    state: Coarse status (`not_found` / `in_flight` / `completed` / `failed`).\n    workflow_id: The derived workflow id queried (non-PII), or None for not_found\n        when no id could be derived.\n    per_store: In-flight per-store progress `{ErasureStore: StepState}`; None for\n        terminal/not-found reads (terminal proof lives in the audit row).\n    outcome: Terminal outcome string (`completed`/`failed`) from the audit row; None\n        in-flight / not-found.\n    watermark_t0_epoch_s: T0 (epoch seconds) from the terminal audit row; None\n        in-flight / not-found.\n    completed_at_epoch_s: Terminal `completed_at` (epoch seconds) from the audit row.\n    last_error: Sanitized bounded failure code on a `failed` terminal; None otherwise.\n    proof: Per-store residual-count / empty-listing evidence from the audit row\n        (counts only, non-PII); None in-flight / not-found."
-    HTTPValidationError:
+    Body_create_pylon_feedback_api_v1_support_pylon_feedback_post:
       properties:
-        detail:
+        body:
+          type: string
+          title: Body
+        attachments:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            type: string
+            contentMediaType: application/octet-stream
           type: array
-          title: Detail
+          title: Attachments
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
       type: object
-      title: HTTPValidationError
+      required:
+      - body
+      title: Body_create_pylon_feedback_api_v1_support_pylon_feedback_post
+    ImageType:
+      type: string
+      enum:
+      - image/png
+      - image/jpeg
+      - image/bmp
+      - image/webp
+      title: ImageType
+    PreLoginFeedbackRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+        email:
+          type: string
+          format: email
+          title: Email
+        body:
+          type: string
+          title: Body
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        imageData:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Imagedata
+        imageType:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
+      type: object
+      required:
+      - name
+      - email
+      - body
+      title: PreLoginFeedbackRequest
+    SyncSubscriptionRequest:
+      properties:
+        stripe_subscription_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Subscription Id
+          description: Stripe subscription ID (e.g. sub_xxx)
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+          description: User email — used to look up the Stripe customer
+        dry_run:
+          type: boolean
+          title: Dry Run
+          description: Preview changes without committing. Set to false to apply.
+          default: true
+      type: object
+      title: SyncSubscriptionRequest
+    NPSScoreRequest:
+      properties:
+        customer_id:
+          type: string
+          title: Customer Id
+        score:
+          type: integer
+          title: Score
+        campaign:
+          type: string
+          title: Campaign
+      type: object
+      required:
+      - customer_id
+      - score
+      - campaign
+      title: NPSScoreRequest
     ErasureStartRequest:
       properties:
         email:
@@ -920,48 +953,15 @@ components:
       - ios
       - android
       title: Platform
-    SupportFeedbackRequest:
-      properties:
-        to:
-          type: string
-          title: To
-        body:
-          type: string
-          title: Body
-        attachments:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Attachments
-        subject:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Subject
-        comment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Comment
-        imageData:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Imagedata
-        imageType:
-          anyOf:
-          - $ref: '#/components/schemas/ImageType'
-          - type: 'null'
-        platform:
-          $ref: '#/components/schemas/src__common__constants__Platform'
-          default: desktop
-      type: object
-      required:
-      - to
-      - body
-      title: SupportFeedbackRequest
+    ErasureStatusState:
+      type: string
+      enum:
+      - not_found
+      - in_flight
+      - completed
+      - failed
+      title: ErasureStatusState
+      description: Coarse, non-PII status of an erasure for the redacted status response.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -971,6 +971,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-support-api-openapi.yml

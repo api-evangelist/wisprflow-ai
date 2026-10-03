@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Meetings API
+  title: Wispr Backend Meetings API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Meetings across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-meetings-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Meetings
 paths:
@@ -440,32 +440,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     MeetingSyncRequest:
       properties:
         last_sync_time:
@@ -495,178 +469,6 @@ components:
       - meetings
       title: MeetingSyncRequest
       description: Request model for meeting synchronization.
-    MeetingStatusResponse:
-      properties:
-        refine_status:
-          anyOf:
-          - $ref: '#/components/schemas/RefineJobStatus'
-          - type: 'null'
-        refined_transcript:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Refined Transcript
-        speaker_map:
-          anyOf:
-          - $ref: '#/components/schemas/SpeakerMap'
-          - type: 'null'
-        content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content
-        summary:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Summary
-        notes:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Notes
-      type: object
-      required:
-      - refine_status
-      title: MeetingStatusResponse
-      description: 'Refine-progress snapshot the desktop pulls as a backstop to sync.
-
-
-        The client polls ``GET /meetings/{id}/status`` with the refine
-
-        status it currently believes, and the server inlines whatever the
-
-        client is missing. ``refine_status`` is the server''s job status, or
-
-        ``None`` when no refine job row exists for the meeting (the client
-
-        then has nothing to wait for). ``RefineJobStatus`` is a ``StrEnum``,
-
-        so it serializes to its string value on the wire.
-
-
-        ``refined_transcript`` / ``content`` are inlined only when the
-
-        server is ahead of the client (see ``MeetingsService.get_meeting_status``);
-
-        both stay ``None`` otherwise, on a deleted meeting, and whenever the
-
-        refined blob is absent, undecodable, or empty.'
-    MeetingRefinedTranscriptUrlResponse:
-      properties:
-        url:
-          type: string
-          pattern: ^https?://
-          format: uri
-          title: Url
-        expires_at:
-          type: string
-          format: date-time
-          title: Expires At
-          description: Absolute UTC expiry of the presigned GET
-      type: object
-      required:
-      - url
-      - expires_at
-      title: MeetingRefinedTranscriptUrlResponse
-      description: 'Presigned S3 GET for a meeting''s refined-transcript NDJSON.
-
-
-        The download twin of :class:`MeetingUploadUrlResponse` (same shape as the
-
-        notes ``NoteImageKey`` payload): the desktop calls
-
-        ``GET /meetings/{id}/refined-transcript`` when a pull row''s
-
-        ``refined_uploaded_at`` stamp beats its locally persisted fetched-through
-
-        stamp, then downloads ``refined.ndjson`` straight from S3 — the bytes
-
-        never transit the API.'
-    SpeakerPerson:
-      properties:
-        name:
-          type: string
-          title: Name
-        origin:
-          type: string
-          enum:
-          - platform
-          - calendar
-          - user
-          - merged_cal_platform
-          - self
-          - llm
-          title: Origin
-        platform:
-          anyOf:
-          - type: string
-            maxLength: 120
-          - type: 'null'
-          title: Platform
-        participantId:
-          anyOf:
-          - type: string
-            maxLength: 64
-          - type: 'null'
-          title: Participantid
-      additionalProperties: false
-      type: object
-      required:
-      - name
-      - origin
-      title: SpeakerPerson
-      description: 'One person in :attr:`SpeakerMap.people`, keyed by a plain uuid4 string.
-
-
-        ``platform`` is immutable after mint; ``origin`` changes only via the
-
-        calendar-merge upgrade (``platform`` → ``merged_cal_platform``); a rename
-
-        (any origin, including a machine-minted person) changes only ``name``.
-
-        ``origin="self"`` represents the meeting owner ("you").
-
-        ``participantId`` is the server-derived stable calendar-attendee key —
-
-        deliberately NOT an email (nothing PII-bearing rides the map) and NOT the
-
-        ``calendar_participant`` row id (those rows are replaced on every calendar
-
-        re-sync); present only on ``calendar`` / ``merged_cal_platform`` people.'
-    MeetingUploadUrlRequest:
-      properties:
-        content_type:
-          type: string
-          title: Content Type
-          description: Audio MIME type; one of audio/ogg, audio/wav
-        size_bytes:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Size Bytes
-          description: Encoded audio size in bytes
-        context:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Context
-          description: Client meeting context (dictionary, participants, meeting metadata) reused server-side to enrich the refined transcript + summary. The same envelope the client sends on the live transcription WS.
-        include_google_contact_names:
-          type: boolean
-          title: Include Google Contact Names
-          description: 'Feature payload option: add per-user Google Contacts display names as weak refine terms.'
-          default: false
-        include_workspace_directory_names:
-          type: boolean
-          title: Include Workspace Directory Names
-          description: 'Feature payload option: add per-user workspace directory display names as weak refine terms.'
-          default: false
-      type: object
-      required:
-      - content_type
-      - size_bytes
-      title: MeetingUploadUrlRequest
-      description: Request for a presigned S3 slot to upload a meeting's refine audio.
     SyncMeeting-Input:
       properties:
         id:
@@ -818,6 +620,235 @@ components:
         deliberately NOT on the wire: cross-device live view is
 
         unsupported, so clients have no use for that watermark.'
+    SpeakerObservationsUploadUrlRequest:
+      properties:
+        content_type:
+          type: string
+          title: Content Type
+          description: Observation-log MIME type; must be application/x-ndjson
+        size_bytes:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Size Bytes
+          description: NDJSON body size in bytes
+      type: object
+      required:
+      - content_type
+      - size_bytes
+      title: SpeakerObservationsUploadUrlRequest
+      description: 'Request for a presigned S3 slot to upload a meeting''s speaker-observation log.
+
+
+        Distinct from :class:`MeetingUploadUrlRequest`: NDJSON not audio, an
+
+        8 MiB cap not 500 MiB, and no ``context`` passthrough — this artifact
+
+        carries observations the server reduces into canonical speakers, not
+
+        refine/summary context.'
+    MeetingRefinedTranscriptUrlResponse:
+      properties:
+        url:
+          type: string
+          pattern: ^https?://
+          format: uri
+          title: Url
+        expires_at:
+          type: string
+          format: date-time
+          title: Expires At
+          description: Absolute UTC expiry of the presigned GET
+      type: object
+      required:
+      - url
+      - expires_at
+      title: MeetingRefinedTranscriptUrlResponse
+      description: 'Presigned S3 GET for a meeting''s refined-transcript NDJSON.
+
+
+        The download twin of :class:`MeetingUploadUrlResponse` (same shape as the
+
+        notes ``NoteImageKey`` payload): the desktop calls
+
+        ``GET /meetings/{id}/refined-transcript`` when a pull row''s
+
+        ``refined_uploaded_at`` stamp beats its locally persisted fetched-through
+
+        stamp, then downloads ``refined.ndjson`` straight from S3 — the bytes
+
+        never transit the API.'
+    MeetingSyncResponse:
+      properties:
+        acked:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Acked
+        pull:
+          items:
+            $ref: '#/components/schemas/SyncMeeting-Output'
+          type: array
+          title: Pull
+        sync_time:
+          type: string
+          title: Sync Time
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Non-null when more changed meetings remain; refetch with it and the same last_sync_time.
+      type: object
+      required:
+      - acked
+      - pull
+      - sync_time
+      title: MeetingSyncResponse
+      description: Response model for meeting synchronization.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    SpeakerAssignment:
+      properties:
+        consensus:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Consensus
+        user:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: User
+        mic:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Mic
+        dom:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Dom
+        llm:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Llm
+      additionalProperties: false
+      type: object
+      title: SpeakerAssignment
+      description: 'One ``refined_id``''s person slots in :attr:`SpeakerMap.assignments`.
+
+
+        Machine slots — ``dom`` (tile consensus), ``mic`` (reserved for the
+
+        owner/mic channel), ``llm`` (post-summary LLM consensus) — are written only
+
+        by the server, each mechanism rewriting only its own slot. ``consensus`` is
+
+        the dual-written legacy ALIAS of the winning machine slot
+
+        (``dom ?? mic ?? llm``) so pre-v2 clients keep resolving; a stored pre-v2
+
+        row carrying only ``consensus`` is normalized to ``dom`` at parse (the
+
+        legacy slot was only ever written by the tile-consensus fold). ``user`` is
+
+        written only from the client half of a sync-push composition. Resolution
+
+        ladder: ``user > dom > mic > llm > consensus``. A merge is two ids'' user
+
+        slots pointing at one person; an un-merge clears the user slot so
+
+        resolution falls back to the machine slots.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    SpeakerMap:
+      properties:
+        people:
+          additionalProperties:
+            $ref: '#/components/schemas/SpeakerPerson'
+          type: object
+          maxProperties: 512
+          title: People
+        assignments:
+          additionalProperties:
+            $ref: '#/components/schemas/SpeakerAssignment'
+          type: object
+          maxProperties: 512
+          title: Assignments
+      additionalProperties: false
+      type: object
+      title: SpeakerMap
+      description: 'The ``meetings.speaker_map`` blob (nullable JSONB on the meeting row).
+
+
+        ``people`` is keyed by person id (a plain uuid4 string, minted by whoever
+
+        creates the person); ``assignments`` is keyed by ``refined_id`` (the
+
+        transcript ``speaker.id``, serialized as a string key).'
+    LiveTranscriptUploadUrlRequest:
+      properties:
+        content_type:
+          type: string
+          title: Content Type
+          description: Live-transcript MIME type; must be application/x-ndjson
+        size_bytes:
+          type: integer
+          exclusiveMinimum: 0.0
+          title: Size Bytes
+          description: NDJSON body size in bytes
+      type: object
+      required:
+      - content_type
+      - size_bytes
+      title: LiveTranscriptUploadUrlRequest
+      description: 'Request for a presigned S3 slot to upload a meeting''s live-transcript NDJSON.
+
+
+        Sibling to :class:`SpeakerObservationsUploadUrlRequest`: same NDJSON
+
+        content type, but the 64 MiB ``LIVE_TRANSCRIPT_MAX_BYTES`` cap and a
+
+        distinct server-composed key.'
     NoteVisibility:
       type: string
       enum:
@@ -825,6 +856,73 @@ components:
       - domain
       - invited_only
       title: NoteVisibility
+    MeetingStatusResponse:
+      properties:
+        refine_status:
+          anyOf:
+          - $ref: '#/components/schemas/RefineJobStatus'
+          - type: 'null'
+        refined_transcript:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Refined Transcript
+        speaker_map:
+          anyOf:
+          - $ref: '#/components/schemas/SpeakerMap'
+          - type: 'null'
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+      type: object
+      required:
+      - refine_status
+      title: MeetingStatusResponse
+      description: 'Refine-progress snapshot the desktop pulls as a backstop to sync.
+
+
+        The client polls ``GET /meetings/{id}/status`` with the refine
+
+        status it currently believes, and the server inlines whatever the
+
+        client is missing. ``refine_status`` is the server''s job status, or
+
+        ``None`` when no refine job row exists for the meeting (the client
+
+        then has nothing to wait for). ``RefineJobStatus`` is a ``StrEnum``,
+
+        so it serializes to its string value on the wire.
+
+
+        ``refined_transcript`` / ``content`` are inlined only when the
+
+        server is ahead of the client (see ``MeetingsService.get_meeting_status``);
+
+        both stay ``None`` otherwise, on a deleted meeting, and whenever the
+
+        refined blob is absent, undecodable, or empty.'
+    RefineJobStatus:
+      type: string
+      enum:
+      - awaiting_audio
+      - transcribing
+      - summarizing
+      - complete
+      - failed
+      - abandoned
+      title: RefineJobStatus
     SyncMeeting-Output:
       properties:
         id:
@@ -976,114 +1074,57 @@ components:
         deliberately NOT on the wire: cross-device live view is
 
         unsupported, so clients have no use for that watermark.'
-    SpeakerMap:
+    SpeakerPerson:
       properties:
-        people:
-          additionalProperties:
-            $ref: '#/components/schemas/SpeakerPerson'
-          type: object
-          maxProperties: 512
-          title: People
-        assignments:
-          additionalProperties:
-            $ref: '#/components/schemas/SpeakerAssignment'
-          type: object
-          maxProperties: 512
-          title: Assignments
-      additionalProperties: false
-      type: object
-      title: SpeakerMap
-      description: 'The ``meetings.speaker_map`` blob (nullable JSONB on the meeting row).
-
-
-        ``people`` is keyed by person id (a plain uuid4 string, minted by whoever
-
-        creates the person); ``assignments`` is keyed by ``refined_id`` (the
-
-        transcript ``speaker.id``, serialized as a string key).'
-    SpeakerAssignment:
-      properties:
-        consensus:
-          anyOf:
-          - type: string
-            maxLength: 64
-          - type: 'null'
-          title: Consensus
-        user:
-          anyOf:
-          - type: string
-            maxLength: 64
-          - type: 'null'
-          title: User
-        mic:
-          anyOf:
-          - type: string
-            maxLength: 64
-          - type: 'null'
-          title: Mic
-        dom:
-          anyOf:
-          - type: string
-            maxLength: 64
-          - type: 'null'
-          title: Dom
-        llm:
-          anyOf:
-          - type: string
-            maxLength: 64
-          - type: 'null'
-          title: Llm
-      additionalProperties: false
-      type: object
-      title: SpeakerAssignment
-      description: 'One ``refined_id``''s person slots in :attr:`SpeakerMap.assignments`.
-
-
-        Machine slots — ``dom`` (tile consensus), ``mic`` (reserved for the
-
-        owner/mic channel), ``llm`` (post-summary LLM consensus) — are written only
-
-        by the server, each mechanism rewriting only its own slot. ``consensus`` is
-
-        the dual-written legacy ALIAS of the winning machine slot
-
-        (``dom ?? mic ?? llm``) so pre-v2 clients keep resolving; a stored pre-v2
-
-        row carrying only ``consensus`` is normalized to ``dom`` at parse (the
-
-        legacy slot was only ever written by the tile-consensus fold). ``user`` is
-
-        written only from the client half of a sync-push composition. Resolution
-
-        ladder: ``user > dom > mic > llm > consensus``. A merge is two ids'' user
-
-        slots pointing at one person; an un-merge clears the user slot so
-
-        resolution falls back to the machine slots.'
-    LiveTranscriptUploadUrlRequest:
-      properties:
-        content_type:
+        name:
           type: string
-          title: Content Type
-          description: Live-transcript MIME type; must be application/x-ndjson
-        size_bytes:
-          type: integer
-          exclusiveMinimum: 0.0
-          title: Size Bytes
-          description: NDJSON body size in bytes
+          title: Name
+        origin:
+          type: string
+          enum:
+          - platform
+          - calendar
+          - user
+          - merged_cal_platform
+          - self
+          - llm
+          title: Origin
+        platform:
+          anyOf:
+          - type: string
+            maxLength: 120
+          - type: 'null'
+          title: Platform
+        participantId:
+          anyOf:
+          - type: string
+            maxLength: 64
+          - type: 'null'
+          title: Participantid
+      additionalProperties: false
       type: object
       required:
-      - content_type
-      - size_bytes
-      title: LiveTranscriptUploadUrlRequest
-      description: 'Request for a presigned S3 slot to upload a meeting''s live-transcript NDJSON.
+      - name
+      - origin
+      title: SpeakerPerson
+      description: 'One person in :attr:`SpeakerMap.people`, keyed by a plain uuid4 string.
 
 
-        Sibling to :class:`SpeakerObservationsUploadUrlRequest`: same NDJSON
+        ``platform`` is immutable after mint; ``origin`` changes only via the
 
-        content type, but the 64 MiB ``LIVE_TRANSCRIPT_MAX_BYTES`` cap and a
+        calendar-merge upgrade (``platform`` → ``merged_cal_platform``); a rename
 
-        distinct server-composed key.'
+        (any origin, including a machine-minted person) changes only ``name``.
+
+        ``origin="self"`` represents the meeting owner ("you").
+
+        ``participantId`` is the server-derived stable calendar-attendee key —
+
+        deliberately NOT an email (nothing PII-bearing rides the map) and NOT the
+
+        ``calendar_participant`` row id (those rows are replaced on every calendar
+
+        re-sync); present only on ``calendar`` / ``merged_cal_platform`` people.'
     MeetingUploadUrlResponse:
       properties:
         url:
@@ -1110,80 +1151,39 @@ components:
         The S3 object key is carried inside ``fields[''key'']`` per the S3
 
         presigned-POST contract, so it is not duplicated as a top-level field.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    MeetingSyncResponse:
-      properties:
-        acked:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Acked
-        pull:
-          items:
-            $ref: '#/components/schemas/SyncMeeting-Output'
-          type: array
-          title: Pull
-        sync_time:
-          type: string
-          title: Sync Time
-        next_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Cursor
-          description: Non-null when more changed meetings remain; refetch with it and the same last_sync_time.
-      type: object
-      required:
-      - acked
-      - pull
-      - sync_time
-      title: MeetingSyncResponse
-      description: Response model for meeting synchronization.
-    SpeakerObservationsUploadUrlRequest:
+    MeetingUploadUrlRequest:
       properties:
         content_type:
           type: string
           title: Content Type
-          description: Observation-log MIME type; must be application/x-ndjson
+          description: Audio MIME type; one of audio/ogg, audio/wav
         size_bytes:
           type: integer
           exclusiveMinimum: 0.0
           title: Size Bytes
-          description: NDJSON body size in bytes
+          description: Encoded audio size in bytes
+        context:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Context
+          description: Client meeting context (dictionary, participants, meeting metadata) reused server-side to enrich the refined transcript + summary. The same envelope the client sends on the live transcription WS.
+        include_google_contact_names:
+          type: boolean
+          title: Include Google Contact Names
+          description: 'Feature payload option: add per-user Google Contacts display names as weak refine terms.'
+          default: false
+        include_workspace_directory_names:
+          type: boolean
+          title: Include Workspace Directory Names
+          description: 'Feature payload option: add per-user workspace directory display names as weak refine terms.'
+          default: false
       type: object
       required:
       - content_type
       - size_bytes
-      title: SpeakerObservationsUploadUrlRequest
-      description: 'Request for a presigned S3 slot to upload a meeting''s speaker-observation log.
-
-
-        Distinct from :class:`MeetingUploadUrlRequest`: NDJSON not audio, an
-
-        8 MiB cap not 500 MiB, and no ``context`` passthrough — this artifact
-
-        carries observations the server reduces into canonical speakers, not
-
-        refine/summary context.'
-    RefineJobStatus:
-      type: string
-      enum:
-      - awaiting_audio
-      - transcribing
-      - summarizing
-      - complete
-      - failed
-      - abandoned
-      title: RefineJobStatus
+      title: MeetingUploadUrlRequest
+      description: Request for a presigned S3 slot to upload a meeting's refine audio.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -1193,6 +1193,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-meetings-api-openapi.yml

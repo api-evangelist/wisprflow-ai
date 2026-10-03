@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai User Voice Preferences API
+  title: Wispr Backend User Voice Preferences API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged User Voice Preferences across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-user-voice-preferences-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: User Voice Preferences
 paths:
@@ -61,18 +61,36 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    ListUserVoicePreferencesResponse:
+    VoicePreferenceRecord:
       properties:
-        voice_preferences:
-          items:
-            $ref: '#/components/schemas/VoicePreferenceRecord'
-          type: array
-          title: Voice Preferences
+        id:
+          type: string
+          format: uuid
+          title: Id
+        preference:
+          type: string
+          title: Preference
+        filter:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Filter
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
       type: object
       required:
-      - voice_preferences
-      title: ListUserVoicePreferencesResponse
-      description: All voice preference rows for the authenticated user, newest first.
+      - id
+      - preference
+      - created_at
+      - modified_at
+      title: VoicePreferenceRecord
+      description: A voice preference row returned from GET /user_voice_preferences.
     UploadUserVoicePreferencesResponse:
       properties:
         num_rows_saved:
@@ -90,6 +108,15 @@ components:
       - ids
       title: UploadUserVoicePreferencesResponse
       description: Response model confirming which voice preference records were saved.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -116,15 +143,6 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     UploadUserVoicePreferencesRequest:
       properties:
         voice_preferences:
@@ -162,36 +180,18 @@ components:
         `filter` is the LLM-derived scope string (e.g. "app:gmail-language:de").
 
         `None` means a general preference that is not scoped to any dimension.'
-    VoicePreferenceRecord:
+    ListUserVoicePreferencesResponse:
       properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        preference:
-          type: string
-          title: Preference
-        filter:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Filter
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        modified_at:
-          type: string
-          format: date-time
-          title: Modified At
+        voice_preferences:
+          items:
+            $ref: '#/components/schemas/VoicePreferenceRecord'
+          type: array
+          title: Voice Preferences
       type: object
       required:
-      - id
-      - preference
-      - created_at
-      - modified_at
-      title: VoicePreferenceRecord
-      description: A voice preference row returned from GET /user_voice_preferences.
+      - voice_preferences
+      title: ListUserVoicePreferencesResponse
+      description: All voice preference rows for the authenticated user, newest first.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -201,6 +201,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-user-voice-preferences-api-openapi.yml

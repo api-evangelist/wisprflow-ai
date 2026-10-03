@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Notes API
+  title: Wispr Backend Notes API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Notes across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-notes-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Notes
 paths:
@@ -36,59 +36,7 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ImageUpload:
-      properties:
-        key:
-          type: string
-          pattern: ^users/[0-9a-f-]{36}/scratchpad/images/[a-f0-9]{64}$
-          title: Key
-        size_bytes:
-          type: integer
-          maximum: 5242880.0
-          exclusiveMinimum: 0.0
-          title: Size Bytes
-        content_type:
-          type: string
-          enum:
-          - image/webp
-          - image/png
-          - image/jpeg
-          - image/gif
-          title: Content Type
-      type: object
-      required:
-      - key
-      - size_bytes
-      - content_type
-      title: ImageUpload
-      description: Image the client wants to upload, declared inline with /notes/sync.
-    SyncNoteRequest:
+    SyncNote:
       properties:
         id:
           type: string
@@ -111,12 +59,10 @@ components:
           title: Is Deleted
           default: false
         image_keys:
-          anyOf:
-          - items:
-              $ref: '#/components/schemas/NoteImageKey'
-            type: array
-            maxItems: 100
-          - type: 'null'
+          items:
+            $ref: '#/components/schemas/NoteImageKey'
+          type: array
+          maxItems: 100
           title: Image Keys
       type: object
       required:
@@ -125,13 +71,8 @@ components:
       - created_at
       - modified_at
       - content
-      title: SyncNoteRequest
-      description: 'Model for note data in sync requests.
-
-
-        ``image_keys=None`` means preserve the server''s existing image metadata.
-
-        An explicit empty list means replace with no images and clean up removed blobs.'
+      title: SyncNote
+      description: Model for note data in sync responses.
     NoteSyncRequest:
       properties:
         last_sync_time:
@@ -175,43 +116,29 @@ components:
       - notes
       title: NoteSyncRequest
       description: Request model for note synchronization.
-    SyncNote:
+    ImageUploadUrl:
       properties:
-        id:
+        key:
           type: string
-          format: uuid
-          title: Id
-        title:
+          pattern: ^users/[0-9a-f-]{36}/scratchpad/images/[a-f0-9]{64}$
+          title: Key
+        url:
           type: string
-          title: Title
-        created_at:
-          type: string
-          title: Created At
-        modified_at:
-          type: string
-          title: Modified At
-        content:
-          type: string
-          title: Content
-        is_deleted:
-          type: boolean
-          title: Is Deleted
-          default: false
-        image_keys:
-          items:
-            $ref: '#/components/schemas/NoteImageKey'
-          type: array
-          maxItems: 100
-          title: Image Keys
+          pattern: ^https?://
+          format: uri
+          title: Url
+        fields:
+          additionalProperties:
+            type: string
+          type: object
+          title: Fields
       type: object
       required:
-      - id
-      - title
-      - created_at
-      - modified_at
-      - content
-      title: SyncNote
-      description: Model for note data in sync responses.
+      - key
+      - url
+      - fields
+      title: ImageUploadUrl
+      description: Presigned POST for a pending key whose blob is not yet in S3.
     NoteImageKey:
       properties:
         id:
@@ -246,46 +173,6 @@ components:
       - size_bytes
       title: NoteImageKey
       description: Image reference attached to a note (sync request side).
-    NoteSyncResponse:
-      properties:
-        acked:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Acked
-        pull:
-          items:
-            $ref: '#/components/schemas/SyncNote'
-          type: array
-          title: Pull
-        sync_time:
-          type: string
-          title: Sync Time
-        upload_urls:
-          items:
-            $ref: '#/components/schemas/ImageUploadUrl'
-          type: array
-          title: Upload Urls
-        refreshed_images:
-          items:
-            $ref: '#/components/schemas/NoteImagePayload'
-          type: array
-          title: Refreshed Images
-          description: Fresh presigned GETs for the subset of refresh_image_ids the caller owns.
-        next_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Cursor
-          description: Non-null when more changed notes remain; refetch with it and the same last_sync_time.
-      type: object
-      required:
-      - acked
-      - pull
-      - sync_time
-      title: NoteSyncResponse
-      description: Response model for note synchronization.
     NoteImagePayload:
       properties:
         id:
@@ -340,29 +227,142 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ImageUploadUrl:
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ImageUpload:
       properties:
         key:
           type: string
           pattern: ^users/[0-9a-f-]{36}/scratchpad/images/[a-f0-9]{64}$
           title: Key
-        url:
+        size_bytes:
+          type: integer
+          maximum: 5242880.0
+          exclusiveMinimum: 0.0
+          title: Size Bytes
+        content_type:
           type: string
-          pattern: ^https?://
-          format: uri
-          title: Url
-        fields:
-          additionalProperties:
-            type: string
-          type: object
-          title: Fields
+          enum:
+          - image/webp
+          - image/png
+          - image/jpeg
+          - image/gif
+          title: Content Type
       type: object
       required:
       - key
-      - url
-      - fields
-      title: ImageUploadUrl
-      description: Presigned POST for a pending key whose blob is not yet in S3.
+      - size_bytes
+      - content_type
+      title: ImageUpload
+      description: Image the client wants to upload, declared inline with /notes/sync.
+    NoteSyncResponse:
+      properties:
+        acked:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Acked
+        pull:
+          items:
+            $ref: '#/components/schemas/SyncNote'
+          type: array
+          title: Pull
+        sync_time:
+          type: string
+          title: Sync Time
+        upload_urls:
+          items:
+            $ref: '#/components/schemas/ImageUploadUrl'
+          type: array
+          title: Upload Urls
+        refreshed_images:
+          items:
+            $ref: '#/components/schemas/NoteImagePayload'
+          type: array
+          title: Refreshed Images
+          description: Fresh presigned GETs for the subset of refresh_image_ids the caller owns.
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+          description: Non-null when more changed notes remain; refetch with it and the same last_sync_time.
+      type: object
+      required:
+      - acked
+      - pull
+      - sync_time
+      title: NoteSyncResponse
+      description: Response model for note synchronization.
+    SyncNoteRequest:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          type: string
+          title: Title
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        content:
+          type: string
+          title: Content
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          default: false
+        image_keys:
+          anyOf:
+          - items:
+              $ref: '#/components/schemas/NoteImageKey'
+            type: array
+            maxItems: 100
+          - type: 'null'
+          title: Image Keys
+      type: object
+      required:
+      - id
+      - title
+      - created_at
+      - modified_at
+      - content
+      title: SyncNoteRequest
+      description: 'Model for note data in sync requests.
+
+
+        ``image_keys=None`` means preserve the server''s existing image metadata.
+
+        An explicit empty list means replace with no images and clean up removed blobs.'
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -372,6 +372,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-notes-api-openapi.yml

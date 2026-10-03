@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Analytics API
+  title: Wispr Backend Analytics API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Analytics across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-analytics-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Analytics
 paths:
@@ -89,91 +89,45 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    UserMetadataResponse:
+    TrackEventRequest:
       properties:
-        created_at:
+        event:
           type: string
-          format: date-time
-          title: Created At
-        metadata_date:
+          title: Event
+        source:
+          $ref: '#/components/schemas/src__backend_service__schemas__api__clickhouse__Source'
+        properties:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Properties
+        user_id:
           type: string
-          format: date
-          title: Metadata Date
-        first_name:
-          type: string
-          title: First Name
-        last_name:
-          type: string
-          title: Last Name
-        email:
-          type: string
-          title: Email
-        enriched_linked_in_url:
-          type: string
-          title: Enriched Linked In Url
-        enriched_job_title:
-          type: string
-          title: Enriched Job Title
-        name:
-          type: string
-          title: Name
-        website:
-          type: string
-          title: Website
-        industry:
-          type: string
-          title: Industry
-        employee_count:
-          type: integer
-          title: Employee Count
-        locality:
-          type: string
-          title: Locality
-        country:
-          type: string
-          title: Country
-        founded:
-          type: integer
-          title: Founded
-        work_email:
-          type: string
-          title: Work Email
-        fundraising:
-          type: string
-          title: Fundraising
-        modified_at:
-          type: string
-          format: date-time
-          title: Modified At
-        event_type:
-          type: string
-          title: Event Type
-        id:
-          type: string
-          format: uuid
-          title: Id
+          title: User Id
       type: object
       required:
-      - created_at
-      - metadata_date
-      - first_name
-      - last_name
-      - email
-      - enriched_linked_in_url
-      - enriched_job_title
-      - name
-      - website
-      - industry
-      - employee_count
-      - locality
-      - country
-      - founded
-      - work_email
-      - fundraising
-      - modified_at
-      - event_type
-      - id
-      title: UserMetadataResponse
+      - event
+      - source
+      - user_id
+      title: TrackEventRequest
+      description: Request model for tracking events
+    src__backend_service__schemas__api__clickhouse__Source:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - web
+      - landing
+      title: Source
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -200,72 +154,6 @@ components:
       - msg
       - type
       title: ValidationError
-    UserMetadataQueryRequest:
-      properties:
-        uuids:
-          anyOf:
-          - items:
-              type: string
-              format: uuid
-            type: array
-          - type: 'null'
-          title: Uuids
-        start_time:
-          type: string
-          title: Start Time
-        end_time:
-          type: string
-          title: End Time
-        page_size:
-          type: integer
-          title: Page Size
-          default: 100
-        page_number:
-          type: integer
-          title: Page Number
-          default: 1
-      type: object
-      required:
-      - start_time
-      - end_time
-      title: UserMetadataQueryRequest
-      description: Request body for querying user metadata with large UUID lists.
-    TrackEventRequest:
-      properties:
-        event:
-          type: string
-          title: Event
-        source:
-          $ref: '#/components/schemas/src__backend_service__schemas__api__clickhouse__Source'
-        properties:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Properties
-        user_id:
-          type: string
-          title: User Id
-      type: object
-      required:
-      - event
-      - source
-      - user_id
-      title: TrackEventRequest
-      description: Request model for tracking events
-    UserMetadataListResponse:
-      properties:
-        rows:
-          items:
-            $ref: '#/components/schemas/UserMetadataResponse'
-          type: array
-          title: Rows
-        pagination:
-          $ref: '#/components/schemas/PaginationMetadata'
-      type: object
-      required:
-      - rows
-      - pagination
-      title: UserMetadataListResponse
     UserMetadataRequest:
       properties:
         id:
@@ -372,6 +260,50 @@ components:
       - email
       title: UserMetadataRequest
       description: Request model for ingesting user metadata into ClickHouse
+    UserMetadataListResponse:
+      properties:
+        rows:
+          items:
+            $ref: '#/components/schemas/UserMetadataResponse'
+          type: array
+          title: Rows
+        pagination:
+          $ref: '#/components/schemas/PaginationMetadata'
+      type: object
+      required:
+      - rows
+      - pagination
+      title: UserMetadataListResponse
+    UserMetadataQueryRequest:
+      properties:
+        uuids:
+          anyOf:
+          - items:
+              type: string
+              format: uuid
+            type: array
+          - type: 'null'
+          title: Uuids
+        start_time:
+          type: string
+          title: Start Time
+        end_time:
+          type: string
+          title: End Time
+        page_size:
+          type: integer
+          title: Page Size
+          default: 100
+        page_number:
+          type: integer
+          title: Page Number
+          default: 1
+      type: object
+      required:
+      - start_time
+      - end_time
+      title: UserMetadataQueryRequest
+      description: Request body for querying user metadata with large UUID lists.
     PaginationMetadata:
       properties:
         page_size:
@@ -393,23 +325,91 @@ components:
       - total_pages
       - total_rows
       title: PaginationMetadata
-    HTTPValidationError:
+    UserMetadataResponse:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        metadata_date:
+          type: string
+          format: date
+          title: Metadata Date
+        first_name:
+          type: string
+          title: First Name
+        last_name:
+          type: string
+          title: Last Name
+        email:
+          type: string
+          title: Email
+        enriched_linked_in_url:
+          type: string
+          title: Enriched Linked In Url
+        enriched_job_title:
+          type: string
+          title: Enriched Job Title
+        name:
+          type: string
+          title: Name
+        website:
+          type: string
+          title: Website
+        industry:
+          type: string
+          title: Industry
+        employee_count:
+          type: integer
+          title: Employee Count
+        locality:
+          type: string
+          title: Locality
+        country:
+          type: string
+          title: Country
+        founded:
+          type: integer
+          title: Founded
+        work_email:
+          type: string
+          title: Work Email
+        fundraising:
+          type: string
+          title: Fundraising
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        event_type:
+          type: string
+          title: Event Type
+        id:
+          type: string
+          format: uuid
+          title: Id
       type: object
-      title: HTTPValidationError
-    src__backend_service__schemas__api__clickhouse__Source:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - web
-      - landing
-      title: Source
+      required:
+      - created_at
+      - metadata_date
+      - first_name
+      - last_name
+      - email
+      - enriched_linked_in_url
+      - enriched_job_title
+      - name
+      - website
+      - industry
+      - employee_count
+      - locality
+      - country
+      - founded
+      - work_email
+      - fundraising
+      - modified_at
+      - event_type
+      - id
+      title: UserMetadataResponse
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -419,6 +419,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-analytics-api-openapi.yml

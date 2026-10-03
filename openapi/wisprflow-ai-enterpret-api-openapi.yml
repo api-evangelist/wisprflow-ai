@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Enterpret API
+  title: Wispr Backend Enterpret API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Enterpret across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-enterpret-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Enterpret
 paths:
@@ -37,32 +37,15 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
-    ValidationError:
+    HTTPValidationError:
       properties:
-        loc:
+        detail:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Detail
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: HTTPValidationError
     EnterpretWebhookRequest:
       properties:
         webhook_target:
@@ -93,6 +76,32 @@ components:
       - webhook_payload
       title: EnterpretWebhookRequest
       description: The outer Enterpret webhook request wrapping its payload and metadata.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     EnterpretDeviceDetails:
       properties:
         architecture:
@@ -124,15 +133,6 @@ components:
       type: object
       title: EnterpretDeviceDetails
       description: Device metadata attached to an Enterpret issue.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     EnterpretWebhookPayload:
       properties:
         issue_id:
@@ -436,6 +436,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-enterpret-api-openapi.yml

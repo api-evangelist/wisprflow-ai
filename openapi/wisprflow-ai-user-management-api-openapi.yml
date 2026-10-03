@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai User Management API
+  title: Wispr Backend User Management API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged User Management across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-user-management-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: User Management
 paths:
@@ -591,32 +591,30 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    ValidationError:
+    UserProfileResponse:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
       type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: UserProfileResponse
     UserPreference:
       properties:
         preferences:
@@ -630,22 +628,76 @@ components:
       required:
       - preferences
       title: UserPreference
-    OnboardingIntent:
+    DeviceInfoStatus:
       type: string
       enum:
-      - spend_time_typing
-      - flow_use_case
-      - about_yourself
-      - work_environment
-      - language_preference
-      - attribution
-      - privacy_consent
-      - personalization_styles
-      - personalization_styles_default
-      - trial_activation
-      - voice_profile
-      - product_value_prop
-      title: OnboardingIntent
+      - ok
+      - partial
+      - missing
+      - access_denied
+      - error
+      title: DeviceInfoStatus
+    NotetakerTranscriptRetention:
+      type: string
+      enum:
+      - never_delete
+      - 1_day
+      - 7_days
+      - 30_days
+      - 90_days
+      - 180_days
+      - 365_days
+      title: NotetakerTranscriptRetention
+    UserProfile:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+      type: object
+      title: UserProfile
+      description: 'Model for user profile information.
+
+        Kept this seperated from UserPreference in case we have more user profile related fields in the future.'
+    SubmitOnboardingAnswersRequest:
+      properties:
+        answers:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - items:
+                type: string
+              type: array
+            - type: boolean
+            - type: integer
+          type: object
+          title: Answers
+        fulfilled_intents:
+          items:
+            $ref: '#/components/schemas/OnboardingIntent'
+          type: array
+          title: Fulfilled Intents
+          default: []
+      type: object
+      required:
+      - answers
+      title: SubmitOnboardingAnswersRequest
+      description: Request body carrying the user's onboarding answers and fulfilled intents.
+    SignHipaaBaaRequest:
+      properties:
+        legal_name:
+          type: string
+          title: Legal Name
+      type: object
+      required:
+      - legal_name
+      title: SignHipaaBaaRequest
     UserPreferencesUpdate:
       properties:
         privacy_mode:
@@ -831,28 +883,41 @@ components:
       description: 'Model for partial updates to user preferences.
 
         All fields are optional but when present must follow the same validation rules as UserPreferences.'
-    NotetakerTranscriptRetention:
-      type: string
-      enum:
-      - never_delete
-      - 1_day
-      - 7_days
-      - 30_days
-      - 90_days
-      - 180_days
-      - 365_days
-      title: NotetakerTranscriptRetention
-    PersonalizationStyle:
-      type: string
-      enum:
-      - formal
-      - casual
-      - veryCasual
-      - excited
-      - genz
-      - default
-      title: PersonalizationStyle
-      description: Represents the style for personalization settings.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     PolishInstructions:
       properties:
         default:
@@ -870,28 +935,17 @@ components:
       type: object
       title: PolishInstructions
       description: Saved toggle rules for Polish transforms (built-in defaults + custom).
-    Body_request_push_notification_api_v1_user_request_push_notification_post:
-      properties:
-        device_token:
-          type: string
-          title: Device Token
-        state:
-          type: integer
-          title: State
-      type: object
-      required:
-      - device_token
-      - state
-      title: Body_request_push_notification_api_v1_user_request_push_notification_post
-    SignHipaaBaaRequest:
-      properties:
-        legal_name:
-          type: string
-          title: Legal Name
-      type: object
-      required:
-      - legal_name
-      title: SignHipaaBaaRequest
+    PersonalizationStyle:
+      type: string
+      enum:
+      - formal
+      - casual
+      - veryCasual
+      - excited
+      - genz
+      - default
+      title: PersonalizationStyle
+      description: Represents the style for personalization settings.
     Body_update_student_status_api_v1_user_update_student_status_post:
       properties:
         email:
@@ -910,13 +964,22 @@ components:
       - email
       - is_student
       title: Body_update_student_status_api_v1_user_update_student_status_post
-    TrialVariant:
+    OnboardingIntent:
       type: string
       enum:
-      - control
-      - opt_in_claimed
-      - opt_in_declined
-      title: TrialVariant
+      - spend_time_typing
+      - flow_use_case
+      - about_yourself
+      - work_environment
+      - language_preference
+      - attribution
+      - privacy_consent
+      - personalization_styles
+      - personalization_styles_default
+      - trial_activation
+      - voice_profile
+      - product_value_prop
+      title: OnboardingIntent
     RegisterDeviceRequest:
       properties:
         device_id:
@@ -968,32 +1031,26 @@ components:
       - device_os_name
       - device_os_version
       title: RegisterDeviceRequest
-    HTTPValidationError:
+    TrialVariant:
+      type: string
+      enum:
+      - control
+      - opt_in_claimed
+      - opt_in_declined
+      title: TrialVariant
+    Body_request_push_notification_api_v1_user_request_push_notification_post:
       properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
+        device_token:
+          type: string
+          title: Device Token
+        state:
+          type: integer
+          title: State
       type: object
-      title: HTTPValidationError
-    UserProfile:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-      type: object
-      title: UserProfile
-      description: 'Model for user profile information.
-
-        Kept this seperated from UserPreference in case we have more user profile related fields in the future.'
+      required:
+      - device_token
+      - state
+      title: Body_request_push_notification_api_v1_user_request_push_notification_post
     PersonalizationStyles:
       properties:
         personal:
@@ -1013,30 +1070,6 @@ components:
           default: default
       type: object
       title: PersonalizationStyles
-    UserProfileResponse:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-      type: object
-      title: UserProfileResponse
     DictionaryItemOld:
       properties:
         id:
@@ -1104,39 +1137,6 @@ components:
       - message
       title: OnboardingAnswersResponse
       description: Acknowledgement response after onboarding answers are submitted.
-    SubmitOnboardingAnswersRequest:
-      properties:
-        answers:
-          additionalProperties:
-            anyOf:
-            - type: string
-            - items:
-                type: string
-              type: array
-            - type: boolean
-            - type: integer
-          type: object
-          title: Answers
-        fulfilled_intents:
-          items:
-            $ref: '#/components/schemas/OnboardingIntent'
-          type: array
-          title: Fulfilled Intents
-          default: []
-      type: object
-      required:
-      - answers
-      title: SubmitOnboardingAnswersRequest
-      description: Request body carrying the user's onboarding answers and fulfilled intents.
-    DeviceInfoStatus:
-      type: string
-      enum:
-      - ok
-      - partial
-      - missing
-      - access_denied
-      - error
-      title: DeviceInfoStatus
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -1146,6 +1146,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-user-management-api-openapi.yml

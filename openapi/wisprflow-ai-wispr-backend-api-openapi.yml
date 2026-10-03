@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Wispr Backend API
+  title: Wispr Backend API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Wispr Backend across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-wispr-backend-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Wispr Backend
 paths:
@@ -28,6 +28,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-wispr-backend-api-openapi.yml

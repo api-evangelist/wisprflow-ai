@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Tracking API
+  title: Wispr Backend Tracking API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Tracking across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-tracking-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Tracking
 paths:
@@ -39,6 +39,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -65,6 +74,34 @@ components:
       - msg
       - type
       title: ValidationError
+    AttributionPlatform:
+      type: string
+      enum:
+      - web
+      - desktop_mac
+      - desktop_windows
+      - ios
+      - android
+      title: AttributionPlatform
+      description: 'Valid platforms for attribution event tracking.
+
+
+        Desktop clients must use specific variants (DESKTOP_MAC, DESKTOP_WINDOWS).'
+    TrackingEventResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - success
+      title: TrackingEventResponse
+      description: Response for tracking events.
     TrackingEventRequest:
       properties:
         event_name:
@@ -126,49 +163,12 @@ components:
       - event_id
       title: TrackingEventRequest
       description: Request for tracking events from web beacons.
-    TrackingEventResponse:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-      type: object
-      required:
-      - success
-      title: TrackingEventResponse
-      description: Response for tracking events.
     TrackingEventName:
       type: string
       enum:
       - app_download
       title: TrackingEventName
       description: Supported tracking event names for web beacons.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    AttributionPlatform:
-      type: string
-      enum:
-      - web
-      - desktop_mac
-      - desktop_windows
-      - ios
-      - android
-      title: AttributionPlatform
-      description: 'Valid platforms for attribution event tracking.
-
-
-        Desktop clients must use specific variants (DESKTOP_MAC, DESKTOP_WINDOWS).'
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -178,6 +178,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-tracking-api-openapi.yml

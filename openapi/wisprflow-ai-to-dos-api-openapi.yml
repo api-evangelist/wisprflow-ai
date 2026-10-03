@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Todos To Dos API
+  title: Wispr Backend Todos API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -47,6 +47,51 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
+    TodoStatus:
+      type: string
+      enum:
+      - open
+      - in_progress
+      - done
+      title: TodoStatus
+    TodoSyncRequest:
+      properties:
+        last_sync_time:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Sync Time
+          description: Unix timestamp in ms of the most recent server change the client has seen
+        page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page Cursor
+          description: Opaque cursor from a previous paged response. While this is set, keep last_sync_time unchanged and pass this value to continue the same pull snapshot.
+        hard_refresh:
+          type: boolean
+          title: Hard Refresh
+          description: When true, ignore last_sync_time and pull all of the user's todos regardless of it
+          default: false
+        todos:
+          items:
+            $ref: '#/components/schemas/SyncTodoRequest'
+          type: array
+          title: Todos
+      type: object
+      required:
+      - todos
+      title: TodoSyncRequest
+      description: Envelope for ``POST /api/v1/todos/sync``.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -73,13 +118,6 @@ components:
       - msg
       - type
       title: ValidationError
-    TodoStatus:
-      type: string
-      enum:
-      - open
-      - in_progress
-      - done
-      title: TodoStatus
     TodoSyncResponse:
       properties:
         acked:
@@ -243,44 +281,6 @@ components:
         constrained to :class:`TodoStatus` and rejected at parse time (422) on a bad
 
         value — a closed set, unlike the lenient open-ended fields.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    TodoSyncRequest:
-      properties:
-        last_sync_time:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Sync Time
-          description: Unix timestamp in ms of the most recent server change the client has seen
-        page_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Page Cursor
-          description: Opaque cursor from a previous paged response. While this is set, keep last_sync_time unchanged and pass this value to continue the same pull snapshot.
-        hard_refresh:
-          type: boolean
-          title: Hard Refresh
-          description: When true, ignore last_sync_time and pull all of the user's todos regardless of it
-          default: false
-        todos:
-          items:
-            $ref: '#/components/schemas/SyncTodoRequest'
-          type: array
-          title: Todos
-      type: object
-      required:
-      - todos
-      title: TodoSyncRequest
-      description: Envelope for ``POST /api/v1/todos/sync``.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

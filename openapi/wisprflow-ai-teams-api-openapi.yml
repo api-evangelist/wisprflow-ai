@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Teams API
+  title: Wispr Backend Teams API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Teams across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-teams-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Teams
 paths:
@@ -404,28 +404,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    CreateTeamRequest:
-      properties:
-        name:
-          type: string
-          maxLength: 120
-          minLength: 1
-          title: Name
-        member_user_ids:
-          items:
-            type: string
-          type: array
-          maxItems: 500
-          title: Member User Ids
-        successor_admin_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Successor Admin Email
-      type: object
-      required:
-      - name
-      title: CreateTeamRequest
     MoveTeamToCostCenterRequest:
       properties:
         cost_center_id:
@@ -437,32 +415,6 @@ components:
       - cost_center_id
       title: MoveTeamToCostCenterRequest
       description: Reassign a team to a different cost center within the same enterprise.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     TeamListResponse:
       properties:
         teams:
@@ -474,6 +426,54 @@ components:
       required:
       - teams
       title: TeamListResponse
+    ActiveCostCenterResponse:
+      properties:
+        cost_center_id:
+          type: string
+          format: uuid
+          title: Cost Center Id
+        cost_center_name:
+          type: string
+          title: Cost Center Name
+        caller_team_id:
+          type: string
+          format: uuid
+          title: Caller Team Id
+        caller_is_effective_team_admin:
+          type: boolean
+          title: Caller Is Effective Team Admin
+        members:
+          items:
+            $ref: '#/components/schemas/ActiveCostCenterMemberResponse'
+          type: array
+          title: Members
+      type: object
+      required:
+      - cost_center_id
+      - cost_center_name
+      - caller_team_id
+      - caller_is_effective_team_admin
+      - members
+      title: ActiveCostCenterResponse
+      description: 'Caller''s active cost center plus all active members of teams within it.
+
+
+        Returned by ``GET /me/active-cost-center``. The create-department dialog
+
+        uses ``members`` (excluding the caller) to populate the picker. Successor
+
+        admins are filtered client-side to members with ``team_id == caller_team_id``.'
+    UpdateTeamRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Name
+      type: object
+      required:
+      - name
+      title: UpdateTeamRequest
     ActiveCostCenterMemberResponse:
       properties:
         user_id:
@@ -536,6 +536,118 @@ components:
         ``team_id`` is the member''s *current* team within the CC, used to filter
 
         successor-admin candidates to caller''s old teammates.'
+    CreateTeamRequest:
+      properties:
+        name:
+          type: string
+          maxLength: 120
+          minLength: 1
+          title: Name
+        member_user_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 500
+          title: Member User Ids
+        successor_admin_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Successor Admin Email
+      type: object
+      required:
+      - name
+      title: CreateTeamRequest
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TeamMembershipResponse:
+      properties:
+        team_id:
+          type: string
+          format: uuid
+          title: Team Id
+        user_id:
+          type: string
+          title: User Id
+        role:
+          anyOf:
+          - $ref: '#/components/schemas/TeamMemberRole'
+          - type: 'null'
+      type: object
+      required:
+      - team_id
+      - user_id
+      - role
+      title: TeamMembershipResponse
+      description: A single ``UserTeamMembership`` row exposed to admin clients.
+    UpdateTeamMemberRoleRequest:
+      properties:
+        role:
+          $ref: '#/components/schemas/TeamMemberRole'
+      type: object
+      required:
+      - role
+      title: UpdateTeamMemberRoleRequest
+      description: Set the per-team membership role for a user already on the team.
+    TeamMemberRole:
+      type: string
+      enum:
+      - admin
+      - member
+      title: TeamMemberRole
+      description: 'Per-team membership role stored in ``UserTeamMembership.role``.
+
+
+        Distinct from the enterprise-level role on ``User.enterprise_role`` — a user
+
+        can be an enterprise ``superadmin`` while being a team-level ``member``, or
+
+        vice versa.'
+    MoveMemberRequest:
+      properties:
+        user_id:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: User Id
+      type: object
+      required:
+      - user_id
+      title: MoveMemberRequest
+      description: Pull an existing enterprise user into this team from whichever team they're on now.
     TeamResponse:
       properties:
         id:
@@ -583,118 +695,6 @@ components:
       - created_at
       title: TeamResponse
       description: Team details with live member count.
-    TeamMembershipResponse:
-      properties:
-        team_id:
-          type: string
-          format: uuid
-          title: Team Id
-        user_id:
-          type: string
-          title: User Id
-        role:
-          anyOf:
-          - $ref: '#/components/schemas/TeamMemberRole'
-          - type: 'null'
-      type: object
-      required:
-      - team_id
-      - user_id
-      - role
-      title: TeamMembershipResponse
-      description: A single ``UserTeamMembership`` row exposed to admin clients.
-    UpdateTeamMemberRoleRequest:
-      properties:
-        role:
-          $ref: '#/components/schemas/TeamMemberRole'
-      type: object
-      required:
-      - role
-      title: UpdateTeamMemberRoleRequest
-      description: Set the per-team membership role for a user already on the team.
-    UpdateTeamRequest:
-      properties:
-        name:
-          type: string
-          maxLength: 120
-          minLength: 1
-          title: Name
-      type: object
-      required:
-      - name
-      title: UpdateTeamRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    TeamMemberRole:
-      type: string
-      enum:
-      - admin
-      - member
-      title: TeamMemberRole
-      description: 'Per-team membership role stored in ``UserTeamMembership.role``.
-
-
-        Distinct from the enterprise-level role on ``User.enterprise_role`` — a user
-
-        can be an enterprise ``superadmin`` while being a team-level ``member``, or
-
-        vice versa.'
-    ActiveCostCenterResponse:
-      properties:
-        cost_center_id:
-          type: string
-          format: uuid
-          title: Cost Center Id
-        cost_center_name:
-          type: string
-          title: Cost Center Name
-        caller_team_id:
-          type: string
-          format: uuid
-          title: Caller Team Id
-        caller_is_effective_team_admin:
-          type: boolean
-          title: Caller Is Effective Team Admin
-        members:
-          items:
-            $ref: '#/components/schemas/ActiveCostCenterMemberResponse'
-          type: array
-          title: Members
-      type: object
-      required:
-      - cost_center_id
-      - cost_center_name
-      - caller_team_id
-      - caller_is_effective_team_admin
-      - members
-      title: ActiveCostCenterResponse
-      description: 'Caller''s active cost center plus all active members of teams within it.
-
-
-        Returned by ``GET /me/active-cost-center``. The create-department dialog
-
-        uses ``members`` (excluding the caller) to populate the picker. Successor
-
-        admins are filtered client-side to members with ``team_id == caller_team_id``.'
-    MoveMemberRequest:
-      properties:
-        user_id:
-          type: string
-          maxLength: 80
-          minLength: 1
-          title: User Id
-      type: object
-      required:
-      - user_id
-      title: MoveMemberRequest
-      description: Pull an existing enterprise user into this team from whichever team they're on now.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -704,6 +704,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-teams-api-openapi.yml

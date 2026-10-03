@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Platform API
+  title: Wispr Backend Platform API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Platform across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-platform-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Platform
 paths:
@@ -558,6 +558,171 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    CreateUserInviteRequest:
+      properties:
+        emails:
+          items:
+            type: string
+          type: array
+          title: Emails
+        role:
+          $ref: '#/components/schemas/Role'
+      type: object
+      required:
+      - emails
+      - role
+      title: CreateUserInviteRequest
+    CreateAPIKeyRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: CreateAPIKeyRequest
+    UpdateOrgRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        logo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo
+      type: object
+      title: UpdateOrgRequest
+    Conversation:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Identifier of the conversation
+        participants:
+          items:
+            type: string
+          type: array
+          title: Participants
+          description: List of participants in the conversation
+        messages:
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          type: array
+          title: Messages
+          description: List of messages in the conversation
+      type: object
+      required:
+      - id
+      title: Conversation
+    ChatMessage:
+      properties:
+        role:
+          $ref: '#/components/schemas/ChatRole'
+          description: Role of the message sender
+        content:
+          type: string
+          title: Content
+          description: Content of the message
+        sender_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sender Id
+          description: Identifier of the message sender
+      type: object
+      required:
+      - role
+      - content
+      title: ChatMessage
+    ChatRole:
+      type: string
+      enum:
+      - user
+      - human
+      - assistant
+      title: ChatRole
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    Role:
+      type: string
+      enum:
+      - admin
+      - member
+      title: Role
+      description: A platform team member's role.
+    Body_playground_api_v1_platform_organizations__organization_id__playground_post:
+      properties:
+        audio:
+          type: string
+          title: Audio
+          description: Base64 encoded audio
+        language:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: string
+          - type: 'null'
+          title: Language
+          description: List of languages the user speaks
+        context:
+          anyOf:
+          - $ref: '#/components/schemas/Context'
+          - type: 'null'
+          description: Full context surrounding the dictation
+        properties:
+          anyOf:
+          - $ref: '#/components/schemas/APIProperties'
+          - type: 'null'
+          description: Additional properties
+      type: object
+      required:
+      - audio
+      title: Body_playground_api_v1_platform_organizations__organization_id__playground_post
+    UpdateRoleRequest:
+      properties:
+        role:
+          $ref: '#/components/schemas/Role'
+      type: object
+      required:
+      - role
+      title: UpdateRoleRequest
     Context:
       properties:
         app:
@@ -668,70 +833,6 @@ components:
           description: List of all applications (names, bundle IDs, URLs) used for dictation in this session
       type: object
       title: Context
-    AppType:
-      type: string
-      enum:
-      - email
-      - ai
-      - word
-      - terminal
-      - other
-      title: AppType
-      description: Represents the type of app the user is trying to paste in.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    CreateUserInviteRequest:
-      properties:
-        emails:
-          items:
-            type: string
-          type: array
-          title: Emails
-        role:
-          $ref: '#/components/schemas/Role'
-      type: object
-      required:
-      - emails
-      - role
-      title: CreateUserInviteRequest
-    UpdateOrgRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-        logo:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Logo
-      type: object
-      title: UpdateOrgRequest
     App:
       properties:
         name:
@@ -758,30 +859,25 @@ components:
           description: URL within the app
       type: object
       title: App
-    TextboxContents:
+    AppType:
+      type: string
+      enum:
+      - email
+      - ai
+      - word
+      - terminal
+      - other
+      title: AppType
+      description: Represents the type of app the user is trying to paste in.
+    CreateOrgRequest:
       properties:
-        beforeText:
+        name:
           type: string
-          title: Beforetext
-          description: Text right before the cursor position or start of selected text
-          default: ''
-        selectedText:
-          type: string
-          title: Selectedtext
-          description: Highlited text in the textbox
-          default: ''
-        afterText:
-          type: string
-          title: Aftertext
-          description: Text right after the cursor position or end of selected text
-          default: ''
-        contents:
-          type: string
-          title: Contents
-          description: All of the text in the textbox
-          default: ''
+          title: Name
       type: object
-      title: TextboxContents
+      required:
+      - name
+      title: CreateOrgRequest
     APIProperties:
       properties:
         language:
@@ -935,37 +1031,6 @@ components:
           description: Dictionary words
       type: object
       title: APIProperties
-    Conversation:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Identifier of the conversation
-        participants:
-          items:
-            type: string
-          type: array
-          title: Participants
-          description: List of participants in the conversation
-        messages:
-          items:
-            $ref: '#/components/schemas/ChatMessage'
-          type: array
-          title: Messages
-          description: List of messages in the conversation
-      type: object
-      required:
-      - id
-      title: Conversation
-    CreateAPIKeyRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - name
-      title: CreateAPIKeyRequest
     UpdateAPIKeyRequest:
       properties:
         name:
@@ -975,95 +1040,30 @@ components:
           title: Name
       type: object
       title: UpdateAPIKeyRequest
-    ChatRole:
-      type: string
-      enum:
-      - user
-      - human
-      - assistant
-      title: ChatRole
-    Role:
-      type: string
-      enum:
-      - admin
-      - member
-      title: Role
-      description: A platform team member's role.
-    CreateOrgRequest:
+    TextboxContents:
       properties:
-        name:
+        beforeText:
           type: string
-          title: Name
-      type: object
-      required:
-      - name
-      title: CreateOrgRequest
-    ChatMessage:
-      properties:
-        role:
-          $ref: '#/components/schemas/ChatRole'
-          description: Role of the message sender
-        content:
+          title: Beforetext
+          description: Text right before the cursor position or start of selected text
+          default: ''
+        selectedText:
           type: string
-          title: Content
-          description: Content of the message
-        sender_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sender Id
-          description: Identifier of the message sender
-      type: object
-      required:
-      - role
-      - content
-      title: ChatMessage
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    UpdateRoleRequest:
-      properties:
-        role:
-          $ref: '#/components/schemas/Role'
-      type: object
-      required:
-      - role
-      title: UpdateRoleRequest
-    Body_playground_api_v1_platform_organizations__organization_id__playground_post:
-      properties:
-        audio:
+          title: Selectedtext
+          description: Highlited text in the textbox
+          default: ''
+        afterText:
           type: string
-          title: Audio
-          description: Base64 encoded audio
-        language:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: string
-          - type: 'null'
-          title: Language
-          description: List of languages the user speaks
-        context:
-          anyOf:
-          - $ref: '#/components/schemas/Context'
-          - type: 'null'
-          description: Full context surrounding the dictation
-        properties:
-          anyOf:
-          - $ref: '#/components/schemas/APIProperties'
-          - type: 'null'
-          description: Additional properties
+          title: Aftertext
+          description: Text right after the cursor position or end of selected text
+          default: ''
+        contents:
+          type: string
+          title: Contents
+          description: All of the text in the textbox
+          default: ''
       type: object
-      required:
-      - audio
-      title: Body_playground_api_v1_platform_organizations__organization_id__playground_post
+      title: TextboxContents
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -1073,6 +1073,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-platform-api-openapi.yml

@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Promotions API
+  title: Wispr Backend Promotions API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Promotions across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-promotions-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Promotions
 paths:
@@ -194,17 +194,58 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    PhoneNumberSubmitRequest:
+    BoostActionResponse:
       properties:
-        phone_number:
+        success:
+          type: boolean
+          title: Success
+        action:
           type: string
-          pattern: ^\+[1-9]\d{6,14}$
-          title: Phone Number
+          title: Action
+        boost_earned:
+          type: integer
+          title: Boost Earned
+        current_rank:
+          type: integer
+          title: Current Rank
+        total_boost:
+          type: integer
+          title: Total Boost
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
       type: object
       required:
-      - phone_number
-      title: PhoneNumberSubmitRequest
-      description: Request schema for phone number boost submission
+      - success
+      - action
+      - boost_earned
+      - current_rank
+      - total_boost
+      title: BoostActionResponse
+      description: Generic response for boost action endpoints
+    ApplyPromoCodeRequest:
+      properties:
+        code:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Code
+      type: object
+      required:
+      - code
+      title: ApplyPromoCodeRequest
+      description: Request to apply a promo code by its string.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -231,18 +272,6 @@ components:
       - msg
       - type
       title: ValidationError
-    ApplyPromoCodeRequest:
-      properties:
-        code:
-          type: string
-          maxLength: 80
-          minLength: 1
-          title: Code
-      type: object
-      required:
-      - code
-      title: ApplyPromoCodeRequest
-      description: Request to apply a promo code by its string.
     CampaignPromoDetails:
       properties:
         trial_days:
@@ -269,6 +298,17 @@ components:
       - campaign_id
       title: CampaignPromoDetails
       description: Resolved promo details for a validated code and its campaign.
+    PhoneNumberSubmitRequest:
+      properties:
+        phone_number:
+          type: string
+          pattern: ^\+[1-9]\d{6,14}$
+          title: Phone Number
+      type: object
+      required:
+      - phone_number
+      title: PhoneNumberSubmitRequest
+      description: Request schema for phone number boost submission
     AndroidWaitlistRankResponse:
       properties:
         referral_code:
@@ -327,46 +367,6 @@ components:
       - verified_share_discord
       title: AndroidWaitlistRankResponse
       description: Response schema for GET /promos/android_waitlist_rank
-    BoostActionResponse:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        action:
-          type: string
-          title: Action
-        boost_earned:
-          type: integer
-          title: Boost Earned
-        current_rank:
-          type: integer
-          title: Current Rank
-        total_boost:
-          type: integer
-          title: Total Boost
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-      type: object
-      required:
-      - success
-      - action
-      - boost_earned
-      - current_rank
-      - total_boost
-      title: BoostActionResponse
-      description: Generic response for boost action endpoints
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post:
       properties:
         screenshot:
@@ -386,6 +386,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-promotions-api-openapi.yml

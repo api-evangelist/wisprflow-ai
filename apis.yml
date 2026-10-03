@@ -277,16 +277,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/wisprflow-ai-keyboard-telemetry-api-openapi.yml
-- aid: wisprflow-ai:wisprflow-ai-linked-in-api
-  name: Wispr Flow Linked In API
-  description: The Linked In API from Wispr Flow — 3 operation(s) for linked in.
-  humanURL: https://wisprflow.ai/developers
-  baseURL: https://api.wisprflow.ai
-  tags:
-  - Linked In
-  properties:
-  - type: OpenAPI
-    url: openapi/wisprflow-ai-linked-in-api-openapi.yml
 - aid: wisprflow-ai:wisprflow-ai-llm-api
   name: Wispr Flow LLM API
   description: The LLM API from Wispr Flow — 20 operation(s) for llm.
@@ -487,16 +477,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/wisprflow-ai-teams-api-openapi.yml
-- aid: wisprflow-ai:wisprflow-ai-to-dos-api
-  name: Wispr Flow To Dos API
-  description: The To Dos API from Wispr Flow — 1 operation(s) for to dos.
-  humanURL: https://wisprflow.ai/developers
-  baseURL: https://api.wisprflow.ai
-  tags:
-  - To Dos
-  properties:
-  - type: OpenAPI
-    url: openapi/wisprflow-ai-to-dos-api-openapi.yml
 - aid: wisprflow-ai:wisprflow-ai-tracking-api
   name: Wispr Flow Tracking API
   description: The Tracking API from Wispr Flow — 1 operation(s) for tracking.
@@ -577,6 +557,26 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/wisprflow-ai-wispr-backend-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-linked-in-api
+  name: Wispr Flow Linked In API
+  description: The Linked In API from Wispr Flow — 3 operation(s) for linked in.
+  humanURL: https://wisprflow.ai/developers
+  baseURL: https://api.wisprflow.ai
+  tags:
+  - Linked In
+  properties:
+  - type: OpenAPI
+    url: openapi/wisprflow-ai-linked-in-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-to-dos-api
+  name: Wispr Flow To Dos API
+  description: The To Dos API from Wispr Flow — 1 operation(s) for to dos.
+  humanURL: https://wisprflow.ai/developers
+  baseURL: https://api.wisprflow.ai
+  tags:
+  - To Dos
+  properties:
+  - type: OpenAPI
+    url: openapi/wisprflow-ai-to-dos-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

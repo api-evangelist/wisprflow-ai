@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Instruct History API
+  title: Wispr Backend Instruct History API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged InstructHistory across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-instructhistory-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: InstructHistory
 paths:
@@ -38,6 +38,51 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
+    InstructChatSessionRecord:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+      type: object
+      required:
+      - id
+      title: InstructChatSessionRecord
+    ClassificationMode:
+      type: string
+      enum:
+      - autoClassify
+      - instructShortcut
+      title: ClassificationMode
+      description: How the dictation entered the classification flow.
+    InstructHistoryStatus:
+      type: string
+      enum:
+      - succeeded
+      - classifier_failed
+      - classifier_timeout
+      - short_circuit_used
+      - route_error
+      - paste_failed
+      - cancelled
+      - no_text
+      - not_editable
+      title: InstructHistoryStatus
+      description: End-to-end outcome of the resolved dictation route.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -191,57 +236,38 @@ components:
         has no separate classifier). ``instruct_session_id``/``session_turn_index``
 
         group turns of one instruct chat back-and-forth.'
-    UploadInstructHistoryRequest:
+    UploadInstructHistoryResponse:
       properties:
-        user_id:
-          type: string
-          title: User Id
-        instruct_chat_sessions:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
           items:
-            $ref: '#/components/schemas/InstructChatSessionRecord'
+            type: string
+            format: uuid
           type: array
-          title: Instruct Chat Sessions
-        instruct_history_records:
+          title: Ids
+        session_ids:
           items:
-            $ref: '#/components/schemas/InstructHistoryRecord'
+            type: string
+            format: uuid
           type: array
-          title: Instruct History Records
+          title: Session Ids
       type: object
       required:
-      - user_id
-      - instruct_history_records
-      title: UploadInstructHistoryRequest
-    InstructHistoryStatus:
+      - num_rows_saved
+      - ids
+      title: UploadInstructHistoryResponse
+    ClassifierStatus:
       type: string
       enum:
       - succeeded
-      - classifier_failed
-      - classifier_timeout
-      - short_circuit_used
-      - route_error
-      - paste_failed
-      - cancelled
-      - no_text
-      - not_editable
-      title: InstructHistoryStatus
-      description: End-to-end outcome of the resolved dictation route.
-    InstructHistoryFeedback:
-      properties:
-        rating:
-          type: string
-          enum:
-          - up
-          - down
-          title: Rating
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-      type: object
-      required:
-      - rating
-      title: InstructHistoryFeedback
+      - timeout
+      - short_circuit
+      - error
+      - not_invoked
+      title: ClassifierStatus
+      description: Outcome of the /llm/classify_intent call (null when classify-intent was not invoked).
     InstructToolCall:
       properties:
         name:
@@ -272,69 +298,43 @@ components:
         ``input``/``output`` shapes are owned by the desktop per tool; server-side
 
         enforcement would block adding a tool without a coordinated deploy.'
-    ClassificationMode:
-      type: string
-      enum:
-      - autoClassify
-      - instructShortcut
-      title: ClassificationMode
-      description: How the dictation entered the classification flow.
-    UploadInstructHistoryResponse:
+    UploadInstructHistoryRequest:
       properties:
-        num_rows_saved:
-          type: integer
-          title: Num Rows Saved
-        ids:
+        user_id:
+          type: string
+          title: User Id
+        instruct_chat_sessions:
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/InstructChatSessionRecord'
           type: array
-          title: Ids
-        session_ids:
+          title: Instruct Chat Sessions
+        instruct_history_records:
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/InstructHistoryRecord'
           type: array
-          title: Session Ids
+          title: Instruct History Records
       type: object
       required:
-      - num_rows_saved
-      - ids
-      title: UploadInstructHistoryResponse
-    InstructChatSessionRecord:
+      - user_id
+      - instruct_history_records
+      title: UploadInstructHistoryRequest
+    InstructHistoryFeedback:
       properties:
-        id:
+        rating:
           type: string
-          format: uuid
-          title: Id
-        title:
+          enum:
+          - up
+          - down
+          title: Rating
+        text:
           anyOf:
           - type: string
           - type: 'null'
-          title: Title
+          title: Text
       type: object
       required:
-      - id
-      title: InstructChatSessionRecord
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ClassifierStatus:
-      type: string
-      enum:
-      - succeeded
-      - timeout
-      - short_circuit
-      - error
-      - not_invoked
-      title: ClassifierStatus
-      description: Outcome of the /llm/classify_intent call (null when classify-intent was not invoked).
+      - rating
+      title: InstructHistoryFeedback
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -344,6 +344,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-instructhistory-api-openapi.yml

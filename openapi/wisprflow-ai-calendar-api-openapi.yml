@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Calendar API
+  title: Wispr Backend Calendar API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Calendar across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-calendar-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Calendar
 paths:
@@ -354,13 +354,74 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    SyncResponse:
+    PrereadResponse:
       properties:
-        events:
+        title:
+          type: string
+          title: Title
+        summary:
+          type: string
+          title: Summary
+        contentMd:
+          type: string
+          title: Contentmd
+        generatedAt:
+          type: string
+          format: date-time
+          title: Generatedat
+      type: object
+      required:
+      - title
+      - summary
+      - contentMd
+      - generatedAt
+      title: PrereadResponse
+      description: 'Response shape for ``GET /api/v1/calendar/events/{external_id}/preread``.
+
+
+        The endpoint generates the pre-read on-the-fly per request (no
+
+        persistence), so ``generated_at`` is the response timestamp.
+
+
+        ``title`` is a very short calendar-event-label suitable for a
+
+        notification card. ``summary`` is a single declarative sentence that
+
+        describes what the meeting is about — surfaced under the calendar
+
+        event title on the desktop hub.'
+    ParticipantDTO:
+      properties:
+        name:
+          type: string
+          title: Name
+        photoUrl:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Photourl
+        isSelf:
+          type: boolean
+          title: Isself
+          default: false
+      type: object
+      required:
+      - name
+      title: ParticipantDTO
+      description: 'Per-attendee detail for the desktop: display name, optional real profile photo, and self flag.
+
+
+        Carried alongside the legacy ``participants: list[str]`` (display-name-only) field so existing
+
+        consumers keep working; the desktop reads ``photoUrl`` / ``isSelf`` to render meeting avatars.'
+    AgenticPrereadSyncResponse:
+      properties:
+        agenticPrereads:
           items:
-            $ref: '#/components/schemas/CalendarEventDTO'
+            $ref: '#/components/schemas/AgenticPrereadSyncItemDTO'
           type: array
-          title: Events
+          title: Agenticprereads
         serverTime:
           type: string
           format: date-time
@@ -372,50 +433,15 @@ components:
           title: Nextcursor
       type: object
       required:
-      - events
+      - agenticPrereads
       - serverTime
-      title: SyncResponse
-      description: 'Response shape for `GET /api/v1/calendar/sync` (Day 2).
+      title: AgenticPrereadSyncResponse
+      description: 'Response shape for ``GET /api/v1/calendar/prereads/agentic_sync``.
 
 
-        Defined now so the contract is locked. `server_time` is the timestamp at which
+        Mirrors the calendar sync cursor contract: desktop advances ``since`` to
 
-        the server produced the response — desktop should use this as the next `since` cursor.
-
-
-        When `next_cursor` is non-null, the desktop should refetch immediately with
-
-        ``since`` unchanged and ``cursor`` set to this value. When null, the result set
-
-        fits in a single page and the desktop advances to ``server_time`` as the next
-
-        ``since`` value.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+        ``serverTime`` once ``nextCursor`` is null.'
     CalendarEventDTO:
       properties:
         externalId:
@@ -519,43 +545,6 @@ components:
       - rating
       title: PrereadFeedbackRequest
       description: Request shape for ``POST /api/v1/calendar/preread/feedback``.
-    PrereadResponse:
-      properties:
-        title:
-          type: string
-          title: Title
-        summary:
-          type: string
-          title: Summary
-        contentMd:
-          type: string
-          title: Contentmd
-        generatedAt:
-          type: string
-          format: date-time
-          title: Generatedat
-      type: object
-      required:
-      - title
-      - summary
-      - contentMd
-      - generatedAt
-      title: PrereadResponse
-      description: 'Response shape for ``GET /api/v1/calendar/events/{external_id}/preread``.
-
-
-        The endpoint generates the pre-read on-the-fly per request (no
-
-        persistence), so ``generated_at`` is the response timestamp.
-
-
-        ``title`` is a very short calendar-event-label suitable for a
-
-        notification card. ``summary`` is a single declarative sentence that
-
-        describes what the meeting is about — surfaced under the calendar
-
-        event title on the desktop hub.'
     AgenticPrereadSyncItemDTO:
       properties:
         title:
@@ -583,57 +572,58 @@ components:
       - externalId
       title: AgenticPrereadSyncItemDTO
       description: One agentic pre-read deliverable keyed by the calendar event's ``external_id``.
-    AgenticPrereadSyncResponse:
+    HTTPValidationError:
       properties:
-        agenticPrereads:
+        detail:
           items:
-            $ref: '#/components/schemas/AgenticPrereadSyncItemDTO'
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Agenticprereads
-        serverTime:
-          type: string
-          format: date-time
-          title: Servertime
-        nextCursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Nextcursor
+          title: Detail
       type: object
-      required:
-      - agenticPrereads
-      - serverTime
-      title: AgenticPrereadSyncResponse
-      description: 'Response shape for ``GET /api/v1/calendar/prereads/agentic_sync``.
-
-
-        Mirrors the calendar sync cursor contract: desktop advances ``since`` to
-
-        ``serverTime`` once ``nextCursor`` is null.'
-    ParticipantDTO:
+      title: HTTPValidationError
+    ValidationError:
       properties:
-        name:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          title: Name
-        photoUrl:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Photourl
-        isSelf:
-          type: boolean
-          title: Isself
-          default: false
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - name
-      title: ParticipantDTO
-      description: 'Per-attendee detail for the desktop: display name, optional real profile photo, and self flag.
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    CalendarEventBatchResponse:
+      properties:
+        events:
+          items:
+            $ref: '#/components/schemas/CalendarEventDTO'
+          type: array
+          title: Events
+      type: object
+      required:
+      - events
+      title: CalendarEventBatchResponse
+      description: 'Response shape for ``GET /api/v1/calendar/events/batch``.
 
 
-        Carried alongside the legacy ``participants: list[str]`` (display-name-only) field so existing
+        Returns events matching the requested ``externalId`` values. Missing ids
 
-        consumers keep working; the desktop reads ``photoUrl`` / ``isSelf`` to render meeting avatars.'
+        (not in the DB, or belonging to another user) are simply absent.'
     ResyncResponse:
       properties:
         eventsCount:
@@ -655,32 +645,42 @@ components:
         number of ``calendar_event`` rows present for the user after the
 
         backfill completes.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    CalendarEventBatchResponse:
+    SyncResponse:
       properties:
         events:
           items:
             $ref: '#/components/schemas/CalendarEventDTO'
           type: array
           title: Events
+        serverTime:
+          type: string
+          format: date-time
+          title: Servertime
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Nextcursor
       type: object
       required:
       - events
-      title: CalendarEventBatchResponse
-      description: 'Response shape for ``GET /api/v1/calendar/events/batch``.
+      - serverTime
+      title: SyncResponse
+      description: 'Response shape for `GET /api/v1/calendar/sync` (Day 2).
 
 
-        Returns events matching the requested ``externalId`` values. Missing ids
+        Defined now so the contract is locked. `server_time` is the timestamp at which
 
-        (not in the DB, or belonging to another user) are simply absent.'
+        the server produced the response — desktop should use this as the next `since` cursor.
+
+
+        When `next_cursor` is non-null, the desktop should refetch immediately with
+
+        ``since`` unchanged and ``cursor`` set to this value. When null, the result set
+
+        fits in a single page and the desktop advances to ``server_time`` as the next
+
+        ``since`` value.'
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -690,6 +690,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-calendar-api-openapi.yml

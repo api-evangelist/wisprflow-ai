@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Marketing API
+  title: Wispr Backend Marketing API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Marketing across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-marketing-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Marketing
 paths:
@@ -212,47 +212,54 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
+    MicQuizV2EmailRequest:
       properties:
-        loc:
+        best_match:
+          type: string
+          enum:
+          - podcastMic
+          - gooseneckMic
+          - lavMic
+          - headsetWithMic
+          title: Best Match
+        title:
+          type: string
+          title: Title
+      type: object
+      required:
+      - best_match
+      - title
+      title: MicQuizV2EmailRequest
+      description: 'Payload for the V2 mic quiz email. Both fields are required — the template uses them
+
+        directly without fallbacks, so missing data will render as an empty highlight/title.'
+    MicQuizEmailRequest:
+      properties:
+        title:
+          type: string
+          title: Title
+          default: Your recommended setup!
+        subtitle:
+          type: string
+          title: Subtitle
+          default: ''
+        recommendations:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/MicRecommendation'
           type: array
-          title: Location
-        msg:
+          title: Recommendations
+        show_less_ideal:
+          type: boolean
+          title: Show Less Ideal
+          default: false
+        less_ideal_text:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Less Ideal Text
+          default: ''
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    OnboardingWebhookRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        token:
-          type: string
-          title: Token
-      type: object
-      required:
-      - email
-      - token
-      title: OnboardingWebhookRequest
-      description: Request schema for Customer.io onboarding webhook.
+      - recommendations
+      title: MicQuizEmailRequest
     MicRecommendation:
       properties:
         badge:
@@ -282,33 +289,6 @@ components:
       - name
       - description
       title: MicRecommendation
-    MicQuizEmailRequest:
-      properties:
-        title:
-          type: string
-          title: Title
-          default: Your recommended setup!
-        subtitle:
-          type: string
-          title: Subtitle
-          default: ''
-        recommendations:
-          items:
-            $ref: '#/components/schemas/MicRecommendation'
-          type: array
-          title: Recommendations
-        show_less_ideal:
-          type: boolean
-          title: Show Less Ideal
-          default: false
-        less_ideal_text:
-          type: string
-          title: Less Ideal Text
-          default: ''
-      type: object
-      required:
-      - recommendations
-      title: MicQuizEmailRequest
     HTTPValidationError:
       properties:
         detail:
@@ -318,27 +298,47 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    MicQuizV2EmailRequest:
+    OnboardingWebhookRequest:
       properties:
-        best_match:
+        email:
           type: string
-          enum:
-          - podcastMic
-          - gooseneckMic
-          - lavMic
-          - headsetWithMic
-          title: Best Match
-        title:
+          format: email
+          title: Email
+        token:
           type: string
-          title: Title
+          title: Token
       type: object
       required:
-      - best_match
-      - title
-      title: MicQuizV2EmailRequest
-      description: 'Payload for the V2 mic quiz email. Both fields are required — the template uses them
-
-        directly without fallbacks, so missing data will render as an empty highlight/title.'
+      - email
+      - token
+      title: OnboardingWebhookRequest
+      description: Request schema for Customer.io onboarding webhook.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -348,6 +348,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-marketing-api-openapi.yml

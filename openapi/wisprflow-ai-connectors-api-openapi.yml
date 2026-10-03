@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Connectors API
+  title: Wispr Backend Connectors API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Connectors across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-connectors-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Connectors
 paths:
@@ -165,67 +165,39 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    ValidationError:
+    InitiateConnectionRequest:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+        callback_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Callback Url
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    ConnectorKey:
-      type: string
-      enum:
-      - calendar
-      - github
-      - gmail
-      - linear
-      - notion
-      - slack
-      - wispr
-      title: ConnectorKey
-      x-enum-varnames:
-      - Calendar
-      - Github
-      - GoogleAutomations
-      - Linear
-      - Notion
-      - Slack
-      - Wispr
-    ConnectorStatus:
-      type: string
-      enum:
-      - pending
-      - active
-      - failed
-      title: ConnectorStatus
-    DisconnectResponse:
+      - key
+      title: InitiateConnectionRequest
+      description: Request to start connecting a connector identified by its key.
+    ListCalendarEventsResponse:
       properties:
         successful:
           type: boolean
           title: Successful
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        data:
+          items:
+            $ref: '#/components/schemas/GoogleCalendarEvent'
+          type: array
+          title: Data
       type: object
       required:
       - successful
-      title: DisconnectResponse
+      title: ListCalendarEventsResponse
     ListCalendarEventsRequest:
       properties:
         time_min:
@@ -247,118 +219,6 @@ components:
       - time_max
       title: ListCalendarEventsRequest
       description: Request to list calendar events within a time window.
-    ConnectorsResponse:
-      properties:
-        connectors:
-          items:
-            $ref: '#/components/schemas/ConnectorInfo'
-          type: array
-          title: Connectors
-      type: object
-      required:
-      - connectors
-      title: ConnectorsResponse
-      description: The list of connectors and their status for the user.
-    RawInitiateConnectionRequest:
-      properties:
-        app:
-          type: string
-          title: App
-        callback_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Callback Url
-      type: object
-      required:
-      - app
-      title: RawInitiateConnectionRequest
-      description: Request to start connecting a connector identified by a raw app string.
-    ListCalendarEventsResponse:
-      properties:
-        successful:
-          type: boolean
-          title: Successful
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-        data:
-          items:
-            $ref: '#/components/schemas/GoogleCalendarEvent'
-          type: array
-          title: Data
-      type: object
-      required:
-      - successful
-      title: ListCalendarEventsResponse
-    InitiateConnectionResponse:
-      properties:
-        connection_id:
-          type: string
-          title: Connection Id
-        redirect_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Redirect Url
-      type: object
-      required:
-      - connection_id
-      title: InitiateConnectionResponse
-    GoogleCalendarEvent:
-      properties:
-        summary:
-          type: string
-          title: Summary
-          default: ''
-        description:
-          type: string
-          title: Description
-          default: ''
-        start:
-          type: string
-          format: date-time
-          title: Start
-        end:
-          type: string
-          format: date-time
-          title: End
-        organizer:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Organizer
-        attendees:
-          items:
-            type: string
-          type: array
-          title: Attendees
-        url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url
-      type: object
-      required:
-      - start
-      - end
-      title: GoogleCalendarEvent
-    InitiateConnectionRequest:
-      properties:
-        key:
-          $ref: '#/components/schemas/ConnectorKey'
-        callback_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Callback Url
-      type: object
-      required:
-      - key
-      title: InitiateConnectionRequest
-      description: Request to start connecting a connector identified by its key.
     ConnectorInfo:
       properties:
         key:
@@ -404,6 +264,51 @@ components:
       - status
       - toolkit_slug
       title: ConnectionStatusResponse
+    GoogleCalendarEvent:
+      properties:
+        summary:
+          type: string
+          title: Summary
+          default: ''
+        description:
+          type: string
+          title: Description
+          default: ''
+        start:
+          type: string
+          format: date-time
+          title: Start
+        end:
+          type: string
+          format: date-time
+          title: End
+        organizer:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Organizer
+        attendees:
+          items:
+            type: string
+          type: array
+          title: Attendees
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+      type: object
+      required:
+      - start
+      - end
+      title: GoogleCalendarEvent
+    ConnectorStatus:
+      type: string
+      enum:
+      - pending
+      - active
+      - failed
+      title: ConnectorStatus
     HTTPValidationError:
       properties:
         detail:
@@ -413,6 +318,101 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    RawInitiateConnectionRequest:
+      properties:
+        app:
+          type: string
+          title: App
+        callback_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Callback Url
+      type: object
+      required:
+      - app
+      title: RawInitiateConnectionRequest
+      description: Request to start connecting a connector identified by a raw app string.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ConnectorKey:
+      type: string
+      enum:
+      - calendar
+      - github
+      - gmail
+      - linear
+      - notion
+      - slack
+      - wispr
+      title: ConnectorKey
+      x-enum-varnames:
+      - Calendar
+      - Github
+      - GoogleAutomations
+      - Linear
+      - Notion
+      - Slack
+      - Wispr
+    ConnectorsResponse:
+      properties:
+        connectors:
+          items:
+            $ref: '#/components/schemas/ConnectorInfo'
+          type: array
+          title: Connectors
+      type: object
+      required:
+      - connectors
+      title: ConnectorsResponse
+      description: The list of connectors and their status for the user.
+    InitiateConnectionResponse:
+      properties:
+        connection_id:
+          type: string
+          title: Connection Id
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+      type: object
+      required:
+      - connection_id
+      title: InitiateConnectionResponse
+    DisconnectResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+      type: object
+      required:
+      - successful
+      title: DisconnectResponse
     DisconnectRequest:
       properties:
         key:
@@ -431,6 +431,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-connectors-api-openapi.yml

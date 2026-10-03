@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Dictionary API
+  title: Wispr Backend Dictionary API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Dictionary across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-dictionary-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Dictionary
 paths:
@@ -180,6 +180,102 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    BulkCreateTeamDictionaryResult:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        imported_count:
+          type: integer
+          title: Imported Count
+        duplicate_count:
+          type: integer
+          title: Duplicate Count
+      type: object
+      required:
+      - success
+      - imported_count
+      - duplicate_count
+      title: BulkCreateTeamDictionaryResult
+      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
+    DictionaryItem:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        team_dictionary_id:
+          type: string
+          format: uuid
+          title: Team Dictionary Id
+        word:
+          type: string
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        replacement_html:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement Html
+        is_manual:
+          type: boolean
+          title: Is Manual
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+        frequency_used:
+          type: integer
+          title: Frequency Used
+        last_used:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Used
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+        observed_source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Observed Source
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+      type: object
+      required:
+      - id
+      - team_dictionary_id
+      - word
+      - is_manual
+      - created_at
+      - modified_at
+      - is_deleted
+      - frequency_used
+      - is_snippet
+      title: DictionaryItem
+      description: A team dictionary word or snippet entry as returned to clients.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -281,102 +377,6 @@ components:
       - is_snippet
       title: UpdateTeamDictionaryItem
       description: Request payload for updating an existing team dictionary item.
-    BulkCreateTeamDictionaryResult:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        imported_count:
-          type: integer
-          title: Imported Count
-        duplicate_count:
-          type: integer
-          title: Duplicate Count
-      type: object
-      required:
-      - success
-      - imported_count
-      - duplicate_count
-      title: BulkCreateTeamDictionaryResult
-      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    DictionaryItem:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        team_dictionary_id:
-          type: string
-          format: uuid
-          title: Team Dictionary Id
-        word:
-          type: string
-          title: Word
-        replacement:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Replacement
-        replacement_html:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Replacement Html
-        is_manual:
-          type: boolean
-          title: Is Manual
-        created_at:
-          type: string
-          title: Created At
-        modified_at:
-          type: string
-          title: Modified At
-        is_deleted:
-          type: boolean
-          title: Is Deleted
-        frequency_used:
-          type: integer
-          title: Frequency Used
-        last_used:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Used
-        source:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Source
-        observed_source:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Observed Source
-        is_snippet:
-          type: boolean
-          title: Is Snippet
-      type: object
-      required:
-      - id
-      - team_dictionary_id
-      - word
-      - is_manual
-      - created_at
-      - modified_at
-      - is_deleted
-      - frequency_used
-      - is_snippet
-      title: DictionaryItem
-      description: A team dictionary word or snippet entry as returned to clients.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -386,6 +386,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-dictionary-api-openapi.yml

@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Insights API
+  title: Wispr Backend Insights API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Insights across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-insights-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Insights
 paths:
@@ -88,32 +88,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     HeatmapDay:
       properties:
         date:
@@ -147,6 +121,99 @@ components:
       - mobile_words
       title: HeatmapDay
       description: Per-day data for the calendar heatmap.
+    StatsBackfillRequest:
+      properties:
+        desktop_words_corrected_delta:
+          type: integer
+          minimum: 0.0
+          title: Desktop Words Corrected Delta
+      type: object
+      required:
+      - desktop_words_corrected_delta
+      title: StatsBackfillRequest
+      description: Desktop client sends a pre-aggregated correction delta for backfilling user_stats.
+    HeatmapResponse:
+      properties:
+        days:
+          items:
+            $ref: '#/components/schemas/HeatmapDay'
+          type: array
+          title: Days
+        account_created_at:
+          type: string
+          format: date
+          title: Account Created At
+      type: object
+      required:
+      - days
+      - account_created_at
+      title: HeatmapResponse
+      description: Heatmap data for a date range.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    AppCategoryUsage:
+      properties:
+        key:
+          type: string
+          title: Key
+        category:
+          type: string
+          title: Category
+        word_count:
+          type: integer
+          minimum: 0.0
+          title: Word Count
+        dictation_count:
+          type: integer
+          minimum: 0.0
+          title: Dictation Count
+        percentage:
+          type: number
+          maximum: 100.0
+          minimum: 0.0
+          title: Percentage
+      type: object
+      required:
+      - key
+      - category
+      - word_count
+      - dictation_count
+      - percentage
+      title: AppCategoryUsage
+      description: Word and dictation count breakdown for one app category.
     InsightsResponse:
       properties:
         words_per_minute:
@@ -231,73 +298,6 @@ components:
       - longest_streak
       title: InsightsResponse
       description: Stats-only insights data (no heatmap).
-    AppCategoryUsage:
-      properties:
-        key:
-          type: string
-          title: Key
-        category:
-          type: string
-          title: Category
-        word_count:
-          type: integer
-          minimum: 0.0
-          title: Word Count
-        dictation_count:
-          type: integer
-          minimum: 0.0
-          title: Dictation Count
-        percentage:
-          type: number
-          maximum: 100.0
-          minimum: 0.0
-          title: Percentage
-      type: object
-      required:
-      - key
-      - category
-      - word_count
-      - dictation_count
-      - percentage
-      title: AppCategoryUsage
-      description: Word and dictation count breakdown for one app category.
-    HeatmapResponse:
-      properties:
-        days:
-          items:
-            $ref: '#/components/schemas/HeatmapDay'
-          type: array
-          title: Days
-        account_created_at:
-          type: string
-          format: date
-          title: Account Created At
-      type: object
-      required:
-      - days
-      - account_created_at
-      title: HeatmapResponse
-      description: Heatmap data for a date range.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    StatsBackfillRequest:
-      properties:
-        desktop_words_corrected_delta:
-          type: integer
-          minimum: 0.0
-          title: Desktop Words Corrected Delta
-      type: object
-      required:
-      - desktop_words_corrected_delta
-      title: StatsBackfillRequest
-      description: Desktop client sends a pre-aggregated correction delta for backfilling user_stats.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -307,6 +307,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-insights-api-openapi.yml

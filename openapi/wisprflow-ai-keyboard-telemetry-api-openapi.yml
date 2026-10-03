@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Keyboard Telemetry API
+  title: Wispr Backend Keyboard Telemetry API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged keyboard_telemetry across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-keyboard-telemetry-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: keyboard_telemetry
 paths:
@@ -35,6 +35,25 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
+    KbTouchIngestResponse:
+      properties:
+        accepted:
+          type: integer
+          title: Accepted
+      type: object
+      required:
+      - accepted
+      title: KbTouchIngestResponse
+      description: Response reporting how many touch cells were accepted for ingestion.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     ValidationError:
       properties:
         loc:
@@ -165,16 +184,6 @@ components:
       - sum_t2
       title: KbTouchCell
       description: A single per-key moment-counter cell aggregated on-device.
-    KbTouchIngestResponse:
-      properties:
-        accepted:
-          type: integer
-          title: Accepted
-      type: object
-      required:
-      - accepted
-      title: KbTouchIngestResponse
-      description: Response reporting how many touch cells were accepted for ingestion.
     KbTouchBatch:
       properties:
         batch_id:
@@ -196,15 +205,6 @@ components:
       - cells
       title: KbTouchBatch
       description: A batch of keyboard touch aggregate cells uploaded by the client.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -214,6 +214,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-keyboard-telemetry-api-openapi.yml

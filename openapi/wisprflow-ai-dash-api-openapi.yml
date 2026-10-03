@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wisprflow Ai Dash API
+  title: Wispr Backend Dash API
+  description: Wispr Backend API
   version: 0.5.2
-  description: 'Operations tagged Dash across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wispr-ai-dash-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Dash
 paths:
@@ -172,45 +172,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TokenResponse:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-        expires_in:
-          type: integer
-          title: Expires In
-      type: object
-      required:
-      - access_token
-      - expires_in
-      title: TokenResponse
     TokenRequest:
       properties:
         client_id:
@@ -240,26 +201,19 @@ components:
       required:
       - access_token
       title: RevokeTokenRequest
-    ChromeExtensionClientKeyRequest:
+    TokenResponse:
       properties:
-        client_id:
+        access_token:
           type: string
-          title: Client Id
-        extension_version:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Extension Version
-        build_channel:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Build Channel
+          title: Access Token
+        expires_in:
+          type: integer
+          title: Expires In
       type: object
       required:
-      - client_id
-      title: ChromeExtensionClientKeyRequest
-      description: Pre-auth request from the Chrome extension to mint a short-lived `client_key`.
+      - access_token
+      - expires_in
+      title: TokenResponse
     ChromeExtensionClientKeyResponse:
       properties:
         client_key:
@@ -282,6 +236,52 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    ChromeExtensionClientKeyRequest:
+      properties:
+        client_id:
+          type: string
+          title: Client Id
+        extension_version:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Extension Version
+        build_channel:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Build Channel
+      type: object
+      required:
+      - client_id
+      title: ChromeExtensionClientKeyRequest
+      description: Pre-auth request from the Chrome extension to mint a short-lived `client_key`.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -291,6 +291,3 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
-x-refined-from:
-- wispr-ai-backend-openapi-original.json
-- wispr-ai-dash-api-openapi.yml
