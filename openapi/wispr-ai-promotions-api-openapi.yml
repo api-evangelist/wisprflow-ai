@@ -203,86 +203,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    BoostActionResponse:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        action:
-          type: string
-          title: Action
-        boost_earned:
-          type: integer
-          title: Boost Earned
-        current_rank:
-          type: integer
-          title: Current Rank
-        total_boost:
-          type: integer
-          title: Total Boost
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-      type: object
-      required:
-      - success
-      - action
-      - boost_earned
-      - current_rank
-      - total_boost
-      title: BoostActionResponse
-      description: Generic response for boost action endpoints
-    ApplyPromoCodeRequest:
-      properties:
-        code:
-          type: string
-          maxLength: 80
-          minLength: 1
-          title: Code
-      type: object
-      required:
-      - code
-      title: ApplyPromoCodeRequest
-      description: Request to apply a promo code by its string.
-    CampaignPromoDetails:
-      properties:
-        trial_days:
-          type: integer
-          title: Trial Days
-        source_name:
-          type: string
-          title: Source Name
-        attribution_message:
-          type: string
-          title: Attribution Message
-        code_id:
-          type: string
-          title: Code Id
-        campaign_id:
-          type: string
-          title: Campaign Id
-      type: object
-      required:
-      - trial_days
-      - source_name
-      - attribution_message
-      - code_id
-      - campaign_id
-      title: CampaignPromoDetails
-      description: Resolved promo details for a validated code and its campaign.
-    PhoneNumberSubmitRequest:
-      properties:
-        phone_number:
-          type: string
-          pattern: ^\+[1-9]\d{6,14}$
-          title: Phone Number
-      type: object
-      required:
-      - phone_number
-      title: PhoneNumberSubmitRequest
-      description: Request schema for phone number boost submission
     AndroidWaitlistRankResponse:
       properties:
         referral_code:
@@ -341,6 +261,29 @@ components:
       - verified_share_discord
       title: AndroidWaitlistRankResponse
       description: Response schema for GET /promos/android_waitlist_rank
+    ApplyPromoCodeRequest:
+      properties:
+        code:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Code
+      type: object
+      required:
+      - code
+      title: ApplyPromoCodeRequest
+      description: Request to apply a promo code by its string.
+    PhoneNumberSubmitRequest:
+      properties:
+        phone_number:
+          type: string
+          pattern: ^\+[1-9]\d{6,14}$
+          title: Phone Number
+      type: object
+      required:
+      - phone_number
+      title: PhoneNumberSubmitRequest
+      description: Request schema for phone number boost submission
     Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post:
       properties:
         screenshot:
@@ -351,6 +294,63 @@ components:
       required:
       - screenshot
       title: Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post
+    CampaignPromoDetails:
+      properties:
+        trial_days:
+          type: integer
+          title: Trial Days
+        source_name:
+          type: string
+          title: Source Name
+        attribution_message:
+          type: string
+          title: Attribution Message
+        code_id:
+          type: string
+          title: Code Id
+        campaign_id:
+          type: string
+          title: Campaign Id
+      type: object
+      required:
+      - trial_days
+      - source_name
+      - attribution_message
+      - code_id
+      - campaign_id
+      title: CampaignPromoDetails
+      description: Resolved promo details for a validated code and its campaign.
+    BoostActionResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        action:
+          type: string
+          title: Action
+        boost_earned:
+          type: integer
+          title: Boost Earned
+        current_rank:
+          type: integer
+          title: Current Rank
+        total_boost:
+          type: integer
+          title: Total Boost
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - success
+      - action
+      - boost_earned
+      - current_rank
+      - total_boost
+      title: BoostActionResponse
+      description: Generic response for boost action endpoints
     ValidationError:
       properties:
         loc:

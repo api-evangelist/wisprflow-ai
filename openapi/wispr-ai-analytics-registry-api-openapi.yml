@@ -157,63 +157,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    AnalyticsLifecycleState:
-      type: string
-      enum:
-      - draft
-      - active
-      - deprecated
-      title: AnalyticsLifecycleState
-      description: Lifecycle stage of an analytics event definition.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    BatchSaveRequest:
-      properties:
-        creates:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventBase'
-          type: array
-          title: Creates
-          description: New events to create
-        updates:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventUpdate'
-          type: array
-          title: Updates
-          description: Existing events to update
-      type: object
-      title: BatchSaveRequest
-      description: Batch of event creates and updates to apply in one request.
-    BatchSaveResponse:
-      properties:
-        created:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventResponse'
-          type: array
-          title: Created
-          description: Newly created events
-        updated:
-          items:
-            $ref: '#/components/schemas/AnalyticsEventResponse'
-          type: array
-          title: Updated
-          description: Updated events
-        errors:
-          items:
-            type: string
-          type: array
-          title: Errors
-          description: Any errors encountered
-      type: object
-      title: BatchSaveResponse
-      description: 'Result of a batch save: created and updated events plus any errors.'
     AnalyticsEventStatus:
       type: string
       enum:
@@ -222,94 +165,6 @@ components:
       - implemented
       title: AnalyticsEventStatus
       description: Client-implementation status of an analytics event.
-    AnalyticsPlatform:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - android
-      title: AnalyticsPlatform
-      description: Client platform an analytics event is emitted from.
-    ChangeSetStatus:
-      type: string
-      enum:
-      - created
-      - published
-      - merged
-      title: ChangeSetStatus
-      description: Status of a change set within the publish pipeline.
-    ChangeSetResponse:
-      properties:
-        change_set_id:
-          type: string
-          title: Change Set Id
-          description: Unique identifier for the change set
-        status:
-          $ref: '#/components/schemas/ChangeSetStatus'
-        snapshot:
-          type: object
-          title: Snapshot
-          description: Immutable snapshot of the analytics registry
-        last_error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Error
-          description: Error message if the change set failed
-        created_by:
-          type: string
-          title: Created By
-          description: User ID who created this change set
-        created_by_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Created By Name
-          description: Full name of the user who created this change set
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        modified_at:
-          type: string
-          format: date-time
-          title: Modified At
-      type: object
-      required:
-      - change_set_id
-      - status
-      - snapshot
-      - created_by
-      - created_at
-      - modified_at
-      title: ChangeSetResponse
-      description: A registry change set with its status, snapshot, and audit fields.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
     AnalyticsEventBase:
       properties:
         event_key:
@@ -357,6 +212,66 @@ components:
       - name
       title: AnalyticsEventBase
       description: Shared analytics event fields used as the create payload.
+    AnalyticsPlatform:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - android
+      title: AnalyticsPlatform
+      description: Client platform an analytics event is emitted from.
+    BatchSaveRequest:
+      properties:
+        creates:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventBase'
+          type: array
+          title: Creates
+          description: New events to create
+        updates:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventUpdate'
+          type: array
+          title: Updates
+          description: Existing events to update
+      type: object
+      title: BatchSaveRequest
+      description: Batch of event creates and updates to apply in one request.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     AnalyticsEventUpdate:
       properties:
         id:
@@ -408,6 +323,14 @@ components:
       - id
       title: AnalyticsEventUpdate
       description: Partial-update payload for an existing analytics event, keyed by id.
+    AnalyticsLifecycleState:
+      type: string
+      enum:
+      - draft
+      - active
+      - deprecated
+      title: AnalyticsLifecycleState
+      description: Lifecycle stage of an analytics event definition.
     AnalyticsEventResponse:
       properties:
         id:
@@ -488,6 +411,83 @@ components:
       - status
       title: AnalyticsEventResponse
       description: A fully hydrated analytics event, including audit and status fields.
+    ChangeSetStatus:
+      type: string
+      enum:
+      - created
+      - published
+      - merged
+      title: ChangeSetStatus
+      description: Status of a change set within the publish pipeline.
+    ChangeSetResponse:
+      properties:
+        change_set_id:
+          type: string
+          title: Change Set Id
+          description: Unique identifier for the change set
+        status:
+          $ref: '#/components/schemas/ChangeSetStatus'
+        snapshot:
+          type: object
+          title: Snapshot
+          description: Immutable snapshot of the analytics registry
+        last_error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Error
+          description: Error message if the change set failed
+        created_by:
+          type: string
+          title: Created By
+          description: User ID who created this change set
+        created_by_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Created By Name
+          description: Full name of the user who created this change set
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+      type: object
+      required:
+      - change_set_id
+      - status
+      - snapshot
+      - created_by
+      - created_at
+      - modified_at
+      title: ChangeSetResponse
+      description: A registry change set with its status, snapshot, and audit fields.
+    BatchSaveResponse:
+      properties:
+        created:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventResponse'
+          type: array
+          title: Created
+          description: Newly created events
+        updated:
+          items:
+            $ref: '#/components/schemas/AnalyticsEventResponse'
+          type: array
+          title: Updated
+          description: Updated events
+        errors:
+          items:
+            type: string
+          type: array
+          title: Errors
+          description: Any errors encountered
+      type: object
+      title: BatchSaveResponse
+      description: 'Result of a batch save: created and updated events plus any errors.'
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

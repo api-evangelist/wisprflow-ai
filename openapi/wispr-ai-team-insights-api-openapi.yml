@@ -564,71 +564,128 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    TeamInsightsFilters:
-      properties:
-        start_date:
-          anyOf:
-          - type: string
-            format: date
-          - type: 'null'
-          title: Start Date
-        end_date:
-          anyOf:
-          - type: string
-            format: date
-          - type: 'null'
-          title: End Date
-        team_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Team Id
-        user_ids:
-          items:
-            type: string
-          type: array
-          maxItems: 100
-          title: User Ids
-        app_keys:
-          items:
-            type: string
-          type: array
-          title: App Keys
-        app_categories:
-          items:
-            type: string
-          type: array
-          title: App Categories
-        comparison_mode:
-          anyOf:
-          - type: string
-            enum:
-            - rolling
-            - calendar
-          - type: 'null'
-          title: Comparison Mode
-      type: object
-      title: TeamInsightsFilters
-      description: Filters echoed back on every response. Null date fields = all-time.
-    AppFilterOption:
+    DesktopAppRow:
       properties:
         app_key:
           type: string
           title: App Key
-        display_name:
-          type: string
-          title: Display Name
         category:
           type: string
           title: Category
+        word_count:
+          type: integer
+          minimum: 0.0
+          title: Word Count
+        pct_of_total:
+          type: number
+          maximum: 100.0
+          minimum: 0.0
+          title: Pct Of Total
+        user_count:
+          type: integer
+          minimum: 0.0
+          title: User Count
       type: object
       required:
       - app_key
-      - display_name
       - category
-      title: AppFilterOption
-      description: A selectable app in the insights filter dropdown, with its display name and category.
+      - word_count
+      - pct_of_total
+      - user_count
+      title: DesktopAppRow
+      description: '``app_key`` is the canonical app name; display-name mapping is client-owned.'
+    UserFilterOption:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+      type: object
+      required:
+      - user_id
+      title: UserFilterOption
+      description: A selectable user in the insights typeahead filter.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    AiPromptQuality:
+      properties:
+        multiplier:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Multiplier
+      type: object
+      title: AiPromptQuality
+      description: 'Multiplier of avg AI-prompt length vs the 8-word typed baseline (e.g. ``2.2`` renders as ``2.2x``).
+
+
+        Null when no AI dictations or avg words ≤ baseline.'
+    TeamFilterOption:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - id
+      - name
+      title: TeamFilterOption
+      description: A selectable team in the insights filter dropdown.
+    ImpactResponse:
+      properties:
+        filters_applied:
+          $ref: '#/components/schemas/TeamInsightsFilters'
+        data_quality_flags:
+          items:
+            type: string
+          type: array
+          title: Data Quality Flags
+        minutes_saved:
+          $ref: '#/components/schemas/MinutesSaved'
+        ai_prompt_quality:
+          $ref: '#/components/schemas/AiPromptQuality'
+        dictionary:
+          $ref: '#/components/schemas/DictionaryStats'
+        auto_formatting:
+          $ref: '#/components/schemas/AutoFormatting'
+        features_utilized:
+          items:
+            $ref: '#/components/schemas/FeatureUtilization'
+          type: array
+          title: Features Utilized
+        value_calculator:
+          $ref: '#/components/schemas/ValueCalculator'
+      type: object
+      required:
+      - filters_applied
+      - minutes_saved
+      - ai_prompt_quality
+      - dictionary
+      - auto_formatting
+      - features_utilized
+      - value_calculator
+      title: ImpactResponse
+      description: 'Impact-tab payload: minutes saved, prompt quality, dictionary, formatting, and ROI inputs.'
     DesktopAppsResponse:
       properties:
         filters_applied:
@@ -664,6 +721,26 @@ components:
       - total_distinct_app_count
       title: DesktopAppsResponse
       description: Per-app desktop dictation breakdown plus distinct-app-count headline and delta.
+    FeatureUtilization:
+      properties:
+        feature:
+          type: string
+          title: Feature
+        user_count:
+          type: integer
+          minimum: 0.0
+          title: User Count
+        feature_usage_count:
+          type: integer
+          minimum: 0.0
+          title: Feature Usage Count
+      type: object
+      required:
+      - feature
+      - user_count
+      - feature_usage_count
+      title: FeatureUtilization
+      description: Lifetime counts per feature (``dictionary`` / ``snippets`` / ``styles`` / ``transforms``).
     ValueCalculator:
       properties:
         team_member_count:
@@ -717,177 +794,37 @@ components:
         falls back to the DB-cached billing currency on Stripe errors so the FE stays
 
         currency-locked across transient blips.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    TeamMembersDailyPoint:
-      properties:
-        period:
-          type: string
-          format: date
-          title: Period
-        count:
-          type: integer
-          minimum: 0.0
-          title: Count
-      type: object
-      required:
-      - period
-      - count
-      title: TeamMembersDailyPoint
-      description: '``count`` is WAU(D) or MAU(D) for rolling-window modes.'
-    CategoryFilterOption:
-      properties:
-        category:
-          type: string
-          title: Category
-        display_name:
-          type: string
-          title: Display Name
-      type: object
-      required:
-      - category
-      - display_name
-      title: CategoryFilterOption
-      description: A selectable app category in the insights filter dropdown.
-    TeamFilterOption:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - id
-      - name
-      title: TeamFilterOption
-      description: A selectable team in the insights filter dropdown.
-    WordsDictatedWeeklyPoint:
-      properties:
-        period:
-          type: string
-          title: Period
-        desktop:
-          type: integer
-          minimum: 0.0
-          title: Desktop
-        mobile:
-          type: integer
-          minimum: 0.0
-          title: Mobile
-      type: object
-      required:
-      - period
-      - desktop
-      - mobile
-      title: WordsDictatedWeeklyPoint
-      description: '``period`` is the ISO date of the week''s Sunday (e.g. ``2026-04-12``).'
-    MinutesSaved:
+    DictionaryStats:
       properties:
         total:
-          type: number
+          type: integer
           minimum: 0.0
           title: Total
-        since:
-          type: string
-          format: date
-          title: Since
+        auto_learned:
+          type: integer
+          minimum: 0.0
+          title: Auto Learned
+        manually_added:
+          type: integer
+          minimum: 0.0
+          title: Manually Added
+        phrases_added:
+          type: integer
+          minimum: 0.0
+          title: Phrases Added
+        snippets_added:
+          type: integer
+          minimum: 0.0
+          title: Snippets Added
       type: object
       required:
       - total
-      - since
-      title: MinutesSaved
-      description: '``since`` is team creation date (when team-scoped) or enterprise creation date.'
-    AiPromptQuality:
-      properties:
-        multiplier:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Multiplier
-      type: object
-      title: AiPromptQuality
-      description: 'Multiplier of avg AI-prompt length vs the 8-word typed baseline (e.g. ``2.2`` renders as ``2.2x``).
-
-
-        Null when no AI dictations or avg words ≤ baseline.'
-    UserFilterOptionsResponse:
-      properties:
-        users:
-          items:
-            $ref: '#/components/schemas/UserFilterOption'
-          type: array
-          title: Users
-        has_more:
-          type: boolean
-          title: Has More
-          default: false
-      type: object
-      required:
-      - users
-      title: UserFilterOptionsResponse
-      description: Per-keystroke typeahead — separate from FilterOptionsResponse due to different caching and rate-limit profile.
-    ImpactResponse:
-      properties:
-        filters_applied:
-          $ref: '#/components/schemas/TeamInsightsFilters'
-        data_quality_flags:
-          items:
-            type: string
-          type: array
-          title: Data Quality Flags
-        minutes_saved:
-          $ref: '#/components/schemas/MinutesSaved'
-        ai_prompt_quality:
-          $ref: '#/components/schemas/AiPromptQuality'
-        dictionary:
-          $ref: '#/components/schemas/DictionaryStats'
-        auto_formatting:
-          $ref: '#/components/schemas/AutoFormatting'
-        features_utilized:
-          items:
-            $ref: '#/components/schemas/FeatureUtilization'
-          type: array
-          title: Features Utilized
-        value_calculator:
-          $ref: '#/components/schemas/ValueCalculator'
-      type: object
-      required:
-      - filters_applied
-      - minutes_saved
-      - ai_prompt_quality
-      - dictionary
-      - auto_formatting
-      - features_utilized
-      - value_calculator
-      title: ImpactResponse
-      description: 'Impact-tab payload: minutes saved, prompt quality, dictionary, formatting, and ROI inputs.'
+      - auto_learned
+      - manually_added
+      - phrases_added
+      - snippets_added
+      title: DictionaryStats
+      description: Dictionary entry counts, broken out by how each entry was added.
     AutoFormatting:
       properties:
         total:
@@ -905,68 +842,6 @@ components:
       - by_category
       title: AutoFormatting
       description: Total auto-formatting applications with a per-category breakdown.
-    FilterOptionsResponse:
-      properties:
-        teams:
-          items:
-            $ref: '#/components/schemas/TeamFilterOption'
-          type: array
-          title: Teams
-        apps:
-          items:
-            $ref: '#/components/schemas/AppFilterOption'
-          type: array
-          title: Apps
-        categories:
-          items:
-            $ref: '#/components/schemas/CategoryFilterOption'
-          type: array
-          title: Categories
-      type: object
-      required:
-      - teams
-      - apps
-      - categories
-      title: FilterOptionsResponse
-      description: 'Page-load filter dropdowns (teams + apps + categories).
-
-
-        Bundled so tab switches (Overview needs all three; Impact needs teams only)
-
-        stay on a warm cache.'
-    WordsDictatedTimeseries:
-      properties:
-        daily:
-          items:
-            $ref: '#/components/schemas/WordsDictatedDailyPoint'
-          type: array
-          title: Daily
-        weekly:
-          items:
-            $ref: '#/components/schemas/WordsDictatedWeeklyPoint'
-          type: array
-          title: Weekly
-      type: object
-      required:
-      - daily
-      - weekly
-      title: WordsDictatedTimeseries
-      description: Words-dictated series at both daily and weekly granularity.
-    AutoFormattingCategory:
-      properties:
-        category:
-          type: string
-          title: Category
-        count:
-          type: integer
-          minimum: 0.0
-          title: Count
-      type: object
-      required:
-      - category
-      - count
-      title: AutoFormattingCategory
-      description: Auto-formatting application count for a single formatting category.
     WordsDictatedDailyPoint:
       properties:
         period:
@@ -988,65 +863,6 @@ components:
       - mobile
       title: WordsDictatedDailyPoint
       description: Words dictated on a single calendar day, split by desktop vs mobile.
-    DesktopAppRow:
-      properties:
-        app_key:
-          type: string
-          title: App Key
-        category:
-          type: string
-          title: Category
-        word_count:
-          type: integer
-          minimum: 0.0
-          title: Word Count
-        pct_of_total:
-          type: number
-          maximum: 100.0
-          minimum: 0.0
-          title: Pct Of Total
-        user_count:
-          type: integer
-          minimum: 0.0
-          title: User Count
-      type: object
-      required:
-      - app_key
-      - category
-      - word_count
-      - pct_of_total
-      - user_count
-      title: DesktopAppRow
-      description: '``app_key`` is the canonical app name; display-name mapping is client-owned.'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    UserFilterOption:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-      type: object
-      required:
-      - user_id
-      title: UserFilterOption
-      description: A selectable user in the insights typeahead filter.
     WordsDictatedResponse:
       properties:
         filters_applied:
@@ -1087,26 +903,6 @@ components:
         prior=0 with non-zero current (undefined), or no comparable prior period
 
         exists.'
-    FeatureUtilization:
-      properties:
-        feature:
-          type: string
-          title: Feature
-        user_count:
-          type: integer
-          minimum: 0.0
-          title: User Count
-        feature_usage_count:
-          type: integer
-          minimum: 0.0
-          title: Feature Usage Count
-      type: object
-      required:
-      - feature
-      - user_count
-      - feature_usage_count
-      title: FeatureUtilization
-      description: Lifetime counts per feature (``dictionary`` / ``snippets`` / ``styles`` / ``transforms``).
     TeamMembersResponse:
       properties:
         filters_applied:
@@ -1155,37 +951,241 @@ components:
         when set, otherwise by shape detection. Lifetime (no ``start_date``) falls
 
         back to L7 vs L7-L14 (or mode-matched for team-members).'
-    DictionaryStats:
+    AutoFormattingCategory:
+      properties:
+        category:
+          type: string
+          title: Category
+        count:
+          type: integer
+          minimum: 0.0
+          title: Count
+      type: object
+      required:
+      - category
+      - count
+      title: AutoFormattingCategory
+      description: Auto-formatting application count for a single formatting category.
+    TeamMembersDailyPoint:
+      properties:
+        period:
+          type: string
+          format: date
+          title: Period
+        count:
+          type: integer
+          minimum: 0.0
+          title: Count
+      type: object
+      required:
+      - period
+      - count
+      title: TeamMembersDailyPoint
+      description: '``count`` is WAU(D) or MAU(D) for rolling-window modes.'
+    WordsDictatedWeeklyPoint:
+      properties:
+        period:
+          type: string
+          title: Period
+        desktop:
+          type: integer
+          minimum: 0.0
+          title: Desktop
+        mobile:
+          type: integer
+          minimum: 0.0
+          title: Mobile
+      type: object
+      required:
+      - period
+      - desktop
+      - mobile
+      title: WordsDictatedWeeklyPoint
+      description: '``period`` is the ISO date of the week''s Sunday (e.g. ``2026-04-12``).'
+    CategoryFilterOption:
+      properties:
+        category:
+          type: string
+          title: Category
+        display_name:
+          type: string
+          title: Display Name
+      type: object
+      required:
+      - category
+      - display_name
+      title: CategoryFilterOption
+      description: A selectable app category in the insights filter dropdown.
+    AppFilterOption:
+      properties:
+        app_key:
+          type: string
+          title: App Key
+        display_name:
+          type: string
+          title: Display Name
+        category:
+          type: string
+          title: Category
+      type: object
+      required:
+      - app_key
+      - display_name
+      - category
+      title: AppFilterOption
+      description: A selectable app in the insights filter dropdown, with its display name and category.
+    TeamInsightsFilters:
+      properties:
+        start_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: Start Date
+        end_date:
+          anyOf:
+          - type: string
+            format: date
+          - type: 'null'
+          title: End Date
+        team_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Team Id
+        user_ids:
+          items:
+            type: string
+          type: array
+          maxItems: 100
+          title: User Ids
+        app_keys:
+          items:
+            type: string
+          type: array
+          title: App Keys
+        app_categories:
+          items:
+            type: string
+          type: array
+          title: App Categories
+        comparison_mode:
+          anyOf:
+          - type: string
+            enum:
+            - rolling
+            - calendar
+          - type: 'null'
+          title: Comparison Mode
+      type: object
+      title: TeamInsightsFilters
+      description: Filters echoed back on every response. Null date fields = all-time.
+    FilterOptionsResponse:
+      properties:
+        teams:
+          items:
+            $ref: '#/components/schemas/TeamFilterOption'
+          type: array
+          title: Teams
+        apps:
+          items:
+            $ref: '#/components/schemas/AppFilterOption'
+          type: array
+          title: Apps
+        categories:
+          items:
+            $ref: '#/components/schemas/CategoryFilterOption'
+          type: array
+          title: Categories
+      type: object
+      required:
+      - teams
+      - apps
+      - categories
+      title: FilterOptionsResponse
+      description: 'Page-load filter dropdowns (teams + apps + categories).
+
+
+        Bundled so tab switches (Overview needs all three; Impact needs teams only)
+
+        stay on a warm cache.'
+    MinutesSaved:
       properties:
         total:
-          type: integer
+          type: number
           minimum: 0.0
           title: Total
-        auto_learned:
-          type: integer
-          minimum: 0.0
-          title: Auto Learned
-        manually_added:
-          type: integer
-          minimum: 0.0
-          title: Manually Added
-        phrases_added:
-          type: integer
-          minimum: 0.0
-          title: Phrases Added
-        snippets_added:
-          type: integer
-          minimum: 0.0
-          title: Snippets Added
+        since:
+          type: string
+          format: date
+          title: Since
       type: object
       required:
       - total
-      - auto_learned
-      - manually_added
-      - phrases_added
-      - snippets_added
-      title: DictionaryStats
-      description: Dictionary entry counts, broken out by how each entry was added.
+      - since
+      title: MinutesSaved
+      description: '``since`` is team creation date (when team-scoped) or enterprise creation date.'
+    UserFilterOptionsResponse:
+      properties:
+        users:
+          items:
+            $ref: '#/components/schemas/UserFilterOption'
+          type: array
+          title: Users
+        has_more:
+          type: boolean
+          title: Has More
+          default: false
+      type: object
+      required:
+      - users
+      title: UserFilterOptionsResponse
+      description: Per-keystroke typeahead — separate from FilterOptionsResponse due to different caching and rate-limit profile.
+    WordsDictatedTimeseries:
+      properties:
+        daily:
+          items:
+            $ref: '#/components/schemas/WordsDictatedDailyPoint'
+          type: array
+          title: Daily
+        weekly:
+          items:
+            $ref: '#/components/schemas/WordsDictatedWeeklyPoint'
+          type: array
+          title: Weekly
+      type: object
+      required:
+      - daily
+      - weekly
+      title: WordsDictatedTimeseries
+      description: Words-dictated series at both daily and weekly granularity.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

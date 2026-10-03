@@ -401,6 +401,72 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UpsertShareRequest:
+      properties:
+        visibility:
+          $ref: '#/components/schemas/NoteVisibility'
+      type: object
+      required:
+      - visibility
+      title: UpsertShareRequest
+      description: Request to set a shared note's visibility.
+    SharedNoteListItem:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+        content:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Content
+        notes:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Notes
+        summary:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Summary
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+        modified_at:
+          type: string
+          format: date-time
+          title: Modified At
+        owner:
+          $ref: '#/components/schemas/Owner'
+        caller_role:
+          $ref: '#/components/schemas/NoteShareRole'
+      type: object
+      required:
+      - slug
+      - title
+      - content
+      - created_at
+      - modified_at
+      - owner
+      - caller_role
+      title: SharedNoteListItem
+      description: Shared note row (full content) for authenticated "Shared with me" lists.
     SharedNoteResponse:
       properties:
         title:
@@ -451,13 +517,170 @@ components:
       - caller_role
       title: SharedNoteResponse
       description: Shared note payload returned to a caller with resolved access.
-    TodoStatus:
+    NoteShareRole:
       type: string
       enum:
-      - open
-      - in_progress
-      - done
-      title: TodoStatus
+      - owner
+      - contributor
+      - viewer
+      title: NoteShareRole
+    ShareStateResponse:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        visibility:
+          $ref: '#/components/schemas/NoteVisibility'
+        owner:
+          $ref: '#/components/schemas/Owner'
+        recipients:
+          items:
+            $ref: '#/components/schemas/RecipientEntry'
+          type: array
+          title: Recipients
+      type: object
+      required:
+      - slug
+      - visibility
+      - owner
+      - recipients
+      title: ShareStateResponse
+      description: 'Full share state: slug, visibility, owner, and invited recipients.'
+    SpeakerMap:
+      properties:
+        people:
+          additionalProperties:
+            $ref: '#/components/schemas/SpeakerPerson'
+          type: object
+          maxProperties: 512
+          title: People
+        assignments:
+          additionalProperties:
+            $ref: '#/components/schemas/SpeakerAssignment'
+          type: object
+          maxProperties: 512
+          title: Assignments
+      additionalProperties: false
+      type: object
+      title: SpeakerMap
+      description: 'The ``meetings.speaker_map`` blob (nullable JSONB on the meeting row).
+
+
+        ``people`` is keyed by person id (a plain uuid4 string, minted by whoever
+
+        creates the person); ``assignments`` is keyed by ``refined_id`` (the
+
+        transcript ``speaker.id``, serialized as a string key).'
+    Profile:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+        avatar_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Avatar Url
+      type: object
+      required:
+      - first_name
+      - last_name
+      - avatar_url
+      title: Profile
+      description: Enriched Flow profile fields when a participant email matches an existing user.
+    AddRecipientsRequest:
+      properties:
+        recipients:
+          items:
+            $ref: '#/components/schemas/ShareRecipientInput'
+          type: array
+          maxItems: 50
+          minItems: 1
+          title: Recipients
+      type: object
+      required:
+      - recipients
+      title: AddRecipientsRequest
+      description: Batch request to invite recipients to a shared note.
+    SharedTodo:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          type: string
+          title: Title
+        status:
+          $ref: '#/components/schemas/TodoStatus'
+        created_at:
+          type: string
+          format: date-time
+          title: Created At
+      type: object
+      required:
+      - id
+      - title
+      - status
+      - created_at
+      title: SharedTodo
+      description: An action item attached to a shared note (read-only projection).
+    AddRecipientsResponse:
+      properties:
+        succeeded:
+          type: integer
+          title: Succeeded
+        failed:
+          type: integer
+          title: Failed
+        not_eligible:
+          type: integer
+          title: Not Eligible
+        share:
+          $ref: '#/components/schemas/ShareStateResponse'
+      type: object
+      required:
+      - succeeded
+      - failed
+      - not_eligible
+      - share
+      title: AddRecipientsResponse
+      description: "Outcome of a batch recipient add.\n\nEvery unique email in the request lands in exactly one bucket:\n- ``succeeded``: now an invited recipient (newly added, or already present).\n- ``not_eligible``: barred by the owner's enterprise note-sharing policy — an\n  external recipient while the org restricts sharing outside the enterprise.\n- ``failed``: rejected for any other reason (malformed email, owner self-invite,\n  unsupported role).\n\n``share`` carries the refreshed share state so the client needs no follow-up GET."
+    SharedNoteListResponse:
+      properties:
+        notes:
+          items:
+            $ref: '#/components/schemas/SharedNoteListItem'
+          type: array
+          title: Notes
+        has_more:
+          type: boolean
+          title: Has More
+          default: false
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      type: object
+      required:
+      - notes
+      title: SharedNoteListResponse
+      description: Notes shared with the authenticated caller.
+    NoteVisibility:
+      type: string
+      enum:
+      - anyone_with_link
+      - domain
+      - invited_only
+      title: NoteVisibility
     SpeakerPerson:
       properties:
         name:
@@ -509,342 +732,6 @@ components:
         ``calendar_participant`` row id (those rows are replaced on every calendar
 
         re-sync); present only on ``calendar`` / ``merged_cal_platform`` people.'
-    ShareStateResponse:
-      properties:
-        slug:
-          type: string
-          title: Slug
-        visibility:
-          $ref: '#/components/schemas/NoteVisibility'
-        owner:
-          $ref: '#/components/schemas/Owner'
-        recipients:
-          items:
-            $ref: '#/components/schemas/RecipientEntry'
-          type: array
-          title: Recipients
-      type: object
-      required:
-      - slug
-      - visibility
-      - owner
-      - recipients
-      title: ShareStateResponse
-      description: 'Full share state: slug, visibility, owner, and invited recipients.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    NoteEmailStatus:
-      type: string
-      enum:
-      - pending
-      - sent
-      - error
-      title: NoteEmailStatus
-    AddRecipientsResponse:
-      properties:
-        succeeded:
-          type: integer
-          title: Succeeded
-        failed:
-          type: integer
-          title: Failed
-        not_eligible:
-          type: integer
-          title: Not Eligible
-        share:
-          $ref: '#/components/schemas/ShareStateResponse'
-      type: object
-      required:
-      - succeeded
-      - failed
-      - not_eligible
-      - share
-      title: AddRecipientsResponse
-      description: "Outcome of a batch recipient add.\n\nEvery unique email in the request lands in exactly one bucket:\n- ``succeeded``: now an invited recipient (newly added, or already present).\n- ``not_eligible``: barred by the owner's enterprise note-sharing policy — an\n  external recipient while the org restricts sharing outside the enterprise.\n- ``failed``: rejected for any other reason (malformed email, owner self-invite,\n  unsupported role).\n\n``share`` carries the refreshed share state so the client needs no follow-up GET."
-    SharedNoteListItem:
-      properties:
-        slug:
-          type: string
-          title: Slug
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-        content:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Content
-        notes:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Notes
-        summary:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Summary
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-        modified_at:
-          type: string
-          format: date-time
-          title: Modified At
-        owner:
-          $ref: '#/components/schemas/Owner'
-        caller_role:
-          $ref: '#/components/schemas/NoteShareRole'
-      type: object
-      required:
-      - slug
-      - title
-      - content
-      - created_at
-      - modified_at
-      - owner
-      - caller_role
-      title: SharedNoteListItem
-      description: Shared note row (full content) for authenticated "Shared with me" lists.
-    UpsertShareRequest:
-      properties:
-        visibility:
-          $ref: '#/components/schemas/NoteVisibility'
-      type: object
-      required:
-      - visibility
-      title: UpsertShareRequest
-      description: Request to set a shared note's visibility.
-    NoteShareRole:
-      type: string
-      enum:
-      - owner
-      - contributor
-      - viewer
-      title: NoteShareRole
-    SharedTodo:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        title:
-          type: string
-          title: Title
-        status:
-          $ref: '#/components/schemas/TodoStatus'
-        created_at:
-          type: string
-          format: date-time
-          title: Created At
-      type: object
-      required:
-      - id
-      - title
-      - status
-      - created_at
-      title: SharedTodo
-      description: An action item attached to a shared note (read-only projection).
-    Profile:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-        avatar_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Avatar Url
-      type: object
-      required:
-      - first_name
-      - last_name
-      - avatar_url
-      title: Profile
-      description: Enriched Flow profile fields when a participant email matches an existing user.
-    SharedNoteListResponse:
-      properties:
-        notes:
-          items:
-            $ref: '#/components/schemas/SharedNoteListItem'
-          type: array
-          title: Notes
-        has_more:
-          type: boolean
-          title: Has More
-          default: false
-        next_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Cursor
-      type: object
-      required:
-      - notes
-      title: SharedNoteListResponse
-      description: Notes shared with the authenticated caller.
-    Owner:
-      properties:
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-        role:
-          $ref: '#/components/schemas/NoteShareRole'
-          default: owner
-        profile:
-          anyOf:
-          - $ref: '#/components/schemas/Profile'
-          - type: 'null'
-      type: object
-      required:
-      - email
-      title: Owner
-      description: Derived owner of the shared note — not stored as a recipient row.
-    NoteVisibility:
-      type: string
-      enum:
-      - anyone_with_link
-      - domain
-      - invited_only
-      title: NoteVisibility
-    SpeakerMap:
-      properties:
-        people:
-          additionalProperties:
-            $ref: '#/components/schemas/SpeakerPerson'
-          type: object
-          maxProperties: 512
-          title: People
-        assignments:
-          additionalProperties:
-            $ref: '#/components/schemas/SpeakerAssignment'
-          type: object
-          maxProperties: 512
-          title: Assignments
-      additionalProperties: false
-      type: object
-      title: SpeakerMap
-      description: 'The ``meetings.speaker_map`` blob (nullable JSONB on the meeting row).
-
-
-        ``people`` is keyed by person id (a plain uuid4 string, minted by whoever
-
-        creates the person); ``assignments`` is keyed by ``refined_id`` (the
-
-        transcript ``speaker.id``, serialized as a string key).'
-    AddRecipientsRequest:
-      properties:
-        recipients:
-          items:
-            $ref: '#/components/schemas/ShareRecipientInput'
-          type: array
-          maxItems: 50
-          minItems: 1
-          title: Recipients
-      type: object
-      required:
-      - recipients
-      title: AddRecipientsRequest
-      description: Batch request to invite recipients to a shared note.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    RecipientEntry:
-      properties:
-        email:
-          type: string
-          title: Email
-        role:
-          $ref: '#/components/schemas/NoteShareRole'
-        email_status:
-          $ref: '#/components/schemas/NoteEmailStatus'
-        profile:
-          anyOf:
-          - $ref: '#/components/schemas/Profile'
-          - type: 'null'
-      type: object
-      required:
-      - email
-      - role
-      - email_status
-      title: RecipientEntry
-      description: A single invited recipient in the share state response.
-    SharedNoteShareStateResponse:
-      properties:
-        slug:
-          type: string
-          title: Slug
-        visibility:
-          $ref: '#/components/schemas/NoteVisibility'
-        owner:
-          $ref: '#/components/schemas/Owner'
-        recipients:
-          items:
-            $ref: '#/components/schemas/RecipientEntry'
-          type: array
-          title: Recipients
-        caller_role:
-          $ref: '#/components/schemas/NoteShareRole'
-      type: object
-      required:
-      - slug
-      - visibility
-      - owner
-      - recipients
-      - caller_role
-      title: SharedNoteShareStateResponse
-      description: 'Share state for a shared note as seen by any caller the access walk admits.
-
-
-        Disclosure is scoped to how the caller was admitted: ``recipients`` is
-
-        populated only for the owner and explicitly-invited recipients — domain and
-
-        link viewers get an empty list. ``owner.email`` is additionally null for
-
-        anonymous callers.'
     SpeakerAssignment:
       properties:
         consensus:
@@ -904,27 +791,74 @@ components:
         slots pointing at one person; an un-merge clears the user slot so
 
         resolution falls back to the machine slots.'
-    ShareRecipientInput:
+    RecipientEntry:
       properties:
         email:
           type: string
-          maxLength: 350
           title: Email
         role:
           $ref: '#/components/schemas/NoteShareRole'
-          default: viewer
+        email_status:
+          $ref: '#/components/schemas/NoteEmailStatus'
+        profile:
+          anyOf:
+          - $ref: '#/components/schemas/Profile'
+          - type: 'null'
       type: object
       required:
       - email
-      title: ShareRecipientInput
-      description: 'A single recipient in a batch invite request.
+      - role
+      - email_status
+      title: RecipientEntry
+      description: A single invited recipient in the share state response.
+    TodoStatus:
+      type: string
+      enum:
+      - open
+      - in_progress
+      - done
+      title: TodoStatus
+    NoteEmailStatus:
+      type: string
+      enum:
+      - pending
+      - sent
+      - error
+      title: NoteEmailStatus
+    SharedNoteShareStateResponse:
+      properties:
+        slug:
+          type: string
+          title: Slug
+        visibility:
+          $ref: '#/components/schemas/NoteVisibility'
+        owner:
+          $ref: '#/components/schemas/Owner'
+        recipients:
+          items:
+            $ref: '#/components/schemas/RecipientEntry'
+          type: array
+          title: Recipients
+        caller_role:
+          $ref: '#/components/schemas/NoteShareRole'
+      type: object
+      required:
+      - slug
+      - visibility
+      - owner
+      - recipients
+      - caller_role
+      title: SharedNoteShareStateResponse
+      description: 'Share state for a shared note as seen by any caller the access walk admits.
 
 
-        ``email`` is a plain string (not ``EmailStr``) on purpose: a malformed address
+        Disclosure is scoped to how the caller was admitted: ``recipients`` is
 
-        is reported per-recipient in the response ``failed`` count rather than 422-ing
+        populated only for the owner and explicitly-invited recipients — domain and
 
-        the whole batch. Format is validated in the service layer.'
+        link viewers get an empty list. ``owner.email`` is additionally null for
+
+        anonymous callers.'
     SharedNoteTranscriptResponse:
       properties:
         transcript:
@@ -949,6 +883,72 @@ components:
         meeting-status endpoint inlines as ``refined_transcript``. ``None`` covers absent,
 
         unreadable, and retention-erased alike, so viewers can''t distinguish them.'
+    ShareRecipientInput:
+      properties:
+        email:
+          type: string
+          maxLength: 350
+          title: Email
+        role:
+          $ref: '#/components/schemas/NoteShareRole'
+          default: viewer
+      type: object
+      required:
+      - email
+      title: ShareRecipientInput
+      description: 'A single recipient in a batch invite request.
+
+
+        ``email`` is a plain string (not ``EmailStr``) on purpose: a malformed address
+
+        is reported per-recipient in the response ``failed`` count rather than 422-ing
+
+        the whole batch. Format is validated in the service layer.'
+    Owner:
+      properties:
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        role:
+          $ref: '#/components/schemas/NoteShareRole'
+          default: owner
+        profile:
+          anyOf:
+          - $ref: '#/components/schemas/Profile'
+          - type: 'null'
+      type: object
+      required:
+      - email
+      title: Owner
+      description: Derived owner of the shared note — not stored as a recipient row.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

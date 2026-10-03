@@ -62,51 +62,26 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    UpdateUserContextRequest:
+    PolishPrompt:
       properties:
-        writing_samples:
-          anyOf:
-          - additionalProperties:
-              $ref: '#/components/schemas/WritingSample'
-            type: object
-          - type: 'null'
-          title: Writing Samples
-        polish_prompts:
-          anyOf:
-          - additionalProperties:
-              $ref: '#/components/schemas/PolishPrompt'
-            type: object
-          - type: 'null'
-          title: Polish Prompts
-      type: object
-      title: UpdateUserContextRequest
-      description: 'Request model for updating user context. All fields are optional for partial updates.
-
-        This will sync across all clients and will be useful for user context for things like actions'
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    WritingSample:
-      properties:
-        text:
+        prompt:
           type: string
-          title: Text
+          title: Prompt
+        shortcut:
+          items:
+            type: integer
+          type: array
+          title: Shortcut
         prompt_name:
-          anyOf:
-          - type: string
-          - type: 'null'
+          type: string
           title: Prompt Name
       type: object
       required:
-      - text
-      title: WritingSample
-      description: A single writing sample provided by the user for voice/style matching.
+      - prompt
+      - shortcut
+      - prompt_name
+      title: PolishPrompt
+      description: A single polish prompt provided by the user for polish.
     UserContextResponse:
       properties:
         id:
@@ -141,26 +116,51 @@ components:
       - modified_at
       title: UserContextResponse
       description: Response model for user context.
-    PolishPrompt:
+    HTTPValidationError:
       properties:
-        prompt:
-          type: string
-          title: Prompt
-        shortcut:
+        detail:
           items:
-            type: integer
+            $ref: '#/components/schemas/ValidationError'
           type: array
-          title: Shortcut
-        prompt_name:
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UpdateUserContextRequest:
+      properties:
+        writing_samples:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/WritingSample'
+            type: object
+          - type: 'null'
+          title: Writing Samples
+        polish_prompts:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/PolishPrompt'
+            type: object
+          - type: 'null'
+          title: Polish Prompts
+      type: object
+      title: UpdateUserContextRequest
+      description: 'Request model for updating user context. All fields are optional for partial updates.
+
+        This will sync across all clients and will be useful for user context for things like actions'
+    WritingSample:
+      properties:
+        text:
           type: string
+          title: Text
+        prompt_name:
+          anyOf:
+          - type: string
+          - type: 'null'
           title: Prompt Name
       type: object
       required:
-      - prompt
-      - shortcut
-      - prompt_name
-      title: PolishPrompt
-      description: A single polish prompt provided by the user for polish.
+      - text
+      title: WritingSample
+      description: A single writing sample provided by the user for voice/style matching.
     ValidationError:
       properties:
         loc:

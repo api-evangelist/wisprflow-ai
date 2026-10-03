@@ -212,6 +212,21 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    OnboardingWebhookRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+      - email
+      - token
+      title: OnboardingWebhookRequest
+      description: Request schema for Customer.io onboarding webhook.
     HTTPValidationError:
       properties:
         detail:
@@ -221,54 +236,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    MicQuizV2EmailRequest:
-      properties:
-        best_match:
-          type: string
-          enum:
-          - podcastMic
-          - gooseneckMic
-          - lavMic
-          - headsetWithMic
-          title: Best Match
-        title:
-          type: string
-          title: Title
-      type: object
-      required:
-      - best_match
-      - title
-      title: MicQuizV2EmailRequest
-      description: 'Payload for the V2 mic quiz email. Both fields are required — the template uses them
-
-        directly without fallbacks, so missing data will render as an empty highlight/title.'
-    MicQuizEmailRequest:
-      properties:
-        title:
-          type: string
-          title: Title
-          default: Your recommended setup!
-        subtitle:
-          type: string
-          title: Subtitle
-          default: ''
-        recommendations:
-          items:
-            $ref: '#/components/schemas/MicRecommendation'
-          type: array
-          title: Recommendations
-        show_less_ideal:
-          type: boolean
-          title: Show Less Ideal
-          default: false
-        less_ideal_text:
-          type: string
-          title: Less Ideal Text
-          default: ''
-      type: object
-      required:
-      - recommendations
-      title: MicQuizEmailRequest
     MicRecommendation:
       properties:
         badge:
@@ -298,21 +265,54 @@ components:
       - name
       - description
       title: MicRecommendation
-    OnboardingWebhookRequest:
+    MicQuizEmailRequest:
       properties:
-        email:
+        title:
           type: string
-          format: email
-          title: Email
-        token:
+          title: Title
+          default: Your recommended setup!
+        subtitle:
           type: string
-          title: Token
+          title: Subtitle
+          default: ''
+        recommendations:
+          items:
+            $ref: '#/components/schemas/MicRecommendation'
+          type: array
+          title: Recommendations
+        show_less_ideal:
+          type: boolean
+          title: Show Less Ideal
+          default: false
+        less_ideal_text:
+          type: string
+          title: Less Ideal Text
+          default: ''
       type: object
       required:
-      - email
-      - token
-      title: OnboardingWebhookRequest
-      description: Request schema for Customer.io onboarding webhook.
+      - recommendations
+      title: MicQuizEmailRequest
+    MicQuizV2EmailRequest:
+      properties:
+        best_match:
+          type: string
+          enum:
+          - podcastMic
+          - gooseneckMic
+          - lavMic
+          - headsetWithMic
+          title: Best Match
+        title:
+          type: string
+          title: Title
+      type: object
+      required:
+      - best_match
+      - title
+      title: MicQuizV2EmailRequest
+      description: 'Payload for the V2 mic quiz email. Both fields are required — the template uses them
+
+        directly without fallbacks, so missing data will render as an empty highlight/title.'
     ValidationError:
       properties:
         loc:

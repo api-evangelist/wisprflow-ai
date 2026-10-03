@@ -37,6 +37,41 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    EnterpretConversation:
+      properties:
+        message_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message Id
+        author_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Author Name
+        body:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Body
+        ccs:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ccs
+      additionalProperties: true
+      type: object
+      title: EnterpretConversation
+      description: A single conversation message from an Enterpret issue.
     EnterpretDeviceDetails:
       properties:
         architecture:
@@ -68,45 +103,6 @@ components:
       type: object
       title: EnterpretDeviceDetails
       description: Device metadata attached to an Enterpret issue.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    EnterpretWebhookRequest:
-      properties:
-        webhook_target:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Webhook Target
-        request_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Request Id
-        webhook_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Webhook Id
-        webhook_payload:
-          $ref: '#/components/schemas/EnterpretWebhookPayload'
-        metadata:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Metadata
-      additionalProperties: true
-      type: object
-      required:
-      - webhook_payload
-      title: EnterpretWebhookRequest
-      description: The outer Enterpret webhook request wrapping its payload and metadata.
     EnterpretWebhookPayload:
       properties:
         issue_id:
@@ -375,32 +371,36 @@ components:
       - issue_number
       title: EnterpretWebhookPayload
       description: The issue payload delivered by an Enterpret webhook.
-    EnterpretConversation:
+    EnterpretWebhookRequest:
       properties:
-        message_id:
+        webhook_target:
           anyOf:
           - type: string
           - type: 'null'
-          title: Message Id
-        author_name:
+          title: Webhook Target
+        request_id:
           anyOf:
           - type: string
           - type: 'null'
-          title: Author Name
-        body:
+          title: Request Id
+        webhook_id:
           anyOf:
           - type: string
           - type: 'null'
-          title: Body
-        ccs:
+          title: Webhook Id
+        webhook_payload:
+          $ref: '#/components/schemas/EnterpretWebhookPayload'
+        metadata:
           anyOf:
-          - type: string
+          - type: object
           - type: 'null'
-          title: Ccs
+          title: Metadata
       additionalProperties: true
       type: object
-      title: EnterpretConversation
-      description: A single conversation message from an Enterpret issue.
+      required:
+      - webhook_payload
+      title: EnterpretWebhookRequest
+      description: The outer Enterpret webhook request wrapping its payload and metadata.
     ValidationError:
       properties:
         loc:

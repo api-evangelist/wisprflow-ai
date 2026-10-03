@@ -48,15 +48,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     AttributionUserData:
       properties:
         email:
@@ -99,64 +90,15 @@ components:
       type: object
       title: AttributionUserData
       description: Optional user data for enhanced conversions (Google Ads attribution).
-    AttributionEventName:
-      type: string
-      enum:
-      - usage_milestone_reached
-      - first_external_dictation
-      - onboarding_completed
-      - paywall_viewed
-      - begin_checkout
-      - purchase
-      - lead
-      title: AttributionEventName
-      description: 'GA4 event names for attribution tracking.
-
-
-        These map to GA4 Measurement Protocol event names.
-
-        See: https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference
-
-
-        USAGE_MILESTONE_REACHED is a single event name; individual milestones (words_200,
-
-        words_500, words_2000) are distinguished via the `milestone_name` custom parameter,
-
-        which should be registered as a GA4 custom dimension for reporting.'
-    AttributionPlatform:
-      type: string
-      enum:
-      - web
-      - desktop_mac
-      - desktop_windows
-      - ios
-      - android
-      title: AttributionPlatform
-      description: 'Valid platforms for attribution event tracking.
-
-
-        Desktop clients must use specific variants (DESKTOP_MAC, DESKTOP_WINDOWS).'
-    AttributionTrackingResponse:
+    HTTPValidationError:
       properties:
-        success:
-          type: boolean
-          title: Success
-          description: Whether the event was tracked successfully
-        event_name:
-          $ref: '#/components/schemas/AttributionEventName'
-          description: Name of the tracked event
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-          description: Additional message
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - success
-      - event_name
-      title: AttributionTrackingResponse
-      description: Response for attribution tracking endpoints.
+      title: HTTPValidationError
     PaywallViewedRequest:
       properties:
         ga4_client_id:
@@ -190,6 +132,64 @@ components:
         will derive it from user_id for cross-device attribution. Web clients should
 
         provide ga4_client_id from gtag.js cookies for pre-login tracking.'
+    AttributionPlatform:
+      type: string
+      enum:
+      - web
+      - desktop_mac
+      - desktop_windows
+      - ios
+      - android
+      title: AttributionPlatform
+      description: 'Valid platforms for attribution event tracking.
+
+
+        Desktop clients must use specific variants (DESKTOP_MAC, DESKTOP_WINDOWS).'
+    AttributionEventName:
+      type: string
+      enum:
+      - usage_milestone_reached
+      - first_external_dictation
+      - onboarding_completed
+      - paywall_viewed
+      - begin_checkout
+      - purchase
+      - lead
+      title: AttributionEventName
+      description: 'GA4 event names for attribution tracking.
+
+
+        These map to GA4 Measurement Protocol event names.
+
+        See: https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference
+
+
+        USAGE_MILESTONE_REACHED is a single event name; individual milestones (words_200,
+
+        words_500, words_2000) are distinguished via the `milestone_name` custom parameter,
+
+        which should be registered as a GA4 custom dimension for reporting.'
+    AttributionTrackingResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+          description: Whether the event was tracked successfully
+        event_name:
+          $ref: '#/components/schemas/AttributionEventName'
+          description: Name of the tracked event
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+          description: Additional message
+      type: object
+      required:
+      - success
+      - event_name
+      title: AttributionTrackingResponse
+      description: Response for attribution tracking endpoints.
     ValidationError:
       properties:
         loc:

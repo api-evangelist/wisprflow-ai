@@ -39,6 +39,12 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    TrackingEventName:
+      type: string
+      enum:
+      - app_download
+      title: TrackingEventName
+      description: Supported tracking event names for web beacons.
     HTTPValidationError:
       properties:
         detail:
@@ -48,21 +54,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    TrackingEventResponse:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        message:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Message
-      type: object
-      required:
-      - success
-      title: TrackingEventResponse
-      description: Response for tracking events.
     AttributionPlatform:
       type: string
       enum:
@@ -137,12 +128,21 @@ components:
       - event_id
       title: TrackingEventRequest
       description: Request for tracking events from web beacons.
-    TrackingEventName:
-      type: string
-      enum:
-      - app_download
-      title: TrackingEventName
-      description: Supported tracking event names for web beacons.
+    TrackingEventResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        message:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Message
+      type: object
+      required:
+      - success
+      title: TrackingEventResponse
+      description: Response for tracking events.
     ValidationError:
       properties:
         loc:

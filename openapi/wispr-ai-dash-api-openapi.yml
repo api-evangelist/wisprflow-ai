@@ -172,24 +172,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    RevokeTokenRequest:
-      properties:
-        access_token:
-          type: string
-          title: Access Token
-      type: object
-      required:
-      - access_token
-      title: RevokeTokenRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ChromeExtensionClientKeyRequest:
       properties:
         client_id:
@@ -210,6 +192,15 @@ components:
       - client_id
       title: ChromeExtensionClientKeyRequest
       description: Pre-auth request from the Chrome extension to mint a short-lived `client_key`.
+    RevokeTokenRequest:
+      properties:
+        access_token:
+          type: string
+          title: Access Token
+      type: object
+      required:
+      - access_token
+      title: RevokeTokenRequest
     TokenResponse:
       properties:
         access_token:
@@ -223,19 +214,15 @@ components:
       - access_token
       - expires_in
       title: TokenResponse
-    ChromeExtensionClientKeyResponse:
+    HTTPValidationError:
       properties:
-        client_key:
-          type: string
-          title: Client Key
-        expires_in:
-          type: integer
-          title: Expires In
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - client_key
-      - expires_in
-      title: ChromeExtensionClientKeyResponse
+      title: HTTPValidationError
     TokenRequest:
       properties:
         client_id:
@@ -256,6 +243,19 @@ components:
       required:
       - client_id
       title: TokenRequest
+    ChromeExtensionClientKeyResponse:
+      properties:
+        client_key:
+          type: string
+          title: Client Key
+        expires_in:
+          type: integer
+          title: Expires In
+      type: object
+      required:
+      - client_key
+      - expires_in
+      title: ChromeExtensionClientKeyResponse
     ValidationError:
       properties:
         loc:

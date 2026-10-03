@@ -165,29 +165,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    InitiateConnectionResponse:
-      properties:
-        connection_id:
-          type: string
-          title: Connection Id
-        redirect_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Redirect Url
-      type: object
-      required:
-      - connection_id
-      title: InitiateConnectionResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     ConnectorInfo:
       properties:
         key:
@@ -213,6 +190,25 @@ components:
       - label
       - connected
       title: ConnectorInfo
+    ListCalendarEventsResponse:
+      properties:
+        successful:
+          type: boolean
+          title: Successful
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        data:
+          items:
+            $ref: '#/components/schemas/GoogleCalendarEvent'
+          type: array
+          title: Data
+      type: object
+      required:
+      - successful
+      title: ListCalendarEventsResponse
     ConnectorsResponse:
       properties:
         connectors:
@@ -225,6 +221,60 @@ components:
       - connectors
       title: ConnectorsResponse
       description: The list of connectors and their status for the user.
+    DisconnectRequest:
+      properties:
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+      type: object
+      required:
+      - key
+      title: DisconnectRequest
+      description: Request to disconnect a connector identified by its key.
+    RawInitiateConnectionRequest:
+      properties:
+        app:
+          type: string
+          title: App
+        callback_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Callback Url
+      type: object
+      required:
+      - app
+      title: RawInitiateConnectionRequest
+      description: Request to start connecting a connector identified by a raw app string.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ConnectorStatus:
+      type: string
+      enum:
+      - pending
+      - active
+      - failed
+      title: ConnectorStatus
+    InitiateConnectionRequest:
+      properties:
+        key:
+          $ref: '#/components/schemas/ConnectorKey'
+        callback_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Callback Url
+      type: object
+      required:
+      - key
+      title: InitiateConnectionRequest
+      description: Request to start connecting a connector identified by its key.
     ConnectionStatusResponse:
       properties:
         connection_id:
@@ -245,6 +295,60 @@ components:
       - status
       - toolkit_slug
       title: ConnectionStatusResponse
+    InitiateConnectionResponse:
+      properties:
+        connection_id:
+          type: string
+          title: Connection Id
+        redirect_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Redirect Url
+      type: object
+      required:
+      - connection_id
+      title: InitiateConnectionResponse
+    ListCalendarEventsRequest:
+      properties:
+        time_min:
+          type: string
+          format: date-time
+          title: Time Min
+        time_max:
+          type: string
+          format: date-time
+          title: Time Max
+        max_results:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Max Results
+      type: object
+      required:
+      - time_min
+      - time_max
+      title: ListCalendarEventsRequest
+      description: Request to list calendar events within a time window.
+    ConnectorKey:
+      type: string
+      enum:
+      - calendar
+      - github
+      - gmail
+      - linear
+      - notion
+      - slack
+      - wispr
+      title: ConnectorKey
+      x-enum-varnames:
+      - Calendar
+      - Github
+      - GoogleAutomations
+      - Linear
+      - Notion
+      - Slack
+      - Wispr
     GoogleCalendarEvent:
       properties:
         summary:
@@ -283,110 +387,6 @@ components:
       - start
       - end
       title: GoogleCalendarEvent
-    ConnectorStatus:
-      type: string
-      enum:
-      - pending
-      - active
-      - failed
-      title: ConnectorStatus
-    ConnectorKey:
-      type: string
-      enum:
-      - calendar
-      - github
-      - gmail
-      - linear
-      - notion
-      - slack
-      - wispr
-      title: ConnectorKey
-      x-enum-varnames:
-      - Calendar
-      - Github
-      - GoogleAutomations
-      - Linear
-      - Notion
-      - Slack
-      - Wispr
-    RawInitiateConnectionRequest:
-      properties:
-        app:
-          type: string
-          title: App
-        callback_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Callback Url
-      type: object
-      required:
-      - app
-      title: RawInitiateConnectionRequest
-      description: Request to start connecting a connector identified by a raw app string.
-    InitiateConnectionRequest:
-      properties:
-        key:
-          $ref: '#/components/schemas/ConnectorKey'
-        callback_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Callback Url
-      type: object
-      required:
-      - key
-      title: InitiateConnectionRequest
-      description: Request to start connecting a connector identified by its key.
-    ListCalendarEventsResponse:
-      properties:
-        successful:
-          type: boolean
-          title: Successful
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-        data:
-          items:
-            $ref: '#/components/schemas/GoogleCalendarEvent'
-          type: array
-          title: Data
-      type: object
-      required:
-      - successful
-      title: ListCalendarEventsResponse
-    ListCalendarEventsRequest:
-      properties:
-        time_min:
-          type: string
-          format: date-time
-          title: Time Min
-        time_max:
-          type: string
-          format: date-time
-          title: Time Max
-        max_results:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Max Results
-      type: object
-      required:
-      - time_min
-      - time_max
-      title: ListCalendarEventsRequest
-      description: Request to list calendar events within a time window.
-    DisconnectRequest:
-      properties:
-        key:
-          $ref: '#/components/schemas/ConnectorKey'
-      type: object
-      required:
-      - key
-      title: DisconnectRequest
-      description: Request to disconnect a connector identified by its key.
     DisconnectResponse:
       properties:
         successful:

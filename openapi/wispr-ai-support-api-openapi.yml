@@ -532,23 +532,135 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    NPSFeedbackRequest:
+    Body_create_pylon_feedback_api_v1_support_pylon_feedback_post:
       properties:
-        customer_id:
+        body:
           type: string
-          title: Customer Id
-        feedback:
-          type: string
-          title: Feedback
-        campaign:
-          type: string
-          title: Campaign
+          title: Body
+        attachments:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Attachments
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
       type: object
       required:
-      - customer_id
-      - feedback
-      - campaign
-      title: NPSFeedbackRequest
+      - body
+      title: Body_create_pylon_feedback_api_v1_support_pylon_feedback_post
+    SyncSubscriptionRequest:
+      properties:
+        stripe_subscription_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stripe Subscription Id
+          description: Stripe subscription ID (e.g. sub_xxx)
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+          description: User email — used to look up the Stripe customer
+        dry_run:
+          type: boolean
+          title: Dry Run
+          description: Preview changes without committing. Set to false to apply.
+          default: true
+      type: object
+      title: SyncSubscriptionRequest
+    CancelSubscriptionRequest:
+      properties:
+        email:
+          type: string
+          title: Email
+          description: User email
+        refund:
+          type: string
+          title: Refund
+          description: 'Refund type: "full", "partial", or "no"'
+      type: object
+      required:
+      - email
+      - refund
+      title: CancelSubscriptionRequest
+    Body_send_feedback_slack_api_v1_support_slack__platform__post:
+      properties:
+        audio:
+          anyOf:
+          - type: string
+            contentMediaType: application/octet-stream
+          - type: 'null'
+          title: Audio
+        asr_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Asr Text
+        formatted_text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Formatted Text
+        feedback:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Feedback
+        logs:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logs
+        image_data:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Image Data
+        image_type:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
+      type: object
+      title: Body_send_feedback_slack_api_v1_support_slack__platform__post
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     SyncMobileSubscriptionRequest:
       properties:
         user_id:
@@ -598,8 +710,128 @@ components:
         Carries only the derived workflow id (non-PII; `usage-erasure:{user_id}`) and a
 
         flag for whether the email-keyed ClickHouse legs will be skipped (the orphan path).'
-    Body_create_pylon_feedback_api_v1_support_pylon_feedback_post:
+    ErasureStartRequest:
       properties:
+        email:
+          anyOf:
+          - type: string
+            maxLength: 320
+          - type: 'null'
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+            maxLength: 80
+            minLength: 1
+          - type: 'null'
+          title: User Id
+        confirm_orphan:
+          type: boolean
+          title: Confirm Orphan
+          default: false
+        actor:
+          anyOf:
+          - type: string
+            maxLength: 320
+          - type: 'null'
+          title: Actor
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Reason
+      type: object
+      title: ErasureStartRequest
+      description: "Body for `POST /api/v1/support/usage-data-erasure`.\n\nExactly one of `email` / `user_id` must be set.\n\nAttributes:\n    email: The PRIMARY identifier — the target's email. Resolved server-side to a\n        single user_id; the operator stating the human identity IS the fat-finger\n        guard, so no separate confirm field is needed. 0 matches → 404, >1 → 422.\n    user_id: The orphan-only identifier — a raw user id reaching orphaned usage data\n        (no `User` row / no email). The user_id path targets ONLY orphaned data;\n        requires `confirm_orphan=True`; server-side path-char rejected before use.\n    confirm_orphan: Explicit acknowledgement that applies ONLY to the `user_id` /\n        orphan path. Invalid with `email` (rejected by the validator).\n    actor: The support caller's identity — caller-supplied free text stored verbatim in\n        the audit row; not validated and never authorization-bearing.\n    reason: The erasure reason — caller-supplied free text stored verbatim in the audit row."
+    NPSFeedbackRequest:
+      properties:
+        customer_id:
+          type: string
+          title: Customer Id
+        feedback:
+          type: string
+          title: Feedback
+        campaign:
+          type: string
+          title: Campaign
+      type: object
+      required:
+      - customer_id
+      - feedback
+      - campaign
+      title: NPSFeedbackRequest
+    ErasureStatusState:
+      type: string
+      enum:
+      - not_found
+      - in_flight
+      - completed
+      - failed
+      title: ErasureStatusState
+      description: Coarse, non-PII status of an erasure for the redacted status response.
+    NPSScoreRequest:
+      properties:
+        customer_id:
+          type: string
+          title: Customer Id
+        score:
+          type: integer
+          title: Score
+        campaign:
+          type: string
+          title: Campaign
+      type: object
+      required:
+      - customer_id
+      - score
+      - campaign
+      title: NPSScoreRequest
+    PreLoginFeedbackRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+        email:
+          type: string
+          format: email
+          title: Email
+        body:
+          type: string
+          title: Body
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        imageData:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Imagedata
+        imageType:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
+      type: object
+      required:
+      - name
+      - email
+      - body
+      title: PreLoginFeedbackRequest
+    Body_frontapp_feedback_api_v1_support_feedback_post:
+      properties:
+        to:
+          type: string
+          title: To
         body:
           type: string
           title: Body
@@ -624,23 +856,16 @@ components:
           default: desktop
       type: object
       required:
+      - to
       - body
-      title: Body_create_pylon_feedback_api_v1_support_pylon_feedback_post
-    CancelSubscriptionRequest:
-      properties:
-        email:
-          type: string
-          title: Email
-          description: User email
-        refund:
-          type: string
-          title: Refund
-          description: 'Refund type: "full", "partial", or "no"'
-      type: object
-      required:
-      - email
-      - refund
-      title: CancelSubscriptionRequest
+      title: Body_frontapp_feedback_api_v1_support_feedback_post
+    src__common__constants__Platform:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - android
+      title: Platform
     ErasureStatusResponse:
       properties:
         state:
@@ -687,139 +912,6 @@ components:
       - state
       title: ErasureStatusResponse
       description: "REDACTED status of an erasure — ids / enums / counts / timestamps only.\n\nNever carries the raw email, row content, or a raw exception. `per_store` is the\nworkflow's `{store: StepState}` progress map for an in-flight run (bounded enum\nstrings) or omitted for a terminal/not-found read. `last_error` is a sanitized\nbounded code (e.g. `clickhouse_verification_timed_out`), never a stack/raw error.\n\nAttributes:\n    state: Coarse status (`not_found` / `in_flight` / `completed` / `failed`).\n    workflow_id: The derived workflow id queried (non-PII), or None for not_found\n        when no id could be derived.\n    per_store: In-flight per-store progress `{ErasureStore: StepState}`; None for\n        terminal/not-found reads (terminal proof lives in the audit row).\n    outcome: Terminal outcome string (`completed`/`failed`) from the audit row; None\n        in-flight / not-found.\n    watermark_t0_epoch_s: T0 (epoch seconds) from the terminal audit row; None\n        in-flight / not-found.\n    completed_at_epoch_s: Terminal `completed_at` (epoch seconds) from the audit row.\n    last_error: Sanitized bounded failure code on a `failed` terminal; None otherwise.\n    proof: Per-store residual-count / empty-listing evidence from the audit row\n        (counts only, non-PII); None in-flight / not-found."
-    ImageType:
-      type: string
-      enum:
-      - image/png
-      - image/jpeg
-      - image/bmp
-      - image/webp
-      title: ImageType
-    Body_send_feedback_slack_api_v1_support_slack__platform__post:
-      properties:
-        audio:
-          anyOf:
-          - type: string
-            contentMediaType: application/octet-stream
-          - type: 'null'
-          title: Audio
-        asr_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Asr Text
-        formatted_text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Formatted Text
-        feedback:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Feedback
-        logs:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Logs
-        image_data:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Image Data
-        image_type:
-          anyOf:
-          - $ref: '#/components/schemas/ImageType'
-          - type: 'null'
-      type: object
-      title: Body_send_feedback_slack_api_v1_support_slack__platform__post
-    Body_frontapp_feedback_api_v1_support_feedback_post:
-      properties:
-        to:
-          type: string
-          title: To
-        body:
-          type: string
-          title: Body
-        attachments:
-          items:
-            type: string
-            contentMediaType: application/octet-stream
-          type: array
-          title: Attachments
-        subject:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Subject
-        comment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Comment
-        platform:
-          $ref: '#/components/schemas/src__common__constants__Platform'
-          default: desktop
-      type: object
-      required:
-      - to
-      - body
-      title: Body_frontapp_feedback_api_v1_support_feedback_post
-    SyncSubscriptionRequest:
-      properties:
-        stripe_subscription_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stripe Subscription Id
-          description: Stripe subscription ID (e.g. sub_xxx)
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-          description: User email — used to look up the Stripe customer
-        dry_run:
-          type: boolean
-          title: Dry Run
-          description: Preview changes without committing. Set to false to apply.
-          default: true
-      type: object
-      title: SyncSubscriptionRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
-    src__common__constants__Platform:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - android
-      title: Platform
     SupportFeedbackRequest:
       properties:
         to:
@@ -862,106 +954,14 @@ components:
       - to
       - body
       title: SupportFeedbackRequest
-    ErasureStartRequest:
-      properties:
-        email:
-          anyOf:
-          - type: string
-            maxLength: 320
-          - type: 'null'
-          title: Email
-        user_id:
-          anyOf:
-          - type: string
-            maxLength: 80
-            minLength: 1
-          - type: 'null'
-          title: User Id
-        confirm_orphan:
-          type: boolean
-          title: Confirm Orphan
-          default: false
-        actor:
-          anyOf:
-          - type: string
-            maxLength: 320
-          - type: 'null'
-          title: Actor
-        reason:
-          anyOf:
-          - type: string
-            maxLength: 2000
-          - type: 'null'
-          title: Reason
-      type: object
-      title: ErasureStartRequest
-      description: "Body for `POST /api/v1/support/usage-data-erasure`.\n\nExactly one of `email` / `user_id` must be set.\n\nAttributes:\n    email: The PRIMARY identifier — the target's email. Resolved server-side to a\n        single user_id; the operator stating the human identity IS the fat-finger\n        guard, so no separate confirm field is needed. 0 matches → 404, >1 → 422.\n    user_id: The orphan-only identifier — a raw user id reaching orphaned usage data\n        (no `User` row / no email). The user_id path targets ONLY orphaned data;\n        requires `confirm_orphan=True`; server-side path-char rejected before use.\n    confirm_orphan: Explicit acknowledgement that applies ONLY to the `user_id` /\n        orphan path. Invalid with `email` (rejected by the validator).\n    actor: The support caller's identity — caller-supplied free text stored verbatim in\n        the audit row; not validated and never authorization-bearing.\n    reason: The erasure reason — caller-supplied free text stored verbatim in the audit row."
-    PreLoginFeedbackRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-        email:
-          type: string
-          format: email
-          title: Email
-        body:
-          type: string
-          title: Body
-        subject:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Subject
-        comment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Comment
-        imageData:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Imagedata
-        imageType:
-          anyOf:
-          - $ref: '#/components/schemas/ImageType'
-          - type: 'null'
-        platform:
-          $ref: '#/components/schemas/src__common__constants__Platform'
-          default: desktop
-      type: object
-      required:
-      - name
-      - email
-      - body
-      title: PreLoginFeedbackRequest
-    NPSScoreRequest:
-      properties:
-        customer_id:
-          type: string
-          title: Customer Id
-        score:
-          type: integer
-          title: Score
-        campaign:
-          type: string
-          title: Campaign
-      type: object
-      required:
-      - customer_id
-      - score
-      - campaign
-      title: NPSScoreRequest
-    ErasureStatusState:
+    ImageType:
       type: string
       enum:
-      - not_found
-      - in_flight
-      - completed
-      - failed
-      title: ErasureStatusState
-      description: Coarse, non-PII status of an erasure for the redacted status response.
+      - image/png
+      - image/jpeg
+      - image/bmp
+      - image/webp
+      title: ImageType
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

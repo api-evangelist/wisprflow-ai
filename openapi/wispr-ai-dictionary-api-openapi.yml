@@ -180,24 +180,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    BulkCreateTeamDictionaryResult:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        imported_count:
-          type: integer
-          title: Imported Count
-        duplicate_count:
-          type: integer
-          title: Duplicate Count
-      type: object
-      required:
-      - success
-      - imported_count
-      - duplicate_count
-      title: BulkCreateTeamDictionaryResult
-      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
     DictionaryItem:
       properties:
         id:
@@ -267,15 +249,6 @@ components:
       - is_snippet
       title: DictionaryItem
       description: A team dictionary word or snippet entry as returned to clients.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     UpdateTeamDictionaryItem:
       properties:
         word_id:
@@ -306,6 +279,15 @@ components:
       - is_snippet
       title: UpdateTeamDictionaryItem
       description: Request payload for updating an existing team dictionary item.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     CreateTeamDictionaryItem:
       properties:
         word:
@@ -351,6 +333,24 @@ components:
       - is_snippet
       title: CreateTeamDictionaryItem
       description: Request payload for creating a single team dictionary item.
+    BulkCreateTeamDictionaryResult:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        imported_count:
+          type: integer
+          title: Imported Count
+        duplicate_count:
+          type: integer
+          title: Duplicate Count
+      type: object
+      required:
+      - success
+      - imported_count
+      - duplicate_count
+      title: BulkCreateTeamDictionaryResult
+      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
     ValidationError:
       properties:
         loc:

@@ -87,6 +87,23 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    DestroySandboxUserResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+          description: Human-readable message
+        failed_services:
+          items:
+            type: string
+          type: array
+          title: Failed Services
+          description: List of services that failed to delete data
+      type: object
+      required:
+      - message
+      title: DestroySandboxUserResponse
+      description: Response model for sandbox user destruction.
     CreateSandboxUserRequest:
       properties:
         plan:
@@ -167,23 +184,6 @@ components:
       - password
       title: CreateSandboxUserResponse
       description: Response model for sandbox user creation.
-    DestroySandboxUserResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-          description: Human-readable message
-        failed_services:
-          items:
-            type: string
-          type: array
-          title: Failed Services
-          description: List of services that failed to delete data
-      type: object
-      required:
-      - message
-      title: DestroySandboxUserResponse
-      description: Response model for sandbox user destruction.
     ValidationError:
       properties:
         loc:

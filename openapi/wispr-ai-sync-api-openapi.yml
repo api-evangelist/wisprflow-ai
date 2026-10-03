@@ -40,42 +40,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    SyncCheckResponse:
-      properties:
-        changed:
-          items:
-            type: string
-          type: array
-          title: Changed
-        unchanged:
-          items:
-            type: string
-          type: array
-          title: Unchanged
-        timestamps:
-          additionalProperties:
-            type: string
-          type: object
-          title: Timestamps
-        client_region:
-          type: string
-          enum:
-          - us
-          - europe
-          - apac
-          title: Client Region
-        incident_status:
-          anyOf:
-          - $ref: '#/components/schemas/IncidentStatusDetail'
-          - type: 'null'
-      type: object
-      required:
-      - changed
-      - unchanged
-      - timestamps
-      - client_region
-      title: SyncCheckResponse
-      description: Response from ``GET /api/v1/sync/check``.
     IncidentStatusDetail:
       properties:
         state:
@@ -112,6 +76,42 @@ components:
       - incident_url
       title: IncidentStatusDetail
       description: Active incident details returned in the status response.
+    SyncCheckResponse:
+      properties:
+        changed:
+          items:
+            type: string
+          type: array
+          title: Changed
+        unchanged:
+          items:
+            type: string
+          type: array
+          title: Unchanged
+        timestamps:
+          additionalProperties:
+            type: string
+          type: object
+          title: Timestamps
+        client_region:
+          type: string
+          enum:
+          - us
+          - europe
+          - apac
+          title: Client Region
+        incident_status:
+          anyOf:
+          - $ref: '#/components/schemas/IncidentStatusDetail'
+          - type: 'null'
+      type: object
+      required:
+      - changed
+      - unchanged
+      - timestamps
+      - client_region
+      title: SyncCheckResponse
+      description: Response from ``GET /api/v1/sync/check``.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

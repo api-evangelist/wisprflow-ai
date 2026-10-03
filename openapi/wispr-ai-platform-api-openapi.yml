@@ -558,35 +558,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ChatMessage:
-      properties:
-        role:
-          $ref: '#/components/schemas/ChatRole'
-          description: Role of the message sender
-        content:
-          type: string
-          title: Content
-          description: Content of the message
-        sender_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Sender Id
-          description: Identifier of the message sender
-      type: object
-      required:
-      - role
-      - content
-      title: ChatMessage
     Context:
       properties:
         app:
@@ -697,13 +668,124 @@ components:
           description: List of all applications (names, bundle IDs, URLs) used for dictation in this session
       type: object
       title: Context
-    ChatRole:
+    AppType:
       type: string
       enum:
-      - user
-      - human
-      - assistant
-      title: ChatRole
+      - email
+      - ai
+      - word
+      - terminal
+      - other
+      title: AppType
+      description: Represents the type of app the user is trying to paste in.
+    UpdateOrgRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+        logo:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Logo
+      type: object
+      title: UpdateOrgRequest
+    CreateOrgRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+      type: object
+      required:
+      - name
+      title: CreateOrgRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UpdateRoleRequest:
+      properties:
+        role:
+          $ref: '#/components/schemas/Role'
+      type: object
+      required:
+      - role
+      title: UpdateRoleRequest
+    UpdateAPIKeyRequest:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+      type: object
+      title: UpdateAPIKeyRequest
+    App:
+      properties:
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          description: Name of the app
+        bundle_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bundle Id
+          description: Bundle ID of the app
+        type:
+          $ref: '#/components/schemas/AppType'
+          description: Category to which the app belongs
+          default: other
+        url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Url
+          description: URL within the app
+      type: object
+      title: App
+    Role:
+      type: string
+      enum:
+      - admin
+      - member
+      title: Role
+      description: A platform team member's role.
     TextboxContents:
       properties:
         beforeText:
@@ -728,6 +810,28 @@ components:
           default: ''
       type: object
       title: TextboxContents
+    Conversation:
+      properties:
+        id:
+          type: string
+          title: Id
+          description: Identifier of the conversation
+        participants:
+          items:
+            type: string
+          type: array
+          title: Participants
+          description: List of participants in the conversation
+        messages:
+          items:
+            $ref: '#/components/schemas/ChatMessage'
+          type: array
+          title: Messages
+          description: List of messages in the conversation
+      type: object
+      required:
+      - id
+      title: Conversation
     APIProperties:
       properties:
         language:
@@ -881,27 +985,6 @@ components:
           description: Dictionary words
       type: object
       title: APIProperties
-    UpdateOrgRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-        logo:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Logo
-      type: object
-      title: UpdateOrgRequest
-    Role:
-      type: string
-      enum:
-      - admin
-      - member
-      title: Role
-      description: A platform team member's role.
     Body_playground_api_v1_platform_organizations__organization_id__playground_post:
       properties:
         audio:
@@ -931,99 +1014,26 @@ components:
       required:
       - audio
       title: Body_playground_api_v1_platform_organizations__organization_id__playground_post
-    UpdateRoleRequest:
+    ChatMessage:
       properties:
         role:
-          $ref: '#/components/schemas/Role'
+          $ref: '#/components/schemas/ChatRole'
+          description: Role of the message sender
+        content:
+          type: string
+          title: Content
+          description: Content of the message
+        sender_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Sender Id
+          description: Identifier of the message sender
       type: object
       required:
       - role
-      title: UpdateRoleRequest
-    App:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          description: Name of the app
-        bundle_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bundle Id
-          description: Bundle ID of the app
-        type:
-          $ref: '#/components/schemas/AppType'
-          description: Category to which the app belongs
-          default: other
-        url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Url
-          description: URL within the app
-      type: object
-      title: App
-    AppType:
-      type: string
-      enum:
-      - email
-      - ai
-      - word
-      - terminal
-      - other
-      title: AppType
-      description: Represents the type of app the user is trying to paste in.
-    Conversation:
-      properties:
-        id:
-          type: string
-          title: Id
-          description: Identifier of the conversation
-        participants:
-          items:
-            type: string
-          type: array
-          title: Participants
-          description: List of participants in the conversation
-        messages:
-          items:
-            $ref: '#/components/schemas/ChatMessage'
-          type: array
-          title: Messages
-          description: List of messages in the conversation
-      type: object
-      required:
-      - id
-      title: Conversation
-    CreateOrgRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - name
-      title: CreateOrgRequest
-    CreateAPIKeyRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-      type: object
-      required:
-      - name
-      title: CreateAPIKeyRequest
-    UpdateAPIKeyRequest:
-      properties:
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-      type: object
-      title: UpdateAPIKeyRequest
+      - content
+      title: ChatMessage
     CreateUserInviteRequest:
       properties:
         emails:
@@ -1038,32 +1048,22 @@ components:
       - emails
       - role
       title: CreateUserInviteRequest
-    ValidationError:
+    ChatRole:
+      type: string
+      enum:
+      - user
+      - human
+      - assistant
+      title: ChatRole
+    CreateAPIKeyRequest:
       properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
+        name:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Name
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - name
+      title: CreateAPIKeyRequest
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

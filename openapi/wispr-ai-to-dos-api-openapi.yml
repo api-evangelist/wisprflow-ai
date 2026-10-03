@@ -56,86 +56,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    SyncTodo:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        meeting_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Meeting Id
-        title:
-          type: string
-          title: Title
-        status:
-          $ref: '#/components/schemas/TodoStatus'
-        is_archived:
-          type: boolean
-          title: Is Archived
-          default: false
-        is_deleted:
-          type: boolean
-          title: Is Deleted
-          default: false
-        created_at:
-          type: string
-          title: Created At
-        modified_at:
-          type: string
-          title: Modified At
-      type: object
-      required:
-      - id
-      - title
-      - status
-      - created_at
-      - modified_at
-      title: SyncTodo
-      description: 'One todo on the ``/todos/sync`` pull. The whole row travels (existence,
-
-        title, status, archive, tombstone) — todos are not projected from note content,
-
-        so the row is the single source of truth.
-
-
-        ``meeting_id`` is nullable: set ⟹ from that meeting; NULL ⟹ ad-hoc. Timestamps
-
-        are Unix ms strings (symmetric with the request side). The pull includes
-
-        ``is_deleted`` rows so the client can converge a tombstone.'
-    TodoSyncRequest:
-      properties:
-        last_sync_time:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Sync Time
-          description: Unix timestamp in ms of the most recent server change the client has seen
-        page_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Page Cursor
-          description: Opaque cursor from a previous paged response. While this is set, keep last_sync_time unchanged and pass this value to continue the same pull snapshot.
-        hard_refresh:
-          type: boolean
-          title: Hard Refresh
-          description: When true, ignore last_sync_time and pull all of the user's todos regardless of it
-          default: false
-        todos:
-          items:
-            $ref: '#/components/schemas/SyncTodoRequest'
-          type: array
-          title: Todos
-      type: object
-      required:
-      - todos
-      title: TodoSyncRequest
-      description: Envelope for ``POST /api/v1/todos/sync``.
     TodoStatus:
       type: string
       enum:
@@ -255,6 +175,86 @@ components:
         client keeps its previous ``last_sync_time`` and sends ``next_page_cursor`` to
 
         continue the same capped pull.'
+    TodoSyncRequest:
+      properties:
+        last_sync_time:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Sync Time
+          description: Unix timestamp in ms of the most recent server change the client has seen
+        page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Page Cursor
+          description: Opaque cursor from a previous paged response. While this is set, keep last_sync_time unchanged and pass this value to continue the same pull snapshot.
+        hard_refresh:
+          type: boolean
+          title: Hard Refresh
+          description: When true, ignore last_sync_time and pull all of the user's todos regardless of it
+          default: false
+        todos:
+          items:
+            $ref: '#/components/schemas/SyncTodoRequest'
+          type: array
+          title: Todos
+      type: object
+      required:
+      - todos
+      title: TodoSyncRequest
+      description: Envelope for ``POST /api/v1/todos/sync``.
+    SyncTodo:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        meeting_id:
+          anyOf:
+          - type: string
+            format: uuid
+          - type: 'null'
+          title: Meeting Id
+        title:
+          type: string
+          title: Title
+        status:
+          $ref: '#/components/schemas/TodoStatus'
+        is_archived:
+          type: boolean
+          title: Is Archived
+          default: false
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+          default: false
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+      type: object
+      required:
+      - id
+      - title
+      - status
+      - created_at
+      - modified_at
+      title: SyncTodo
+      description: 'One todo on the ``/todos/sync`` pull. The whole row travels (existence,
+
+        title, status, archive, tombstone) — todos are not projected from note content,
+
+        so the row is the single source of truth.
+
+
+        ``meeting_id`` is nullable: set ⟹ from that meeting; NULL ⟹ ad-hoc. Timestamps
+
+        are Unix ms strings (symmetric with the request side). The pull includes
+
+        ``is_deleted`` rows so the client can converge a tombstone.'
     ValidationError:
       properties:
         loc:

@@ -38,15 +38,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     InstructHistoryStatus:
       type: string
       enum:
@@ -61,16 +52,33 @@ components:
       - not_editable
       title: InstructHistoryStatus
       description: End-to-end outcome of the resolved dictation route.
-    ClassifierStatus:
+    UploadInstructHistoryRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        instruct_chat_sessions:
+          items:
+            $ref: '#/components/schemas/InstructChatSessionRecord'
+          type: array
+          title: Instruct Chat Sessions
+        instruct_history_records:
+          items:
+            $ref: '#/components/schemas/InstructHistoryRecord'
+          type: array
+          title: Instruct History Records
+      type: object
+      required:
+      - user_id
+      - instruct_history_records
+      title: UploadInstructHistoryRequest
+    ClassificationMode:
       type: string
       enum:
-      - succeeded
-      - timeout
-      - short_circuit
-      - error
-      - not_invoked
-      title: ClassifierStatus
-      description: Outcome of the /llm/classify_intent call (null when classify-intent was not invoked).
+      - autoClassify
+      - instructShortcut
+      title: ClassificationMode
+      description: How the dictation entered the classification flow.
     InstructChatSessionRecord:
       properties:
         id:
@@ -86,6 +94,37 @@ components:
       required:
       - id
       title: InstructChatSessionRecord
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UploadInstructHistoryResponse:
+      properties:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Ids
+        session_ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Session Ids
+      type: object
+      required:
+      - num_rows_saved
+      - ids
+      title: UploadInstructHistoryResponse
     InstructHistoryRecord:
       properties:
         id:
@@ -213,13 +252,16 @@ components:
         has no separate classifier). ``instruct_session_id``/``session_turn_index``
 
         group turns of one instruct chat back-and-forth.'
-    ClassificationMode:
+    ClassifierStatus:
       type: string
       enum:
-      - autoClassify
-      - instructShortcut
-      title: ClassificationMode
-      description: How the dictation entered the classification flow.
+      - succeeded
+      - timeout
+      - short_circuit
+      - error
+      - not_invoked
+      title: ClassifierStatus
+      description: Outcome of the /llm/classify_intent call (null when classify-intent was not invoked).
     InstructHistoryFeedback:
       properties:
         rating:
@@ -237,48 +279,6 @@ components:
       required:
       - rating
       title: InstructHistoryFeedback
-    UploadInstructHistoryRequest:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        instruct_chat_sessions:
-          items:
-            $ref: '#/components/schemas/InstructChatSessionRecord'
-          type: array
-          title: Instruct Chat Sessions
-        instruct_history_records:
-          items:
-            $ref: '#/components/schemas/InstructHistoryRecord'
-          type: array
-          title: Instruct History Records
-      type: object
-      required:
-      - user_id
-      - instruct_history_records
-      title: UploadInstructHistoryRequest
-    UploadInstructHistoryResponse:
-      properties:
-        num_rows_saved:
-          type: integer
-          title: Num Rows Saved
-        ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Ids
-        session_ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Session Ids
-      type: object
-      required:
-      - num_rows_saved
-      - ids
-      title: UploadInstructHistoryResponse
     InstructToolCall:
       properties:
         name:

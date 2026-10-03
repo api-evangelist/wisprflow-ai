@@ -89,6 +89,141 @@ paths:
       - APIKeyHeader: []
 components:
   schemas:
+    src__backend_service__schemas__api__clickhouse__Source:
+      type: string
+      enum:
+      - desktop
+      - ios
+      - web
+      - landing
+      title: Source
+    UserMetadataRequest:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        event_type:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Event Type
+          default: ''
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          default: ''
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          default: ''
+        email:
+          type: string
+          title: Email
+        modified_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Modified At
+          description: Defaults to current UTC time.
+        enriched_linked_in_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enriched Linked In Url
+          default: ''
+        enriched_job_title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Enriched Job Title
+          default: ''
+        name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Name
+          default: ''
+        website:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Website
+          default: ''
+        industry:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Industry
+          default: ''
+        employee_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Employee Count
+          default: -1
+        founded:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Founded
+          default: -1
+        locality:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Locality
+          default: ''
+        country:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Country
+          default: ''
+        work_email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Work Email
+          default: ''
+        fundraising:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fundraising
+          default: ''
+      type: object
+      required:
+      - id
+      - email
+      title: UserMetadataRequest
+      description: Request model for ingesting user metadata into ClickHouse
+    PaginationMetadata:
+      properties:
+        page_size:
+          type: integer
+          title: Page Size
+        page_number:
+          type: integer
+          title: Page Number
+        total_pages:
+          type: integer
+          title: Total Pages
+        total_rows:
+          type: integer
+          title: Total Rows
+      type: object
+      required:
+      - page_size
+      - page_number
+      - total_pages
+      - total_rows
+      title: PaginationMetadata
     HTTPValidationError:
       properties:
         detail:
@@ -98,6 +233,28 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    TrackEventRequest:
+      properties:
+        event:
+          type: string
+          title: Event
+        source:
+          $ref: '#/components/schemas/src__backend_service__schemas__api__clickhouse__Source'
+        properties:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Properties
+        user_id:
+          type: string
+          title: User Id
+      type: object
+      required:
+      - event
+      - source
+      - user_id
+      title: TrackEventRequest
+      description: Request model for tracking events
     UserMetadataQueryRequest:
       properties:
         uuids:
@@ -227,163 +384,6 @@ components:
       - event_type
       - id
       title: UserMetadataResponse
-    PaginationMetadata:
-      properties:
-        page_size:
-          type: integer
-          title: Page Size
-        page_number:
-          type: integer
-          title: Page Number
-        total_pages:
-          type: integer
-          title: Total Pages
-        total_rows:
-          type: integer
-          title: Total Rows
-      type: object
-      required:
-      - page_size
-      - page_number
-      - total_pages
-      - total_rows
-      title: PaginationMetadata
-    UserMetadataRequest:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        event_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Event Type
-          default: ''
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-          default: ''
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          default: ''
-        email:
-          type: string
-          title: Email
-        modified_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Modified At
-          description: Defaults to current UTC time.
-        enriched_linked_in_url:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Enriched Linked In Url
-          default: ''
-        enriched_job_title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Enriched Job Title
-          default: ''
-        name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Name
-          default: ''
-        website:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Website
-          default: ''
-        industry:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Industry
-          default: ''
-        employee_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Employee Count
-          default: -1
-        founded:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Founded
-          default: -1
-        locality:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Locality
-          default: ''
-        country:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Country
-          default: ''
-        work_email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Work Email
-          default: ''
-        fundraising:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Fundraising
-          default: ''
-      type: object
-      required:
-      - id
-      - email
-      title: UserMetadataRequest
-      description: Request model for ingesting user metadata into ClickHouse
-    src__backend_service__schemas__api__clickhouse__Source:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - web
-      - landing
-      title: Source
-    TrackEventRequest:
-      properties:
-        event:
-          type: string
-          title: Event
-        source:
-          $ref: '#/components/schemas/src__backend_service__schemas__api__clickhouse__Source'
-        properties:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Properties
-        user_id:
-          type: string
-          title: User Id
-      type: object
-      required:
-      - event
-      - source
-      - user_id
-      title: TrackEventRequest
-      description: Request model for tracking events
     ValidationError:
       properties:
         loc:

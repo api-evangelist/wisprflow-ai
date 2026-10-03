@@ -61,6 +61,30 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
+    ListUserVoicePreferencesResponse:
+      properties:
+        voice_preferences:
+          items:
+            $ref: '#/components/schemas/VoicePreferenceRecord'
+          type: array
+          title: Voice Preferences
+      type: object
+      required:
+      - voice_preferences
+      title: ListUserVoicePreferencesResponse
+      description: All voice preference rows for the authenticated user, newest first.
+    UploadUserVoicePreferencesRequest:
+      properties:
+        voice_preferences:
+          items:
+            $ref: '#/components/schemas/VoicePreferenceUploadRecord'
+          type: array
+          title: Voice Preferences
+      type: object
+      required:
+      - voice_preferences
+      title: UploadUserVoicePreferencesRequest
+      description: Request model for bulk-uploading voice preference records.
     HTTPValidationError:
       properties:
         detail:
@@ -95,6 +119,23 @@ components:
         `filter` is the LLM-derived scope string (e.g. "app:gmail-language:de").
 
         `None` means a general preference that is not scoped to any dimension.'
+    UploadUserVoicePreferencesResponse:
+      properties:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Ids
+      type: object
+      required:
+      - num_rows_saved
+      - ids
+      title: UploadUserVoicePreferencesResponse
+      description: Response model confirming which voice preference records were saved.
     VoicePreferenceRecord:
       properties:
         id:
@@ -125,47 +166,6 @@ components:
       - modified_at
       title: VoicePreferenceRecord
       description: A voice preference row returned from GET /user_voice_preferences.
-    UploadUserVoicePreferencesRequest:
-      properties:
-        voice_preferences:
-          items:
-            $ref: '#/components/schemas/VoicePreferenceUploadRecord'
-          type: array
-          title: Voice Preferences
-      type: object
-      required:
-      - voice_preferences
-      title: UploadUserVoicePreferencesRequest
-      description: Request model for bulk-uploading voice preference records.
-    UploadUserVoicePreferencesResponse:
-      properties:
-        num_rows_saved:
-          type: integer
-          title: Num Rows Saved
-        ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Ids
-      type: object
-      required:
-      - num_rows_saved
-      - ids
-      title: UploadUserVoicePreferencesResponse
-      description: Response model confirming which voice preference records were saved.
-    ListUserVoicePreferencesResponse:
-      properties:
-        voice_preferences:
-          items:
-            $ref: '#/components/schemas/VoicePreferenceRecord'
-          type: array
-          title: Voice Preferences
-      type: object
-      required:
-      - voice_preferences
-      title: ListUserVoicePreferencesResponse
-      description: All voice preference rows for the authenticated user, newest first.
     ValidationError:
       properties:
         loc:

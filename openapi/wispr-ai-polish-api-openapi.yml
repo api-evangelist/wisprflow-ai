@@ -36,47 +36,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    PolishStatus:
-      type: string
-      enum:
-      - succeeded
-      - long_text
-      - short_text
-      - timeout
-      - error
-      - cancelled
-      - no_changes
-      - not_editable
-      - no_text
-      - no_instructions
-      title: PolishStatus
-      description: Outcome of a Polish text-refinement request.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    UploadPolishResponse:
-      properties:
-        num_rows_saved:
-          type: integer
-          title: Num Rows Saved
-        ids:
-          items:
-            type: string
-            format: uuid
-          type: array
-          title: Ids
-      type: object
-      required:
-      - num_rows_saved
-      - ids
-      title: UploadPolishResponse
-      description: Response confirming how many polish records were saved and their ids.
     UploadPolishRequest:
       properties:
         user_id:
@@ -93,22 +52,21 @@ components:
       - polish_records
       title: UploadPolishRequest
       description: Request payload for bulk-uploading polish records for a user.
-    CerebrasProviderConfig:
-      properties:
-        kind:
-          type: string
-          enum:
-          - cerebras
-          title: Kind
-          default: cerebras
-        model:
-          type: string
-          title: Model
-      type: object
-      required:
-      - model
-      title: CerebrasProviderConfig
-      description: Provider config for a Cerebras-backed model.
+    PolishStatus:
+      type: string
+      enum:
+      - succeeded
+      - long_text
+      - short_text
+      - timeout
+      - error
+      - cancelled
+      - no_changes
+      - not_editable
+      - no_text
+      - no_instructions
+      title: PolishStatus
+      description: Outcome of a Polish text-refinement request.
     AnthropicProviderConfig:
       properties:
         kind:
@@ -145,6 +103,32 @@ components:
       - model
       title: AnthropicProviderConfig
       description: Provider config for an Anthropic-backed model.
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UploadPolishResponse:
+      properties:
+        num_rows_saved:
+          type: integer
+          title: Num Rows Saved
+        ids:
+          items:
+            type: string
+            format: uuid
+          type: array
+          title: Ids
+      type: object
+      required:
+      - num_rows_saved
+      - ids
+      title: UploadPolishResponse
+      description: Response confirming how many polish records were saved and their ids.
     PolishRecord:
       properties:
         id:
@@ -317,6 +301,22 @@ components:
       - model
       title: OpenAIProviderConfig
       description: Provider config for an OpenAI-backed model.
+    CerebrasProviderConfig:
+      properties:
+        kind:
+          type: string
+          enum:
+          - cerebras
+          title: Kind
+          default: cerebras
+        model:
+          type: string
+          title: Model
+      type: object
+      required:
+      - model
+      title: CerebrasProviderConfig
+      description: Provider config for a Cerebras-backed model.
     ValidationError:
       properties:
         loc:
