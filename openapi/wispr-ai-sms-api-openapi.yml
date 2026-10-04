@@ -1,0 +1,49 @@
+openapi: 3.2.0
+info:
+  title: Wispr Ai SMS API
+  version: 0.5.2
+  description: 'Operations tagged SMS across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-sms-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+tags:
+- name: SMS
+paths:
+  /api/v1/sms/handle-incoming-sms:
+    post:
+      tags:
+      - SMS
+      summary: Handle Incoming Sms
+      description: Handle incoming SMS webhook from Twilio
+      operationId: handle_incoming_sms
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+  /api/v1/sms/user-sms:
+    get:
+      tags:
+      - SMS
+      summary: Check User Has Sms Events
+      description: Check if the current authenticated user has any SMS events
+      operationId: check_user_has_sms_events
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      security:
+      - ApiKeyHeaderPatched: []
+components:
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-sms-api-openapi.yml

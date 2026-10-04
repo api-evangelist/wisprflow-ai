@@ -1,0 +1,33 @@
+openapi: 3.2.0
+info:
+  title: Wispr Ai Wispr Backend API
+  version: 0.5.2
+  description: 'Operations tagged Wispr Backend across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-wispr-backend-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+tags:
+- name: Wispr Backend
+paths:
+  /:
+    get:
+      summary: Read Root
+      operationId: read_root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Wispr Backend
+components:
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-wispr-backend-api-openapi.yml
