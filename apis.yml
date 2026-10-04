@@ -146,7 +146,7 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
-  - DASH
+  - Dash
   tags_raw:
   - Dash
   properties:
@@ -558,6 +558,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - LinkedIn
+  tags_raw:
   - Linked In
   properties:
   - type: OpenAPI
@@ -568,6 +570,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - To-Dos
+  tags_raw:
   - To Dos
   properties:
   - type: OpenAPI
