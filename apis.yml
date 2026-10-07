@@ -582,6 +582,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Plans
+  url: plans/wispr-ai-plans-pricing.yml
 - type: CapabilityMap
   url: capabilities/wispr-ai-capability-edges.yml
   name: Wispr AI Business Capability Map
