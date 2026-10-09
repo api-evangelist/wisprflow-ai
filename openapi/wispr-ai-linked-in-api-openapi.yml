@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend LinkedIn API
+  title: Wispr Backend LinkedIn Linked In API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -69,43 +69,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    LinkedInStatusResponse:
-      properties:
-        connected:
-          type: boolean
-          title: Connected
-        linkedin_member_id_suffix:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Linkedin Member Id Suffix
-        is_top_user:
-          type: boolean
-          title: Is Top User
-        last_sync_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Last Sync At
-        status:
-          anyOf:
-          - type: string
-            enum:
-            - pending
-            - active
-            - failed
-          - type: 'null'
-          title: Status
-      type: object
-      required:
-      - connected
-      - linkedin_member_id_suffix
-      - is_top_user
-      - last_sync_at
-      - status
-      title: LinkedInStatusResponse
-      description: The user's LinkedIn connection status and last sync metadata.
     HTTPValidationError:
       properties:
         detail:
@@ -155,6 +118,43 @@ components:
       - was_connected
       title: LinkedInDisconnectResponse
       description: The result of a LinkedIn disconnect request.
+    LinkedInStatusResponse:
+      properties:
+        connected:
+          type: boolean
+          title: Connected
+        linkedin_member_id_suffix:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Linkedin Member Id Suffix
+        is_top_user:
+          type: boolean
+          title: Is Top User
+        last_sync_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Last Sync At
+        status:
+          anyOf:
+          - type: string
+            enum:
+            - pending
+            - active
+            - failed
+          - type: 'null'
+          title: Status
+      type: object
+      required:
+      - connected
+      - linkedin_member_id_suffix
+      - is_top_user
+      - last_sync_at
+      - status
+      title: LinkedInStatusResponse
+      description: The user's LinkedIn connection status and last sync metadata.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

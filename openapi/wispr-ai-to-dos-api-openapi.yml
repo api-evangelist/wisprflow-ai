@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Todos API
+  title: Wispr Backend Todos To Dos API
   description: Wispr Backend API
   version: 0.5.2
 tags:
@@ -56,13 +56,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    TodoStatus:
-      type: string
-      enum:
-      - open
-      - in_progress
-      - done
-      title: TodoStatus
     SyncTodoRequest:
       properties:
         id:
@@ -126,55 +119,39 @@ components:
         constrained to :class:`TodoStatus` and rejected at parse time (422) on a bad
 
         value — a closed set, unlike the lenient open-ended fields.'
-    TodoSyncResponse:
+    ValidationError:
       properties:
-        acked:
+        loc:
           items:
-            type: string
-            format: uuid
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Acked
-        todos:
-          items:
-            $ref: '#/components/schemas/SyncTodo'
-          type: array
-          title: Todos
-        sync_time:
+          title: Location
+        msg:
           type: string
-          title: Sync Time
-        next_page_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Page Cursor
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - acked
-      - todos
-      - sync_time
-      title: TodoSyncResponse
-      description: 'Response for ``POST /api/v1/todos/sync``.
-
-
-        ``acked`` is the subset of pushed ids the server accepted: a created/updated
-
-        row, OR an existing-and-owned row that lost LWW (it exists, so the client stops
-
-        retrying and lets the newer server value pull down). An id that could NOT be
-
-        adopted — it exists under another user, or its non-null ``meeting_id`` isn''t the
-
-        caller''s (FK race) — is omitted so the client retries. ``todos`` is the
-
-        server→client pull. ``sync_time`` is the server snapshot high-water mark (Unix
-
-        ms); the client persists it as the next ``last_sync_time`` only when
-
-        ``next_page_cursor`` is null. While ``next_page_cursor`` is non-null, the
-
-        client keeps its previous ``last_sync_time`` and sends ``next_page_cursor`` to
-
-        continue the same capped pull.'
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    TodoStatus:
+      type: string
+      enum:
+      - open
+      - in_progress
+      - done
+      title: TodoStatus
     TodoSyncRequest:
       properties:
         last_sync_time:
@@ -255,32 +232,55 @@ components:
         are Unix ms strings (symmetric with the request side). The pull includes
 
         ``is_deleted`` rows so the client can converge a tombstone.'
-    ValidationError:
+    TodoSyncResponse:
       properties:
-        loc:
+        acked:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            type: string
+            format: uuid
           type: array
-          title: Location
-        msg:
+          title: Acked
+        todos:
+          items:
+            $ref: '#/components/schemas/SyncTodo'
+          type: array
+          title: Todos
+        sync_time:
           type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Sync Time
+        next_page_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Page Cursor
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - acked
+      - todos
+      - sync_time
+      title: TodoSyncResponse
+      description: 'Response for ``POST /api/v1/todos/sync``.
+
+
+        ``acked`` is the subset of pushed ids the server accepted: a created/updated
+
+        row, OR an existing-and-owned row that lost LWW (it exists, so the client stops
+
+        retrying and lets the newer server value pull down). An id that could NOT be
+
+        adopted — it exists under another user, or its non-null ``meeting_id`` isn''t the
+
+        caller''s (FK race) — is omitted so the client retries. ``todos`` is the
+
+        server→client pull. ``sync_time`` is the server snapshot high-water mark (Unix
+
+        ms); the client persists it as the next ``last_sync_time`` only when
+
+        ``next_page_cursor`` is null. While ``next_page_cursor`` is non-null, the
+
+        client keeps its previous ``last_sync_time`` and sends ``next_page_cursor`` to
+
+        continue the same capped pull.'
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey

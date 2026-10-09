@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Promotions API
-  description: Wispr Backend API
+  title: Wispr Ai Promotions API
   version: 0.5.2
+  description: 'Operations tagged Promotions across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-promotions-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Promotions
 paths:
@@ -203,6 +203,86 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    PhoneNumberSubmitRequest:
+      properties:
+        phone_number:
+          type: string
+          pattern: ^\+[1-9]\d{6,14}$
+          title: Phone Number
+      type: object
+      required:
+      - phone_number
+      title: PhoneNumberSubmitRequest
+      description: Request schema for phone number boost submission
+    ApplyPromoCodeRequest:
+      properties:
+        code:
+          type: string
+          maxLength: 80
+          minLength: 1
+          title: Code
+      type: object
+      required:
+      - code
+      title: ApplyPromoCodeRequest
+      description: Request to apply a promo code by its string.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    BoostActionResponse:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        action:
+          type: string
+          title: Action
+        boost_earned:
+          type: integer
+          title: Boost Earned
+        current_rank:
+          type: integer
+          title: Current Rank
+        total_boost:
+          type: integer
+          title: Total Boost
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - success
+      - action
+      - boost_earned
+      - current_rank
+      - total_boost
+      title: BoostActionResponse
+      description: Generic response for boost action endpoints
     AndroidWaitlistRankResponse:
       properties:
         referral_code:
@@ -261,29 +341,6 @@ components:
       - verified_share_discord
       title: AndroidWaitlistRankResponse
       description: Response schema for GET /promos/android_waitlist_rank
-    ApplyPromoCodeRequest:
-      properties:
-        code:
-          type: string
-          maxLength: 80
-          minLength: 1
-          title: Code
-      type: object
-      required:
-      - code
-      title: ApplyPromoCodeRequest
-      description: Request to apply a promo code by its string.
-    PhoneNumberSubmitRequest:
-      properties:
-        phone_number:
-          type: string
-          pattern: ^\+[1-9]\d{6,14}$
-          title: Phone Number
-      type: object
-      required:
-      - phone_number
-      title: PhoneNumberSubmitRequest
-      description: Request schema for phone number boost submission
     Body_verify_social_share_api_v1_promos_android_waitlist_verify_social_share_post:
       properties:
         screenshot:
@@ -320,63 +377,6 @@ components:
       - campaign_id
       title: CampaignPromoDetails
       description: Resolved promo details for a validated code and its campaign.
-    BoostActionResponse:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        action:
-          type: string
-          title: Action
-        boost_earned:
-          type: integer
-          title: Boost Earned
-        current_rank:
-          type: integer
-          title: Current Rank
-        total_boost:
-          type: integer
-          title: Total Boost
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-      type: object
-      required:
-      - success
-      - action
-      - boost_earned
-      - current_rank
-      - total_boost
-      title: BoostActionResponse
-      description: Generic response for boost action endpoints
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -386,3 +386,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-promotions-api-openapi.yml

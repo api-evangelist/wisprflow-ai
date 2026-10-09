@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Referral API
-  description: Wispr Backend API
+  title: Wispr Ai Referral API
   version: 0.5.2
+  description: 'Operations tagged Referral across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-referral-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Referral
 paths:
@@ -228,6 +228,24 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
+    src__backend_service__schemas__api__referral__Platform:
+      type: string
+      enum:
+      - ios
+      - mac-apple
+      - mac-intel
+      - windows
+      title: Platform
+      description: Valid platforms for download links
+    ReferralCodeResponse:
+      properties:
+        referral_code:
+          type: string
+          title: Referral Code
+      type: object
+      required:
+      - referral_code
+      title: ReferralCodeResponse
     DirectDownloadLinkRequest:
       properties:
         platform:
@@ -241,15 +259,68 @@ components:
       - platform
       - recipient_email
       title: DirectDownloadLinkRequest
-    ReferralCodeResponse:
+    HTTPValidationError:
       properties:
-        referral_code:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    ApplyReferralCodeRequest:
+      properties:
+        referrer_code:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Referrer Code
+        dub_click_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Dub Click Id
+        check_credits:
+          type: boolean
+          title: Check Credits
+          default: false
+      type: object
+      title: ApplyReferralCodeRequest
+    SelfReferRequest:
+      properties:
+        refer_to:
           type: string
-          title: Referral Code
+          title: Refer To
       type: object
       required:
-      - referral_code
-      title: ReferralCodeResponse
+      - refer_to
+      title: SelfReferRequest
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     ReferralInfoResponse:
       properties:
         referral_code:
@@ -271,6 +342,29 @@ components:
           title: Referrals
       type: object
       title: ReferralInfoResponse
+    ReferEmailsRequest:
+      properties:
+        emails:
+          items:
+            type: string
+            format: email
+          type: array
+          title: Emails
+      type: object
+      required:
+      - emails
+      title: ReferEmailsRequest
+    StudentChallengeLeaderboardResponse:
+      properties:
+        members:
+          items:
+            $ref: '#/components/schemas/StudentChallengeLeaderboardMember'
+          type: array
+          title: Members
+      type: object
+      required:
+      - members
+      title: StudentChallengeLeaderboardResponse
     Referral:
       properties:
         email:
@@ -309,24 +403,6 @@ components:
       - status
       - credits
       title: Referral
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    src__backend_service__schemas__api__referral__Platform:
-      type: string
-      enum:
-      - ios
-      - mac-apple
-      - mac-intel
-      - windows
-      title: Platform
-      description: Valid platforms for download links
     StudentChallengeLeaderboardMember:
       properties:
         first_name:
@@ -350,82 +426,6 @@ components:
       - referral_count
       - is_current_user
       title: StudentChallengeLeaderboardMember
-    ApplyReferralCodeRequest:
-      properties:
-        referrer_code:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Referrer Code
-        dub_click_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Dub Click Id
-        check_credits:
-          type: boolean
-          title: Check Credits
-          default: false
-      type: object
-      title: ApplyReferralCodeRequest
-    ReferEmailsRequest:
-      properties:
-        emails:
-          items:
-            type: string
-            format: email
-          type: array
-          title: Emails
-      type: object
-      required:
-      - emails
-      title: ReferEmailsRequest
-    StudentChallengeLeaderboardResponse:
-      properties:
-        members:
-          items:
-            $ref: '#/components/schemas/StudentChallengeLeaderboardMember'
-          type: array
-          title: Members
-      type: object
-      required:
-      - members
-      title: StudentChallengeLeaderboardResponse
-    SelfReferRequest:
-      properties:
-        refer_to:
-          type: string
-          title: Refer To
-      type: object
-      required:
-      - refer_to
-      title: SelfReferRequest
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -435,3 +435,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-referral-api-openapi.yml

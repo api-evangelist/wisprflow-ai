@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Instruct History API
-  description: Wispr Backend API
+  title: Wispr Ai Instruct History API
   version: 0.5.2
+  description: 'Operations tagged InstructHistory across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-instructhistory-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: InstructHistory
 paths:
@@ -38,62 +38,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    InstructHistoryStatus:
-      type: string
-      enum:
-      - succeeded
-      - classifier_failed
-      - classifier_timeout
-      - short_circuit_used
-      - route_error
-      - paste_failed
-      - cancelled
-      - no_text
-      - not_editable
-      title: InstructHistoryStatus
-      description: End-to-end outcome of the resolved dictation route.
-    UploadInstructHistoryRequest:
-      properties:
-        user_id:
-          type: string
-          title: User Id
-        instruct_chat_sessions:
-          items:
-            $ref: '#/components/schemas/InstructChatSessionRecord'
-          type: array
-          title: Instruct Chat Sessions
-        instruct_history_records:
-          items:
-            $ref: '#/components/schemas/InstructHistoryRecord'
-          type: array
-          title: Instruct History Records
-      type: object
-      required:
-      - user_id
-      - instruct_history_records
-      title: UploadInstructHistoryRequest
-    ClassificationMode:
-      type: string
-      enum:
-      - autoClassify
-      - instructShortcut
-      title: ClassificationMode
-      description: How the dictation entered the classification flow.
-    InstructChatSessionRecord:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        title:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Title
-      type: object
-      required:
-      - id
-      title: InstructChatSessionRecord
     HTTPValidationError:
       properties:
         detail:
@@ -125,6 +69,131 @@ components:
       - num_rows_saved
       - ids
       title: UploadInstructHistoryResponse
+    ClassifierStatus:
+      type: string
+      enum:
+      - succeeded
+      - timeout
+      - short_circuit
+      - error
+      - not_invoked
+      title: ClassifierStatus
+      description: Outcome of the /llm/classify_intent call (null when classify-intent was not invoked).
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    InstructChatSessionRecord:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        title:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Title
+      type: object
+      required:
+      - id
+      title: InstructChatSessionRecord
+    InstructHistoryFeedback:
+      properties:
+        rating:
+          type: string
+          enum:
+          - up
+          - down
+          title: Rating
+        text:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Text
+      type: object
+      required:
+      - rating
+      title: InstructHistoryFeedback
+    ClassificationMode:
+      type: string
+      enum:
+      - autoClassify
+      - instructShortcut
+      title: ClassificationMode
+      description: How the dictation entered the classification flow.
+    UploadInstructHistoryRequest:
+      properties:
+        user_id:
+          type: string
+          title: User Id
+        instruct_chat_sessions:
+          items:
+            $ref: '#/components/schemas/InstructChatSessionRecord'
+          type: array
+          title: Instruct Chat Sessions
+        instruct_history_records:
+          items:
+            $ref: '#/components/schemas/InstructHistoryRecord'
+          type: array
+          title: Instruct History Records
+      type: object
+      required:
+      - user_id
+      - instruct_history_records
+      title: UploadInstructHistoryRequest
+    InstructToolCall:
+      properties:
+        name:
+          type: string
+          title: Name
+        input:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Input
+        output:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Output
+        latency_ms:
+          anyOf:
+          - type: number
+          - type: 'null'
+          title: Latency Ms
+      type: object
+      required:
+      - name
+      title: InstructToolCall
+      description: 'One tool/route invocation within a dictation turn, in execution order.
+
+
+        ``input``/``output`` shapes are owned by the desktop per tool; server-side
+
+        enforcement would block adding a tool without a coordinated deploy.'
     InstructHistoryRecord:
       properties:
         id:
@@ -252,89 +321,20 @@ components:
         has no separate classifier). ``instruct_session_id``/``session_turn_index``
 
         group turns of one instruct chat back-and-forth.'
-    ClassifierStatus:
+    InstructHistoryStatus:
       type: string
       enum:
       - succeeded
-      - timeout
-      - short_circuit
-      - error
-      - not_invoked
-      title: ClassifierStatus
-      description: Outcome of the /llm/classify_intent call (null when classify-intent was not invoked).
-    InstructHistoryFeedback:
-      properties:
-        rating:
-          type: string
-          enum:
-          - up
-          - down
-          title: Rating
-        text:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Text
-      type: object
-      required:
-      - rating
-      title: InstructHistoryFeedback
-    InstructToolCall:
-      properties:
-        name:
-          type: string
-          title: Name
-        input:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Input
-        output:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Output
-        latency_ms:
-          anyOf:
-          - type: number
-          - type: 'null'
-          title: Latency Ms
-      type: object
-      required:
-      - name
-      title: InstructToolCall
-      description: 'One tool/route invocation within a dictation turn, in execution order.
-
-
-        ``input``/``output`` shapes are owned by the desktop per tool; server-side
-
-        enforcement would block adding a tool without a coordinated deploy.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - classifier_failed
+      - classifier_timeout
+      - short_circuit_used
+      - route_error
+      - paste_failed
+      - cancelled
+      - no_text
+      - not_editable
+      title: InstructHistoryStatus
+      description: End-to-end outcome of the resolved dictation route.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -344,3 +344,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-instructhistory-api-openapi.yml

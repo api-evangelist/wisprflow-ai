@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Enterpret API
-  description: Wispr Backend API
+  title: Wispr Ai Enterpret API
   version: 0.5.2
+  description: 'Operations tagged Enterpret across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-enterpret-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Enterpret
 paths:
@@ -46,6 +46,62 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    EnterpretWebhookRequest:
+      properties:
+        webhook_target:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Target
+        request_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Request Id
+        webhook_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Webhook Id
+        webhook_payload:
+          $ref: '#/components/schemas/EnterpretWebhookPayload'
+        metadata:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Metadata
+      additionalProperties: true
+      type: object
+      required:
+      - webhook_payload
+      title: EnterpretWebhookRequest
+      description: The outer Enterpret webhook request wrapping its payload and metadata.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     EnterpretConversation:
       properties:
         message_id:
@@ -72,37 +128,6 @@ components:
       type: object
       title: EnterpretConversation
       description: A single conversation message from an Enterpret issue.
-    EnterpretDeviceDetails:
-      properties:
-        architecture:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Architecture
-        device_type:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Device Type
-        platform:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Platform
-        version:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Version
-        region:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Region
-      additionalProperties: true
-      type: object
-      title: EnterpretDeviceDetails
-      description: Device metadata attached to an Enterpret issue.
     EnterpretWebhookPayload:
       properties:
         issue_id:
@@ -371,62 +396,37 @@ components:
       - issue_number
       title: EnterpretWebhookPayload
       description: The issue payload delivered by an Enterpret webhook.
-    EnterpretWebhookRequest:
+    EnterpretDeviceDetails:
       properties:
-        webhook_target:
+        architecture:
           anyOf:
           - type: string
           - type: 'null'
-          title: Webhook Target
-        request_id:
+          title: Architecture
+        device_type:
           anyOf:
           - type: string
           - type: 'null'
-          title: Request Id
-        webhook_id:
+          title: Device Type
+        platform:
           anyOf:
           - type: string
           - type: 'null'
-          title: Webhook Id
-        webhook_payload:
-          $ref: '#/components/schemas/EnterpretWebhookPayload'
-        metadata:
+          title: Platform
+        version:
           anyOf:
-          - type: object
+          - type: string
           - type: 'null'
-          title: Metadata
+          title: Version
+        region:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Region
       additionalProperties: true
       type: object
-      required:
-      - webhook_payload
-      title: EnterpretWebhookRequest
-      description: The outer Enterpret webhook request wrapping its payload and metadata.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: EnterpretDeviceDetails
+      description: Device metadata attached to an Enterpret issue.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -436,3 +436,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-enterpret-api-openapi.yml

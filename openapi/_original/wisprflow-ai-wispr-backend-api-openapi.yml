@@ -1,0 +1,32 @@
+# x-archived-from: wisprflow-ai-wispr-backend-api-openapi.yml
+# x-archived-on: 2026-10-04
+openapi: 3.2.0
+info:
+  title: Wispr Backend API
+  description: Wispr Backend API
+  version: 0.5.2
+tags:
+- name: Wispr Backend
+paths:
+  /:
+    get:
+      summary: Read Root
+      operationId: read_root__get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+      tags:
+      - Wispr Backend
+components:
+  securitySchemes:
+    ApiKeyHeaderPatched:
+      type: apiKey
+      in: header
+      name: Authorization
+    APIKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-Key

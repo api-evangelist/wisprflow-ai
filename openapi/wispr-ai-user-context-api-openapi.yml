@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend User Context API
-  description: Wispr Backend API
+  title: Wispr Ai User Context API
   version: 0.5.2
+  description: 'Operations tagged User Context across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-user-context-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: User Context
 paths:
@@ -62,6 +62,56 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    WritingSample:
+      properties:
+        text:
+          type: string
+          title: Text
+        prompt_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Prompt Name
+      type: object
+      required:
+      - text
+      title: WritingSample
+      description: A single writing sample provided by the user for voice/style matching.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     PolishPrompt:
       properties:
         prompt:
@@ -116,15 +166,6 @@ components:
       - modified_at
       title: UserContextResponse
       description: Response model for user context.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     UpdateUserContextRequest:
       properties:
         writing_samples:
@@ -146,47 +187,6 @@ components:
       description: 'Request model for updating user context. All fields are optional for partial updates.
 
         This will sync across all clients and will be useful for user context for things like actions'
-    WritingSample:
-      properties:
-        text:
-          type: string
-          title: Text
-        prompt_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Prompt Name
-      type: object
-      required:
-      - text
-      title: WritingSample
-      description: A single writing sample provided by the user for voice/style matching.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -196,3 +196,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-user-context-api-openapi.yml

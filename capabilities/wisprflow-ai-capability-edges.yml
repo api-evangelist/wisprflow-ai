@@ -1,0 +1,82 @@
+slug: wisprflow-ai
+provider: Wispr Flow
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 6
+edges:
+- tag: Enterprise
+  spec_file: wisprflow-ai-enterprise-api-openapi.yml
+  capability_id: BC-4230
+  capability_id_l1: BC-4230
+  capability_name: SaaS Tenant Management
+  confidence: 0.8
+  evidence: POST /api/v1/enterprise/create  create_enterprise_new; GET /api/v1/enterprise/members; PATCH
+    /api/v1/enterprise/settings; GET /api/v1/enterprise/domains/verifications; schemas TeamMemberRole,
+    DomainCapturePolicy
+  reason: Creation and configuration of an enterprise organisation, its settings, members, roles, invites
+    and verified domains — the tenant-administration surface of the multi-tenant SaaS. Spans provisioning,
+    per-tenant configuration and member identity, so the L1 is emitted without committing to a sub-capability.
+- tag: Payments
+  spec_file: wisprflow-ai-payments-api-openapi.yml
+  capability_id: BC-4250
+  capability_id_l1: BC-4250
+  capability_name: Subscription Billing & Revenue Management
+  confidence: 0.78
+  evidence: POST /api/v1/payment/create-checkout-session  Create Checkout Session; POST /api/v1/payment/create-bank-transfer-invoice;
+    ProductPricingResponse
+  reason: Operations create checkout sessions, bank-transfer invoices, handle Stripe/RevenueCat payment
+    webhooks and expose plan pricing — subscription billing and payment collection for the SaaS product.
+    Plan-switch endpoints also touch subscription modification, so the L2 is left open.
+- tag: Analytics
+  spec_file: wisprflow-ai-analytics-api-openapi.yml
+  capability_id: BC-4280.10
+  capability_id_l1: BC-4280
+  capability_name: Product Telemetry Instrumentation
+  confidence: 0.75
+  evidence: POST /api/v1/analytics/track track_event_endpoint 'Track Event Endpoint'; schema TrackEventRequest,
+    UserMetadataRequest
+  reason: Event tracking plus user-metadata ingestion/query is capture of product usage telemetry from
+    the Wispr Flow client runtimes, matching product telemetry instrumentation. Not business/BI reporting
+    since it is raw event ingestion.
+- tag: Analytics Registry
+  spec_file: wisprflow-ai-analytics-registry-api-openapi.yml
+  capability_id: BC-4280.20
+  capability_id_l1: BC-4280
+  capability_name: Telemetry Quality & Governance
+  confidence: 0.72
+  evidence: GET /api/v1/analytics-registry/events list_events; PATCH /global-properties save_global_properties;
+    POST /api/v1/analytics-registry/publish publish; schemas AnalyticsEventBase, AnalyticsLifecycleState,
+    ChangeSetResponse
+  reason: This is an event-schema registry with lifecycle states, change sets and publish/mark-implemented
+    workflow — governance of telemetry event definitions rather than instrumentation or analysis itself.
+- tag: Insights
+  spec_file: wisprflow-ai-insights-api-openapi.yml
+  capability_id: BC-4280.30
+  capability_id_l1: BC-4280
+  capability_name: Product Usage Analytics
+  confidence: 0.7
+  evidence: 'GET /api/v1/insights, GET /api/v1/insights/heatmap; schemas: AppCategoryUsage, HeatmapDay,
+    InsightsResponse'
+  reason: Operations return aggregated usage statistics (per-app category usage, activity heatmap by day)
+    for the dictation product, i.e. analytical views of product usage. Some ambiguity because these are
+    user-facing stats rather than internal analytics.
+- tag: Support
+  spec_file: wisprflow-ai-support-api-openapi.yml
+  capability_id: BC-430
+  capability_id_l1: BC-430
+  capability_name: Customer Service Management
+  confidence: 0.7
+  evidence: POST /api/v1/support/feedback  frontapp_feedback; NPSScoreRequest; POST /api/v1/support/slack/{platform}  Send
+    Feedback Slack
+  reason: Endpoints route user feedback into Front/Pylon/Slack support tooling, capture NPS, and perform
+    support-agent actions (delete user, cancel subscription, data erasure). Clearly customer service operations;
+    the mix of feedback capture and support back-office actions leaves the sub-capability ambiguous.

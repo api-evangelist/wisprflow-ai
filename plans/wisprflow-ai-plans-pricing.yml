@@ -1,0 +1,128 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://wisprflow.ai/pricing
+sources:
+- https://wisprflow.ai/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+  managed_tier: Pro
+published: true
+note: Consumer/business dictation app pricing with monthly and annual (20% discount) toggles; Enterprise
+  is custom/Talk to sales. Student/educator 50% off Flow Pro mentioned.
+plan_count: 6
+currency: USD
+plans:
+- name: Free
+  price_text: $ 0/mo
+  price: 0
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Speech-to-text in any app, 100+ languages; limited Notetaker access; word limit 2,000/week
+    on desktop, 1,000/week on mobile
+- name: Pro (monthly)
+  price_text: $15 /user/mo
+  price: 15
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Unlimited dictations, longer Notetaker history, shared dictionary and snippets, priority
+    support
+- name: Pro (annual)
+  price_text: $12 /user/mo
+  price: 12
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Everything in Free plus unlimited dictations
+- name: Growth (monthly)
+  price_text: $23 /user/mo
+  price: 23
+  currency: USD
+  period: month
+  unit: user
+  included_quota: SSO/SAML, HIPAA enforcement with BAA, admin tools; also listed $33 /user/mo with Unlimited
+    Notetaker access
+- name: Growth (annual)
+  price_text: $18 /user/mo
+  price: 18
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Everything in Pro plus admin controls; also listed $26 /user/mo with Unlimited Notetaker
+    access
+- name: Enterprise
+  price_text: Custom
+  period: none
+  unit: user
+  included_quota: Free IT admin seats, SCIM, audit logs, MDM, custom contract terms, dedicated support
+    with SLAs
+rate_limit_statements:
+- Word limit 2,000/week on desktop 1,000/week on mobile
+- Free accounts have a weekly meeting limit
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - seat
+  units:
+  - seat
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Pro (monthly)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Pro (annual)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Growth (monthly)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Growth (annual)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - none

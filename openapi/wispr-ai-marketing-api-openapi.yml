@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Marketing API
-  description: Wispr Backend API
+  title: Wispr Ai Marketing API
   version: 0.5.2
+  description: 'Operations tagged Marketing across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-marketing-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Marketing
 paths:
@@ -212,21 +212,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    OnboardingWebhookRequest:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        token:
-          type: string
-          title: Token
-      type: object
-      required:
-      - email
-      - token
-      title: OnboardingWebhookRequest
-      description: Request schema for Customer.io onboarding webhook.
     HTTPValidationError:
       properties:
         detail:
@@ -265,6 +250,47 @@ components:
       - name
       - description
       title: MicRecommendation
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OnboardingWebhookRequest:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        token:
+          type: string
+          title: Token
+      type: object
+      required:
+      - email
+      - token
+      title: OnboardingWebhookRequest
+      description: Request schema for Customer.io onboarding webhook.
     MicQuizEmailRequest:
       properties:
         title:
@@ -313,32 +339,6 @@ components:
       description: 'Payload for the V2 mic quiz email. Both fields are required — the template uses them
 
         directly without fallbacks, so missing data will render as an empty highlight/title.'
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -348,3 +348,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-marketing-api-openapi.yml

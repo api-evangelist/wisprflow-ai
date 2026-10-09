@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Typing Test API
-  description: Wispr Backend API
+  title: Wispr Ai Typing Test API
   version: 0.5.2
+  description: 'Operations tagged Typing Test across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-typing-test-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Typing Test
 paths:
@@ -102,23 +102,24 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    Keystroke:
+    PassageResponse:
       properties:
-        key:
-          type: string
-          maxLength: 20
-          title: Key
-        time:
+        id:
           type: integer
-          minimum: 0.0
-          title: Time
-          description: Timestamp in milliseconds
+          title: Id
+        language:
+          type: string
+          title: Language
+        text:
+          type: string
+          title: Text
       type: object
       required:
-      - key
-      - time
-      title: Keystroke
-      description: A single keystroke event with key and timestamp.
+      - id
+      - language
+      - text
+      title: PassageResponse
+      description: Response schema for GET /typing-test/passage
     HTTPValidationError:
       properties:
         detail:
@@ -128,6 +129,29 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
+    TypingTestResponse:
+      properties:
+        stats:
+          anyOf:
+          - $ref: '#/components/schemas/UserTypingTestStats'
+          - type: 'null'
+        leaderboard:
+          $ref: '#/components/schemas/LeaderboardResponse'
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+        submission_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Submission Id
+      type: object
+      required:
+      - leaderboard
+      title: TypingTestResponse
+      description: Response for the submit-score endpoint.
     LeaderboardEntry:
       properties:
         rank:
@@ -146,6 +170,48 @@ components:
       - typing_wpm
       title: LeaderboardEntry
       description: A single leaderboard entry.
+    LeaderboardResponse:
+      properties:
+        top_ranked:
+          items:
+            $ref: '#/components/schemas/LeaderboardEntry'
+          type: array
+          title: Top Ranked
+        me:
+          anyOf:
+          - $ref: '#/components/schemas/LeaderboardEntry'
+          - type: 'null'
+      type: object
+      required:
+      - top_ranked
+      title: LeaderboardResponse
+      description: Leaderboard with top ranked users and the caller's best.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
     UserTypingTestStats:
       properties:
         typing_wpm:
@@ -174,22 +240,6 @@ components:
       - is_new_best
       title: UserTypingTestStats
       description: Caller's stats from their most recent attempt (or just-submitted attempt).
-    LeaderboardResponse:
-      properties:
-        top_ranked:
-          items:
-            $ref: '#/components/schemas/LeaderboardEntry'
-          type: array
-          title: Top Ranked
-        me:
-          anyOf:
-          - $ref: '#/components/schemas/LeaderboardEntry'
-          - type: 'null'
-      type: object
-      required:
-      - top_ranked
-      title: LeaderboardResponse
-      description: Leaderboard with top ranked users and the caller's best.
     SubmitScoreRequest:
       properties:
         email:
@@ -245,73 +295,23 @@ components:
       - keystrokes
       title: SubmitScoreRequest
       description: Request schema for POST /typing-test/submit-score
-    PassageResponse:
+    Keystroke:
       properties:
-        id:
+        key:
+          type: string
+          maxLength: 20
+          title: Key
+        time:
           type: integer
-          title: Id
-        language:
-          type: string
-          title: Language
-        text:
-          type: string
-          title: Text
+          minimum: 0.0
+          title: Time
+          description: Timestamp in milliseconds
       type: object
       required:
-      - id
-      - language
-      - text
-      title: PassageResponse
-      description: Response schema for GET /typing-test/passage
-    TypingTestResponse:
-      properties:
-        stats:
-          anyOf:
-          - $ref: '#/components/schemas/UserTypingTestStats'
-          - type: 'null'
-        leaderboard:
-          $ref: '#/components/schemas/LeaderboardResponse'
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-        submission_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Submission Id
-      type: object
-      required:
-      - leaderboard
-      title: TypingTestResponse
-      description: Response for the submit-score endpoint.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - key
+      - time
+      title: Keystroke
+      description: A single keystroke event with key and timestamp.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -321,3 +321,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-typing-test-api-openapi.yml

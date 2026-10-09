@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Internal Marketing API
-  description: Wispr Backend API
+  title: Wispr Ai Internal Marketing API
   version: 0.5.2
+  description: 'Operations tagged Internal Marketing across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-internal-marketing-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Internal Marketing
 paths:
@@ -182,25 +182,165 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    MarketingJobResponse:
+    GenerateAndSendFlowStateRequest:
       properties:
-        job_id:
+        reporting_month:
           type: string
-          format: uuid
-          title: Job Id
-        message:
-          type: string
-          title: Message
-        log_query:
-          type: string
-          title: Log Query
+          format: date
+          title: Reporting Month
+        min_word_count:
+          type: integer
+          title: Min Word Count
+          default: 500
+        min_app_count:
+          anyOf:
+          - type: integer
+          - type: 'null'
+          title: Min App Count
+        dry_run:
+          type: boolean
+          title: Dry Run
+          default: false
+        resend_failed:
+          type: boolean
+          title: Resend Failed
+          default: false
       type: object
       required:
-      - job_id
-      - message
-      - log_query
-      title: MarketingJobResponse
-      description: Response returned after kicking off a generate-or-send job.
+      - reporting_month
+      title: GenerateAndSendFlowStateRequest
+      description: Request body for the backend-owned all-user generate-and-send endpoint.
+    FlowStateProfilePreviewResponse:
+      properties:
+        total:
+          type: integer
+          title: Total
+        items:
+          items:
+            $ref: '#/components/schemas/FlowStateProfilePreviewItem'
+          type: array
+          title: Items
+      type: object
+      required:
+      - total
+      - items
+      title: FlowStateProfilePreviewResponse
+      description: Paginated generated profile preview.
+    MarketingJobStatusResponse:
+      properties:
+        id:
+          type: string
+          format: uuid
+          title: Id
+        job_type:
+          type: string
+          title: Job Type
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        status:
+          type: string
+          title: Status
+        total:
+          type: integer
+          title: Total
+        succeeded:
+          type: integer
+          title: Succeeded
+        failed:
+          type: integer
+          title: Failed
+        stage:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Stage
+        started_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Started At
+        completed_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Completed At
+        error:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Error
+      type: object
+      required:
+      - id
+      - job_type
+      - reporting_month
+      - status
+      - total
+      - succeeded
+      - failed
+      title: MarketingJobStatusResponse
+      description: Latest persisted state of a marketing generate-or-send job.
+    SendFlowStateRequest:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        user_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Ids
+        all_users:
+          type: boolean
+          title: All Users
+          default: false
+        dry_run:
+          type: boolean
+          title: Dry Run
+          default: false
+        resend_failed:
+          type: boolean
+          title: Resend Failed
+          default: false
+      type: object
+      required:
+      - reporting_month
+      title: SendFlowStateRequest
+      description: 'Request body for the marketing send endpoint.
+
+
+        Requires at least one explicit filter (emails, domain, or user_ids) to prevent
+
+        accidentally blasting every user with a profile for the reporting month.'
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     FlowStateMonthSummaryResponse:
       properties:
         reporting_month:
@@ -263,31 +403,32 @@ components:
       - can_regenerate_send
       title: FlowStateMonthSummaryResponse
       description: Month-level Flow State generation/send state for the admin portal.
-    FlowStateProfilePreviewResponse:
+    ValidationError:
       properties:
-        total:
-          type: integer
-          title: Total
-        items:
+        loc:
           items:
-            $ref: '#/components/schemas/FlowStateProfilePreviewItem'
+            anyOf:
+            - type: string
+            - type: integer
           type: array
-          title: Items
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - total
-      - items
-      title: FlowStateProfilePreviewResponse
-      description: Paginated generated profile preview.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - loc
+      - msg
+      - type
+      title: ValidationError
     FlowStateProfilePreviewItem:
       properties:
         user_id:
@@ -334,6 +475,67 @@ components:
       - profile
       title: FlowStateProfilePreviewItem
       description: Generated Flow State profile row for internal admin preview.
+    MarketingJobResponse:
+      properties:
+        job_id:
+          type: string
+          format: uuid
+          title: Job Id
+        message:
+          type: string
+          title: Message
+        log_query:
+          type: string
+          title: Log Query
+      type: object
+      required:
+      - job_id
+      - message
+      - log_query
+      title: MarketingJobResponse
+      description: Response returned after kicking off a generate-or-send job.
+    FlowStatePreviewRequest:
+      properties:
+        reporting_month:
+          type: string
+          format: date
+          title: Reporting Month
+        emails:
+          anyOf:
+          - items:
+              type: string
+              format: email
+            type: array
+          - type: 'null'
+          title: Emails
+        domain:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Domain
+        user_ids:
+          anyOf:
+          - items:
+              type: string
+            type: array
+          - type: 'null'
+          title: User Ids
+        limit:
+          type: integer
+          maximum: 500.0
+          minimum: 1.0
+          title: Limit
+          default: 100
+        offset:
+          type: integer
+          minimum: 0.0
+          title: Offset
+          default: 0
+      type: object
+      required:
+      - reporting_month
+      title: FlowStatePreviewRequest
+      description: Request body for previewing generated profiles before send.
     GenerateFlowStateRequest:
       properties:
         reporting_month:
@@ -378,208 +580,6 @@ components:
       - reporting_month
       title: GenerateFlowStateRequest
       description: Request body for the marketing profile generation endpoint.
-    MarketingJobStatusResponse:
-      properties:
-        id:
-          type: string
-          format: uuid
-          title: Id
-        job_type:
-          type: string
-          title: Job Type
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        status:
-          type: string
-          title: Status
-        total:
-          type: integer
-          title: Total
-        succeeded:
-          type: integer
-          title: Succeeded
-        failed:
-          type: integer
-          title: Failed
-        stage:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Stage
-        started_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Started At
-        completed_at:
-          anyOf:
-          - type: string
-            format: date-time
-          - type: 'null'
-          title: Completed At
-        error:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Error
-      type: object
-      required:
-      - id
-      - job_type
-      - reporting_month
-      - status
-      - total
-      - succeeded
-      - failed
-      title: MarketingJobStatusResponse
-      description: Latest persisted state of a marketing generate-or-send job.
-    GenerateAndSendFlowStateRequest:
-      properties:
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        min_word_count:
-          type: integer
-          title: Min Word Count
-          default: 500
-        min_app_count:
-          anyOf:
-          - type: integer
-          - type: 'null'
-          title: Min App Count
-        dry_run:
-          type: boolean
-          title: Dry Run
-          default: false
-        resend_failed:
-          type: boolean
-          title: Resend Failed
-          default: false
-      type: object
-      required:
-      - reporting_month
-      title: GenerateAndSendFlowStateRequest
-      description: Request body for the backend-owned all-user generate-and-send endpoint.
-    SendFlowStateRequest:
-      properties:
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        emails:
-          anyOf:
-          - items:
-              type: string
-              format: email
-            type: array
-          - type: 'null'
-          title: Emails
-        domain:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-        user_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: User Ids
-        all_users:
-          type: boolean
-          title: All Users
-          default: false
-        dry_run:
-          type: boolean
-          title: Dry Run
-          default: false
-        resend_failed:
-          type: boolean
-          title: Resend Failed
-          default: false
-      type: object
-      required:
-      - reporting_month
-      title: SendFlowStateRequest
-      description: 'Request body for the marketing send endpoint.
-
-
-        Requires at least one explicit filter (emails, domain, or user_ids) to prevent
-
-        accidentally blasting every user with a profile for the reporting month.'
-    FlowStatePreviewRequest:
-      properties:
-        reporting_month:
-          type: string
-          format: date
-          title: Reporting Month
-        emails:
-          anyOf:
-          - items:
-              type: string
-              format: email
-            type: array
-          - type: 'null'
-          title: Emails
-        domain:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Domain
-        user_ids:
-          anyOf:
-          - items:
-              type: string
-            type: array
-          - type: 'null'
-          title: User Ids
-        limit:
-          type: integer
-          maximum: 500.0
-          minimum: 1.0
-          title: Limit
-          default: 100
-        offset:
-          type: integer
-          minimum: 0.0
-          title: Offset
-          default: 0
-      type: object
-      required:
-      - reporting_month
-      title: FlowStatePreviewRequest
-      description: Request body for previewing generated profiles before send.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -589,3 +589,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-internal-marketing-api-openapi.yml

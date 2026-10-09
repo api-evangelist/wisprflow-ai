@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Support API
-  description: Wispr Backend API
+  title: Wispr Ai Support API
   version: 0.5.2
+  description: 'Operations tagged Support across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-support-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Support
 paths:
@@ -532,6 +532,15 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
     Body_create_pylon_feedback_api_v1_support_pylon_feedback_post:
       properties:
         body:
@@ -581,21 +590,57 @@ components:
           default: true
       type: object
       title: SyncSubscriptionRequest
-    CancelSubscriptionRequest:
+    Body_frontapp_feedback_api_v1_support_feedback_post:
       properties:
-        email:
+        to:
           type: string
-          title: Email
-          description: User email
-        refund:
+          title: To
+        body:
           type: string
-          title: Refund
-          description: 'Refund type: "full", "partial", or "no"'
+          title: Body
+        attachments:
+          items:
+            type: string
+            contentMediaType: application/octet-stream
+          type: array
+          title: Attachments
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
       type: object
       required:
-      - email
-      - refund
-      title: CancelSubscriptionRequest
+      - to
+      - body
+      title: Body_frontapp_feedback_api_v1_support_feedback_post
+    ErasureStartResponse:
+      properties:
+        workflow_id:
+          type: string
+          title: Workflow Id
+        skipped_no_email:
+          type: boolean
+          title: Skipped No Email
+      type: object
+      required:
+      - workflow_id
+      - skipped_no_email
+      title: ErasureStartResponse
+      description: 'Response for a started (or attached-to-existing) erasure.
+
+
+        Carries only the derived workflow id (non-PII; `usage-erasure:{user_id}`) and a
+
+        flag for whether the email-keyed ClickHouse legs will be skipped (the orphan path).'
     Body_send_feedback_slack_api_v1_support_slack__platform__post:
       properties:
         audio:
@@ -635,6 +680,73 @@ components:
           - type: 'null'
       type: object
       title: Body_send_feedback_slack_api_v1_support_slack__platform__post
+    NPSFeedbackRequest:
+      properties:
+        customer_id:
+          type: string
+          title: Customer Id
+        feedback:
+          type: string
+          title: Feedback
+        campaign:
+          type: string
+          title: Campaign
+      type: object
+      required:
+      - customer_id
+      - feedback
+      - campaign
+      title: NPSFeedbackRequest
+    ImageType:
+      type: string
+      enum:
+      - image/png
+      - image/jpeg
+      - image/bmp
+      - image/webp
+      title: ImageType
+    SupportFeedbackRequest:
+      properties:
+        to:
+          type: string
+          title: To
+        body:
+          type: string
+          title: Body
+        attachments:
+          anyOf:
+          - additionalProperties:
+              type: string
+            type: object
+          - type: 'null'
+          title: Attachments
+        subject:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Subject
+        comment:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Comment
+        imageData:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Imagedata
+        imageType:
+          anyOf:
+          - $ref: '#/components/schemas/ImageType'
+          - type: 'null'
+        platform:
+          $ref: '#/components/schemas/src__common__constants__Platform'
+          default: desktop
+      type: object
+      required:
+      - to
+      - body
+      title: SupportFeedbackRequest
     ValidationError:
       properties:
         loc:
@@ -661,115 +773,13 @@ components:
       - msg
       - type
       title: ValidationError
-    SyncMobileSubscriptionRequest:
-      properties:
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-          description: User UUID (same as RevenueCat app_user_id)
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-          description: User email — used to look up the user
-        dry_run:
-          type: boolean
-          title: Dry Run
-          description: Preview changes without committing. Set to false to apply.
-          default: true
-      type: object
-      title: SyncMobileSubscriptionRequest
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    ErasureStartResponse:
-      properties:
-        workflow_id:
-          type: string
-          title: Workflow Id
-        skipped_no_email:
-          type: boolean
-          title: Skipped No Email
-      type: object
-      required:
-      - workflow_id
-      - skipped_no_email
-      title: ErasureStartResponse
-      description: 'Response for a started (or attached-to-existing) erasure.
-
-
-        Carries only the derived workflow id (non-PII; `usage-erasure:{user_id}`) and a
-
-        flag for whether the email-keyed ClickHouse legs will be skipped (the orphan path).'
-    ErasureStartRequest:
-      properties:
-        email:
-          anyOf:
-          - type: string
-            maxLength: 320
-          - type: 'null'
-          title: Email
-        user_id:
-          anyOf:
-          - type: string
-            maxLength: 80
-            minLength: 1
-          - type: 'null'
-          title: User Id
-        confirm_orphan:
-          type: boolean
-          title: Confirm Orphan
-          default: false
-        actor:
-          anyOf:
-          - type: string
-            maxLength: 320
-          - type: 'null'
-          title: Actor
-        reason:
-          anyOf:
-          - type: string
-            maxLength: 2000
-          - type: 'null'
-          title: Reason
-      type: object
-      title: ErasureStartRequest
-      description: "Body for `POST /api/v1/support/usage-data-erasure`.\n\nExactly one of `email` / `user_id` must be set.\n\nAttributes:\n    email: The PRIMARY identifier — the target's email. Resolved server-side to a\n        single user_id; the operator stating the human identity IS the fat-finger\n        guard, so no separate confirm field is needed. 0 matches → 404, >1 → 422.\n    user_id: The orphan-only identifier — a raw user id reaching orphaned usage data\n        (no `User` row / no email). The user_id path targets ONLY orphaned data;\n        requires `confirm_orphan=True`; server-side path-char rejected before use.\n    confirm_orphan: Explicit acknowledgement that applies ONLY to the `user_id` /\n        orphan path. Invalid with `email` (rejected by the validator).\n    actor: The support caller's identity — caller-supplied free text stored verbatim in\n        the audit row; not validated and never authorization-bearing.\n    reason: The erasure reason — caller-supplied free text stored verbatim in the audit row."
-    NPSFeedbackRequest:
-      properties:
-        customer_id:
-          type: string
-          title: Customer Id
-        feedback:
-          type: string
-          title: Feedback
-        campaign:
-          type: string
-          title: Campaign
-      type: object
-      required:
-      - customer_id
-      - feedback
-      - campaign
-      title: NPSFeedbackRequest
-    ErasureStatusState:
+    src__common__constants__Platform:
       type: string
       enum:
-      - not_found
-      - in_flight
-      - completed
-      - failed
-      title: ErasureStatusState
-      description: Coarse, non-PII status of an erasure for the redacted status response.
+      - desktop
+      - ios
+      - android
+      title: Platform
     NPSScoreRequest:
       properties:
         customer_id:
@@ -787,85 +797,6 @@ components:
       - score
       - campaign
       title: NPSScoreRequest
-    PreLoginFeedbackRequest:
-      properties:
-        name:
-          type: string
-          title: Name
-        email:
-          type: string
-          format: email
-          title: Email
-        body:
-          type: string
-          title: Body
-        subject:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Subject
-        comment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Comment
-        imageData:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Imagedata
-        imageType:
-          anyOf:
-          - $ref: '#/components/schemas/ImageType'
-          - type: 'null'
-        platform:
-          $ref: '#/components/schemas/src__common__constants__Platform'
-          default: desktop
-      type: object
-      required:
-      - name
-      - email
-      - body
-      title: PreLoginFeedbackRequest
-    Body_frontapp_feedback_api_v1_support_feedback_post:
-      properties:
-        to:
-          type: string
-          title: To
-        body:
-          type: string
-          title: Body
-        attachments:
-          items:
-            type: string
-            contentMediaType: application/octet-stream
-          type: array
-          title: Attachments
-        subject:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Subject
-        comment:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Comment
-        platform:
-          $ref: '#/components/schemas/src__common__constants__Platform'
-          default: desktop
-      type: object
-      required:
-      - to
-      - body
-      title: Body_frontapp_feedback_api_v1_support_feedback_post
-    src__common__constants__Platform:
-      type: string
-      enum:
-      - desktop
-      - ios
-      - android
-      title: Platform
     ErasureStatusResponse:
       properties:
         state:
@@ -912,21 +843,97 @@ components:
       - state
       title: ErasureStatusResponse
       description: "REDACTED status of an erasure — ids / enums / counts / timestamps only.\n\nNever carries the raw email, row content, or a raw exception. `per_store` is the\nworkflow's `{store: StepState}` progress map for an in-flight run (bounded enum\nstrings) or omitted for a terminal/not-found read. `last_error` is a sanitized\nbounded code (e.g. `clickhouse_verification_timed_out`), never a stack/raw error.\n\nAttributes:\n    state: Coarse status (`not_found` / `in_flight` / `completed` / `failed`).\n    workflow_id: The derived workflow id queried (non-PII), or None for not_found\n        when no id could be derived.\n    per_store: In-flight per-store progress `{ErasureStore: StepState}`; None for\n        terminal/not-found reads (terminal proof lives in the audit row).\n    outcome: Terminal outcome string (`completed`/`failed`) from the audit row; None\n        in-flight / not-found.\n    watermark_t0_epoch_s: T0 (epoch seconds) from the terminal audit row; None\n        in-flight / not-found.\n    completed_at_epoch_s: Terminal `completed_at` (epoch seconds) from the audit row.\n    last_error: Sanitized bounded failure code on a `failed` terminal; None otherwise.\n    proof: Per-store residual-count / empty-listing evidence from the audit row\n        (counts only, non-PII); None in-flight / not-found."
-    SupportFeedbackRequest:
+    ErasureStartRequest:
       properties:
-        to:
+        email:
+          anyOf:
+          - type: string
+            maxLength: 320
+          - type: 'null'
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+            maxLength: 80
+            minLength: 1
+          - type: 'null'
+          title: User Id
+        confirm_orphan:
+          type: boolean
+          title: Confirm Orphan
+          default: false
+        actor:
+          anyOf:
+          - type: string
+            maxLength: 320
+          - type: 'null'
+          title: Actor
+        reason:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Reason
+      type: object
+      title: ErasureStartRequest
+      description: "Body for `POST /api/v1/support/usage-data-erasure`.\n\nExactly one of `email` / `user_id` must be set.\n\nAttributes:\n    email: The PRIMARY identifier — the target's email. Resolved server-side to a\n        single user_id; the operator stating the human identity IS the fat-finger\n        guard, so no separate confirm field is needed. 0 matches → 404, >1 → 422.\n    user_id: The orphan-only identifier — a raw user id reaching orphaned usage data\n        (no `User` row / no email). The user_id path targets ONLY orphaned data;\n        requires `confirm_orphan=True`; server-side path-char rejected before use.\n    confirm_orphan: Explicit acknowledgement that applies ONLY to the `user_id` /\n        orphan path. Invalid with `email` (rejected by the validator).\n    actor: The support caller's identity — caller-supplied free text stored verbatim in\n        the audit row; not validated and never authorization-bearing.\n    reason: The erasure reason — caller-supplied free text stored verbatim in the audit row."
+    SyncMobileSubscriptionRequest:
+      properties:
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
+          description: User UUID (same as RevenueCat app_user_id)
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+          description: User email — used to look up the user
+        dry_run:
+          type: boolean
+          title: Dry Run
+          description: Preview changes without committing. Set to false to apply.
+          default: true
+      type: object
+      title: SyncMobileSubscriptionRequest
+    CancelSubscriptionRequest:
+      properties:
+        email:
           type: string
-          title: To
+          title: Email
+          description: User email
+        refund:
+          type: string
+          title: Refund
+          description: 'Refund type: "full", "partial", or "no"'
+      type: object
+      required:
+      - email
+      - refund
+      title: CancelSubscriptionRequest
+    ErasureStatusState:
+      type: string
+      enum:
+      - not_found
+      - in_flight
+      - completed
+      - failed
+      title: ErasureStatusState
+      description: Coarse, non-PII status of an erasure for the redacted status response.
+    PreLoginFeedbackRequest:
+      properties:
+        name:
+          type: string
+          title: Name
+        email:
+          type: string
+          format: email
+          title: Email
         body:
           type: string
           title: Body
-        attachments:
-          anyOf:
-          - additionalProperties:
-              type: string
-            type: object
-          - type: 'null'
-          title: Attachments
         subject:
           anyOf:
           - type: string
@@ -951,17 +958,10 @@ components:
           default: desktop
       type: object
       required:
-      - to
+      - name
+      - email
       - body
-      title: SupportFeedbackRequest
-    ImageType:
-      type: string
-      enum:
-      - image/png
-      - image/jpeg
-      - image/bmp
-      - image/webp
-      title: ImageType
+      title: PreLoginFeedbackRequest
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -971,3 +971,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-support-api-openapi.yml

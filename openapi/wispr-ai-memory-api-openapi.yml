@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Memory API
-  description: Wispr Backend API
+  title: Wispr Ai Memory API
   version: 0.5.2
+  description: 'Operations tagged memory across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-memory-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Memory
 paths:
@@ -162,173 +162,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    MemorySearchRequest:
-      properties:
-        context:
-          $ref: '#/components/schemas/MemoryWarmUpContext'
-        max_facts:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Max Facts
-          default: 10
-        max_nodes:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Max Nodes
-          default: 10
-      type: object
-      title: MemorySearchRequest
-      description: Debug request to search memory facts and nodes for a context.
-    MemoryIngestResponse:
-      properties:
-        accepted:
-          type: integer
-          title: Accepted
-        rejected:
-          type: integer
-          title: Rejected
-        results:
-          items:
-            $ref: '#/components/schemas/IngestResultRow'
-          type: array
-          title: Results
-      type: object
-      required:
-      - accepted
-      - rejected
-      - results
-      title: MemoryIngestResponse
-      description: 'Ingest summary: accepted/rejected counts and per-event results.'
-    MemorySearchResponse:
-      properties:
-        query:
-          type: string
-          title: Query
-        facts:
-          items:
-            type: object
-          type: array
-          title: Facts
-        nodes:
-          items:
-            type: object
-          type: array
-          title: Nodes
-      type: object
-      required:
-      - query
-      - facts
-      - nodes
-      title: MemorySearchResponse
-      description: 'Debug search results: the synthesized query plus matched facts and nodes.'
-    MemoryIngestRequest:
-      properties:
-        actions:
-          items:
-            $ref: '#/components/schemas/ActionEnvelope'
-          type: array
-          maxItems: 50
-          minItems: 1
-          title: Actions
-      type: object
-      required:
-      - actions
-      title: MemoryIngestRequest
-      description: Batch of action events to ingest into memory.
-    MemoryHealthResponse:
-      properties:
-        graphiti_reachable:
-          type: boolean
-          title: Graphiti Reachable
-        graphiti:
-          anyOf:
-          - type: object
-          - type: 'null'
-          title: Graphiti
-      type: object
-      required:
-      - graphiti_reachable
-      title: MemoryHealthResponse
-      description: Health check reporting Graphiti reachability and detail.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    MemoryWarmUpContext:
-      properties:
-        app:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: App
-        app_category:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: App Category
-        language:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Language
-        app_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: App Name
-        mode:
-          anyOf:
-          - type: string
-            enum:
-            - dictation
-            - generation
-          - type: 'null'
-          title: Mode
-        proper_nouns:
-          items:
-            type: string
-          type: array
-          title: Proper Nouns
-        excerpt:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Excerpt
-      type: object
-      title: MemoryWarmUpContext
-      description: Dictation context for retrieval; the server synthesizes the Graphiti query.
-    MemoryContextRequest:
-      properties:
-        context:
-          $ref: '#/components/schemas/MemoryWarmUpContext'
-        max_facts:
-          type: integer
-          maximum: 50.0
-          minimum: 1.0
-          title: Max Facts
-          default: 10
-        max_nodes:
-          type: integer
-          maximum: 50.0
-          minimum: 0.0
-          title: Max Nodes
-          default: 0
-        max_prompt_chars:
-          type: integer
-          maximum: 8000.0
-          minimum: 200.0
-          title: Max Prompt Chars
-          default: 2000
-      type: object
-      title: MemoryContextRequest
-      description: Request for a synthesized memory prompt block given dictation context.
     ActionEnvelope:
       properties:
         client_event_id:
@@ -381,44 +214,117 @@ components:
       - prompt_block
       title: MemoryContextResponse
       description: The synthesized memory prompt block to prepend for retrieval.
-    IngestResultRow:
+    HTTPValidationError:
       properties:
-        client_event_id:
-          type: string
-          format: uuid
-          title: Client Event Id
-        status:
-          type: string
-          enum:
-          - accepted
-          - rejected
-          title: Status
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      required:
-      - client_event_id
-      - status
-      title: IngestResultRow
-      description: Per-event ingest outcome, keyed by the client event id.
-    AppContext:
+      title: HTTPValidationError
+    MemoryWarmUpContext:
       properties:
+        app:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: App
+        app_category:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: App Category
+        language:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Language
         app_name:
           anyOf:
           - type: string
           - type: 'null'
           title: App Name
-        app_url:
+        mode:
+          anyOf:
+          - type: string
+            enum:
+            - dictation
+            - generation
+          - type: 'null'
+          title: Mode
+        proper_nouns:
+          items:
+            type: string
+          type: array
+          title: Proper Nouns
+        excerpt:
           anyOf:
           - type: string
           - type: 'null'
-          title: App Url
-        bundle_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Bundle Id
+          title: Excerpt
       type: object
-      title: AppContext
-      description: Identifying details of the app an action occurred in.
+      title: MemoryWarmUpContext
+      description: Dictation context for retrieval; the server synthesizes the Graphiti query.
+    MemorySearchRequest:
+      properties:
+        context:
+          $ref: '#/components/schemas/MemoryWarmUpContext'
+        max_facts:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Max Facts
+          default: 10
+        max_nodes:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Max Nodes
+          default: 10
+      type: object
+      title: MemorySearchRequest
+      description: Debug request to search memory facts and nodes for a context.
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    MemoryIngestRequest:
+      properties:
+        actions:
+          items:
+            $ref: '#/components/schemas/ActionEnvelope'
+          type: array
+          maxItems: 50
+          minItems: 1
+          title: Actions
+      type: object
+      required:
+      - actions
+      title: MemoryIngestRequest
+      description: Batch of action events to ingest into memory.
     MemoryListResponse:
       properties:
         query:
@@ -447,32 +353,126 @@ components:
       - nodes
       title: MemoryListResponse
       description: Debug listing of a user's memory episodes, facts, and nodes.
-    ValidationError:
+    MemoryIngestResponse:
       properties:
-        loc:
+        accepted:
+          type: integer
+          title: Accepted
+        rejected:
+          type: integer
+          title: Rejected
+        results:
           items:
-            anyOf:
-            - type: string
-            - type: integer
+            $ref: '#/components/schemas/IngestResultRow'
           type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
+          title: Results
       type: object
       required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      - accepted
+      - rejected
+      - results
+      title: MemoryIngestResponse
+      description: 'Ingest summary: accepted/rejected counts and per-event results.'
+    MemoryHealthResponse:
+      properties:
+        graphiti_reachable:
+          type: boolean
+          title: Graphiti Reachable
+        graphiti:
+          anyOf:
+          - type: object
+          - type: 'null'
+          title: Graphiti
+      type: object
+      required:
+      - graphiti_reachable
+      title: MemoryHealthResponse
+      description: Health check reporting Graphiti reachability and detail.
+    MemoryContextRequest:
+      properties:
+        context:
+          $ref: '#/components/schemas/MemoryWarmUpContext'
+        max_facts:
+          type: integer
+          maximum: 50.0
+          minimum: 1.0
+          title: Max Facts
+          default: 10
+        max_nodes:
+          type: integer
+          maximum: 50.0
+          minimum: 0.0
+          title: Max Nodes
+          default: 0
+        max_prompt_chars:
+          type: integer
+          maximum: 8000.0
+          minimum: 200.0
+          title: Max Prompt Chars
+          default: 2000
+      type: object
+      title: MemoryContextRequest
+      description: Request for a synthesized memory prompt block given dictation context.
+    IngestResultRow:
+      properties:
+        client_event_id:
+          type: string
+          format: uuid
+          title: Client Event Id
+        status:
+          type: string
+          enum:
+          - accepted
+          - rejected
+          title: Status
+      type: object
+      required:
+      - client_event_id
+      - status
+      title: IngestResultRow
+      description: Per-event ingest outcome, keyed by the client event id.
+    MemorySearchResponse:
+      properties:
+        query:
+          type: string
+          title: Query
+        facts:
+          items:
+            type: object
+          type: array
+          title: Facts
+        nodes:
+          items:
+            type: object
+          type: array
+          title: Nodes
+      type: object
+      required:
+      - query
+      - facts
+      - nodes
+      title: MemorySearchResponse
+      description: 'Debug search results: the synthesized query plus matched facts and nodes.'
+    AppContext:
+      properties:
+        app_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: App Name
+        app_url:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: App Url
+        bundle_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Bundle Id
+      type: object
+      title: AppContext
+      description: Identifying details of the app an action occurred in.
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -482,3 +482,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-memory-api-openapi.yml

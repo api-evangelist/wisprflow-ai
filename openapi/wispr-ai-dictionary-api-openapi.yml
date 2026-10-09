@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Dictionary API
-  description: Wispr Backend API
+  title: Wispr Ai Dictionary API
   version: 0.5.2
+  description: 'Operations tagged Dictionary across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-dictionary-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Dictionary
 paths:
@@ -180,6 +180,63 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    UpdateTeamDictionaryItem:
+      properties:
+        word_id:
+          type: string
+          format: uuid
+          title: Word Id
+        word:
+          type: string
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        replacement_html:
+          anyOf:
+          - type: string
+            maxLength: 4000
+          - type: 'null'
+          title: Replacement Html
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+      type: object
+      required:
+      - word_id
+      - word
+      - is_snippet
+      title: UpdateTeamDictionaryItem
+      description: Request payload for updating an existing team dictionary item.
+    BulkCreateTeamDictionaryResult:
+      properties:
+        success:
+          type: boolean
+          title: Success
+        imported_count:
+          type: integer
+          title: Imported Count
+        duplicate_count:
+          type: integer
+          title: Duplicate Count
+      type: object
+      required:
+      - success
+      - imported_count
+      - duplicate_count
+      title: BulkCreateTeamDictionaryResult
+      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
     DictionaryItem:
       properties:
         id:
@@ -249,45 +306,32 @@ components:
       - is_snippet
       title: DictionaryItem
       description: A team dictionary word or snippet entry as returned to clients.
-    UpdateTeamDictionaryItem:
+    ValidationError:
       properties:
-        word_id:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
           type: string
-          format: uuid
-          title: Word Id
-        word:
+          title: Message
+        type:
           type: string
-          title: Word
-        replacement:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Replacement
-        replacement_html:
-          anyOf:
-          - type: string
-            maxLength: 4000
-          - type: 'null'
-          title: Replacement Html
-        is_snippet:
-          type: boolean
-          title: Is Snippet
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
       type: object
       required:
-      - word_id
-      - word
-      - is_snippet
-      title: UpdateTeamDictionaryItem
-      description: Request payload for updating an existing team dictionary item.
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
+      - loc
+      - msg
+      - type
+      title: ValidationError
     CreateTeamDictionaryItem:
       properties:
         word:
@@ -333,50 +377,6 @@ components:
       - is_snippet
       title: CreateTeamDictionaryItem
       description: Request payload for creating a single team dictionary item.
-    BulkCreateTeamDictionaryResult:
-      properties:
-        success:
-          type: boolean
-          title: Success
-        imported_count:
-          type: integer
-          title: Imported Count
-        duplicate_count:
-          type: integer
-          title: Duplicate Count
-      type: object
-      required:
-      - success
-      - imported_count
-      - duplicate_count
-      title: BulkCreateTeamDictionaryResult
-      description: Result summary of a bulk team dictionary import (imported and duplicate counts).
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -386,3 +386,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-dictionary-api-openapi.yml

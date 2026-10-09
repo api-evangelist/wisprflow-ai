@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend User Management API
-  description: Wispr Backend API
+  title: Wispr Ai User Management API
   version: 0.5.2
+  description: 'Operations tagged User Management across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-user-management-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: User Management
 paths:
@@ -591,164 +591,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
-    UserPreference:
-      properties:
-        preferences:
-          $ref: '#/components/schemas/UserPreferencesUpdate'
-        modified_at:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Modified At
-      type: object
-      required:
-      - preferences
-      title: UserPreference
-    TrialVariant:
-      type: string
-      enum:
-      - control
-      - opt_in_claimed
-      - opt_in_declined
-      title: TrialVariant
-    DictionaryItemOld:
-      properties:
-        id:
-          type: string
-          title: Id
-        team_dictionary_id:
-          type: string
-          title: Team Dictionary Id
-          default: 00000000-0000-0000-0000-000000000000
-        word:
-          type: string
-          title: Word
-        replacement:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Replacement
-        is_manual:
-          type: boolean
-          title: Is Manual
-        created_at:
-          type: string
-          title: Created At
-        modified_at:
-          type: string
-          title: Modified At
-        is_deleted:
-          type: boolean
-          title: Is Deleted
-        frequency_used:
-          type: integer
-          title: Frequency Used
-          default: 0
-        last_used:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Used
-        source:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Source
-        is_snippet:
-          type: boolean
-          title: Is Snippet
-          default: false
-      type: object
-      required:
-      - id
-      - word
-      - is_manual
-      - created_at
-      - modified_at
-      - is_deleted
-      - source
-      title: DictionaryItemOld
-    NotetakerTranscriptRetention:
-      type: string
-      enum:
-      - never_delete
-      - 1_day
-      - 7_days
-      - 30_days
-      - 90_days
-      - 180_days
-      - 365_days
-      title: NotetakerTranscriptRetention
-    PersonalizationStyles:
-      properties:
-        personal:
-          $ref: '#/components/schemas/PersonalizationStyle'
-          default: formal
-        work:
-          $ref: '#/components/schemas/PersonalizationStyle'
-          default: formal
-        email:
-          $ref: '#/components/schemas/PersonalizationStyle'
-          default: formal
-        other:
-          $ref: '#/components/schemas/PersonalizationStyle'
-          default: formal
-        unset:
-          $ref: '#/components/schemas/PersonalizationStyle'
-          default: default
-      type: object
-      title: PersonalizationStyles
-    UserProfileResponse:
-      properties:
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-        user_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: User Id
-      type: object
-      title: UserProfileResponse
-    Body_update_student_status_api_v1_user_update_student_status_post:
-      properties:
-        email:
-          type: string
-          format: email
-          title: Email
-        is_student:
-          type: boolean
-          title: Is Student
-        from_now:
-          type: boolean
-          title: From Now
-          default: false
-      type: object
-      required:
-      - email
-      - is_student
-      title: Body_update_student_status_api_v1_user_update_student_status_post
     Body_request_push_notification_api_v1_user_request_push_notification_post:
       properties:
         device_token:
@@ -762,30 +604,33 @@ components:
       - device_token
       - state
       title: Body_request_push_notification_api_v1_user_request_push_notification_post
-    SubmitOnboardingAnswersRequest:
-      properties:
-        answers:
-          additionalProperties:
-            anyOf:
-            - type: string
-            - items:
-                type: string
-              type: array
-            - type: boolean
-            - type: integer
-          type: object
-          title: Answers
-        fulfilled_intents:
-          items:
-            $ref: '#/components/schemas/OnboardingIntent'
-          type: array
-          title: Fulfilled Intents
-          default: []
-      type: object
-      required:
-      - answers
-      title: SubmitOnboardingAnswersRequest
-      description: Request body carrying the user's onboarding answers and fulfilled intents.
+    OnboardingIntent:
+      type: string
+      enum:
+      - spend_time_typing
+      - flow_use_case
+      - about_yourself
+      - work_environment
+      - language_preference
+      - attribution
+      - privacy_consent
+      - personalization_styles
+      - personalization_styles_default
+      - trial_activation
+      - voice_profile
+      - product_value_prop
+      title: OnboardingIntent
+    PersonalizationStyle:
+      type: string
+      enum:
+      - formal
+      - casual
+      - veryCasual
+      - excited
+      - genz
+      - default
+      title: PersonalizationStyle
+      description: Represents the style for personalization settings.
     UserPreferencesUpdate:
       properties:
         privacy_mode:
@@ -971,43 +816,187 @@ components:
       description: 'Model for partial updates to user preferences.
 
         All fields are optional but when present must follow the same validation rules as UserPreferences.'
-    PersonalizationStyle:
-      type: string
-      enum:
-      - formal
-      - casual
-      - veryCasual
-      - excited
-      - genz
-      - default
-      title: PersonalizationStyle
-      description: Represents the style for personalization settings.
-    PolishInstructions:
+    HTTPValidationError:
       properties:
-        default:
-          additionalProperties:
-            type: boolean
-          type: object
-          title: Default
-          default: {}
-        custom:
-          additionalProperties:
-            type: boolean
-          type: object
-          title: Custom
-          default: {}
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
       type: object
-      title: PolishInstructions
-      description: Saved toggle rules for Polish transforms (built-in defaults + custom).
-    SignHipaaBaaRequest:
+      title: HTTPValidationError
+    DictionaryItemOld:
       properties:
-        legal_name:
+        id:
           type: string
-          title: Legal Name
+          title: Id
+        team_dictionary_id:
+          type: string
+          title: Team Dictionary Id
+          default: 00000000-0000-0000-0000-000000000000
+        word:
+          type: string
+          title: Word
+        replacement:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Replacement
+        is_manual:
+          type: boolean
+          title: Is Manual
+        created_at:
+          type: string
+          title: Created At
+        modified_at:
+          type: string
+          title: Modified At
+        is_deleted:
+          type: boolean
+          title: Is Deleted
+        frequency_used:
+          type: integer
+          title: Frequency Used
+          default: 0
+        last_used:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Used
+        source:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Source
+        is_snippet:
+          type: boolean
+          title: Is Snippet
+          default: false
       type: object
       required:
-      - legal_name
-      title: SignHipaaBaaRequest
+      - id
+      - word
+      - is_manual
+      - created_at
+      - modified_at
+      - is_deleted
+      - source
+      title: DictionaryItemOld
+    Body_update_student_status_api_v1_user_update_student_status_post:
+      properties:
+        email:
+          type: string
+          format: email
+          title: Email
+        is_student:
+          type: boolean
+          title: Is Student
+        from_now:
+          type: boolean
+          title: From Now
+          default: false
+      type: object
+      required:
+      - email
+      - is_student
+      title: Body_update_student_status_api_v1_user_update_student_status_post
+    TrialVariant:
+      type: string
+      enum:
+      - control
+      - opt_in_claimed
+      - opt_in_declined
+      title: TrialVariant
+    SubmitOnboardingAnswersRequest:
+      properties:
+        answers:
+          additionalProperties:
+            anyOf:
+            - type: string
+            - items:
+                type: string
+              type: array
+            - type: boolean
+            - type: integer
+          type: object
+          title: Answers
+        fulfilled_intents:
+          items:
+            $ref: '#/components/schemas/OnboardingIntent'
+          type: array
+          title: Fulfilled Intents
+          default: []
+      type: object
+      required:
+      - answers
+      title: SubmitOnboardingAnswersRequest
+      description: Request body carrying the user's onboarding answers and fulfilled intents.
+    UserProfile:
+      properties:
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+      type: object
+      title: UserProfile
+      description: 'Model for user profile information.
+
+        Kept this seperated from UserPreference in case we have more user profile related fields in the future.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    OnboardingAnswersResponse:
+      properties:
+        message:
+          type: string
+          title: Message
+      type: object
+      required:
+      - message
+      title: OnboardingAnswersResponse
+      description: Acknowledgement response after onboarding answers are submitted.
+    UserPreference:
+      properties:
+        preferences:
+          $ref: '#/components/schemas/UserPreferencesUpdate'
+        modified_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Modified At
+      type: object
+      required:
+      - preferences
+      title: UserPreference
     RegisterDeviceRequest:
       properties:
         device_id:
@@ -1059,23 +1048,72 @@ components:
       - device_os_name
       - device_os_version
       title: RegisterDeviceRequest
-    OnboardingIntent:
+    PolishInstructions:
+      properties:
+        default:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Default
+          default: {}
+        custom:
+          additionalProperties:
+            type: boolean
+          type: object
+          title: Custom
+          default: {}
+      type: object
+      title: PolishInstructions
+      description: Saved toggle rules for Polish transforms (built-in defaults + custom).
+    PersonalizationStyles:
+      properties:
+        personal:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        work:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        email:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        other:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: formal
+        unset:
+          $ref: '#/components/schemas/PersonalizationStyle'
+          default: default
+      type: object
+      title: PersonalizationStyles
+    NotetakerTranscriptRetention:
       type: string
       enum:
-      - spend_time_typing
-      - flow_use_case
-      - about_yourself
-      - work_environment
-      - language_preference
-      - attribution
-      - privacy_consent
-      - personalization_styles
-      - personalization_styles_default
-      - trial_activation
-      - voice_profile
-      - product_value_prop
-      title: OnboardingIntent
-    UserProfile:
+      - never_delete
+      - 1_day
+      - 7_days
+      - 30_days
+      - 90_days
+      - 180_days
+      - 365_days
+      title: NotetakerTranscriptRetention
+    SignHipaaBaaRequest:
+      properties:
+        legal_name:
+          type: string
+          title: Legal Name
+      type: object
+      required:
+      - legal_name
+      title: SignHipaaBaaRequest
+    DeviceInfoStatus:
+      type: string
+      enum:
+      - ok
+      - partial
+      - missing
+      - access_denied
+      - error
+      title: DeviceInfoStatus
+    UserProfileResponse:
       properties:
         first_name:
           anyOf:
@@ -1087,56 +1125,18 @@ components:
           - type: string
           - type: 'null'
           title: Last Name
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+        user_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: User Id
       type: object
-      title: UserProfile
-      description: 'Model for user profile information.
-
-        Kept this seperated from UserPreference in case we have more user profile related fields in the future.'
-    OnboardingAnswersResponse:
-      properties:
-        message:
-          type: string
-          title: Message
-      type: object
-      required:
-      - message
-      title: OnboardingAnswersResponse
-      description: Acknowledgement response after onboarding answers are submitted.
-    DeviceInfoStatus:
-      type: string
-      enum:
-      - ok
-      - partial
-      - missing
-      - access_denied
-      - error
-      title: DeviceInfoStatus
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
+      title: UserProfileResponse
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -1146,3 +1146,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-user-management-api-openapi.yml

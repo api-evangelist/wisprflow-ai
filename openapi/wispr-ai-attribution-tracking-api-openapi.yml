@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Attribution Tracking API
-  description: Wispr Backend API
+  title: Wispr Ai Attribution Tracking API
   version: 0.5.2
+  description: 'Operations tagged Attribution Tracking across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-attribution-tracking-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Attribution Tracking
 paths:
@@ -48,48 +48,6 @@ paths:
       - ApiKeyHeaderPatched: []
 components:
   schemas:
-    AttributionUserData:
-      properties:
-        email:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Email
-          description: User's email address
-        phone_number:
-          anyOf:
-          - type: string
-            pattern: ^\+[1-9]\d{1,14}$
-          - type: 'null'
-          title: Phone Number
-          description: Phone number in E.164 format (e.g. +14155551234)
-        first_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: First Name
-          description: User's first name
-        last_name:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Last Name
-          description: User's last name
-        fbp:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Fbp
-          description: Meta _fbp cookie value for browser match quality
-        fbc:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Fbc
-          description: Meta _fbc click ID cookie value for ad attribution
-      type: object
-      title: AttributionUserData
-      description: Optional user data for enhanced conversions (Google Ads attribution).
     HTTPValidationError:
       properties:
         detail:
@@ -99,76 +57,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    PaywallViewedRequest:
-      properties:
-        ga4_client_id:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Ga4 Client Id
-          description: GA4 client_id (optional for native apps)
-        platform:
-          $ref: '#/components/schemas/AttributionPlatform'
-          description: Platform where the event originated
-        timestamp:
-          type: integer
-          title: Timestamp
-          description: Unix timestamp when paywall was viewed
-        user_data:
-          anyOf:
-          - $ref: '#/components/schemas/AttributionUserData'
-          - type: 'null'
-          description: Optional user data for enhanced conversions
-      type: object
-      required:
-      - platform
-      - timestamp
-      title: PaywallViewedRequest
-      description: 'Request for tracking paywall viewed event.
-
-
-        ga4_client_id is optional for native apps (desktop, iOS, Android) - the backend
-
-        will derive it from user_id for cross-device attribution. Web clients should
-
-        provide ga4_client_id from gtag.js cookies for pre-login tracking.'
-    AttributionPlatform:
-      type: string
-      enum:
-      - web
-      - desktop_mac
-      - desktop_windows
-      - ios
-      - android
-      title: AttributionPlatform
-      description: 'Valid platforms for attribution event tracking.
-
-
-        Desktop clients must use specific variants (DESKTOP_MAC, DESKTOP_WINDOWS).'
-    AttributionEventName:
-      type: string
-      enum:
-      - usage_milestone_reached
-      - first_external_dictation
-      - onboarding_completed
-      - paywall_viewed
-      - begin_checkout
-      - purchase
-      - lead
-      title: AttributionEventName
-      description: 'GA4 event names for attribution tracking.
-
-
-        These map to GA4 Measurement Protocol event names.
-
-        See: https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference
-
-
-        USAGE_MILESTONE_REACHED is a single event name; individual milestones (words_200,
-
-        words_500, words_2000) are distinguished via the `milestone_name` custom parameter,
-
-        which should be registered as a GA4 custom dimension for reporting.'
     AttributionTrackingResponse:
       properties:
         success:
@@ -216,6 +104,118 @@ components:
       - msg
       - type
       title: ValidationError
+    PaywallViewedRequest:
+      properties:
+        ga4_client_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Ga4 Client Id
+          description: GA4 client_id (optional for native apps)
+        platform:
+          $ref: '#/components/schemas/AttributionPlatform'
+          description: Platform where the event originated
+        timestamp:
+          type: integer
+          title: Timestamp
+          description: Unix timestamp when paywall was viewed
+        user_data:
+          anyOf:
+          - $ref: '#/components/schemas/AttributionUserData'
+          - type: 'null'
+          description: Optional user data for enhanced conversions
+      type: object
+      required:
+      - platform
+      - timestamp
+      title: PaywallViewedRequest
+      description: 'Request for tracking paywall viewed event.
+
+
+        ga4_client_id is optional for native apps (desktop, iOS, Android) - the backend
+
+        will derive it from user_id for cross-device attribution. Web clients should
+
+        provide ga4_client_id from gtag.js cookies for pre-login tracking.'
+    AttributionUserData:
+      properties:
+        email:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Email
+          description: User's email address
+        phone_number:
+          anyOf:
+          - type: string
+            pattern: ^\+[1-9]\d{1,14}$
+          - type: 'null'
+          title: Phone Number
+          description: Phone number in E.164 format (e.g. +14155551234)
+        first_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: First Name
+          description: User's first name
+        last_name:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Last Name
+          description: User's last name
+        fbp:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fbp
+          description: Meta _fbp cookie value for browser match quality
+        fbc:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Fbc
+          description: Meta _fbc click ID cookie value for ad attribution
+      type: object
+      title: AttributionUserData
+      description: Optional user data for enhanced conversions (Google Ads attribution).
+    AttributionPlatform:
+      type: string
+      enum:
+      - web
+      - desktop_mac
+      - desktop_windows
+      - ios
+      - android
+      title: AttributionPlatform
+      description: 'Valid platforms for attribution event tracking.
+
+
+        Desktop clients must use specific variants (DESKTOP_MAC, DESKTOP_WINDOWS).'
+    AttributionEventName:
+      type: string
+      enum:
+      - usage_milestone_reached
+      - first_external_dictation
+      - onboarding_completed
+      - paywall_viewed
+      - begin_checkout
+      - purchase
+      - lead
+      title: AttributionEventName
+      description: 'GA4 event names for attribution tracking.
+
+
+        These map to GA4 Measurement Protocol event names.
+
+        See: https://developers.google.com/analytics/devguides/collection/protocol/ga4/reference
+
+
+        USAGE_MILESTONE_REACHED is a single event name; individual milestones (words_200,
+
+        words_500, words_2000) are distinguished via the `milestone_name` custom parameter,
+
+        which should be registered as a GA4 custom dimension for reporting.'
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -225,3 +225,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-attribution-tracking-api-openapi.yml

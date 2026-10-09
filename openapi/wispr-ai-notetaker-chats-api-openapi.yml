@@ -1,8 +1,8 @@
 openapi: 3.2.0
 info:
-  title: Wispr Backend Notetaker Chats API
-  description: Wispr Backend API
+  title: Wispr Ai Notetaker Chats API
   version: 0.5.2
+  description: 'Operations tagged Notetaker Chats across 2 of this provider''s published API definitions: wispr-ai-backend-openapi-original.json, wisprflow-ai-notetaker-chats-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 tags:
 - name: Notetaker Chats
 paths:
@@ -228,45 +228,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
 components:
   schemas:
-    NotetakerChatMessageUpload:
-      properties:
-        message_id:
-          type: string
-          format: uuid
-          title: Message Id
-        turn_id:
-          type: string
-          format: uuid
-          title: Turn Id
-        role:
-          $ref: '#/components/schemas/NotetakerChatMessageRole'
-        status:
-          $ref: '#/components/schemas/NotetakerChatMessageStatus'
-        content:
-          additionalProperties:
-            $ref: '#/components/schemas/JsonValue'
-          type: object
-          title: Content
-        metadata:
-          anyOf:
-          - additionalProperties:
-              $ref: '#/components/schemas/JsonValue'
-            type: object
-          - type: 'null'
-          title: Metadata
-        feedback:
-          anyOf:
-          - $ref: '#/components/schemas/NotetakerChatFeedback'
-          - type: 'null'
-      type: object
-      required:
-      - message_id
-      - turn_id
-      - role
-      - status
-      - content
-      title: NotetakerChatMessageUpload
-      description: One client message mutation.
     NotetakerChatMessageAck:
       properties:
         message_id:
@@ -282,6 +243,40 @@ components:
       - sequence_index
       title: NotetakerChatMessageAck
       description: Canonical sequence index acknowledged for a message.
+    NotetakerChatMessageStatus:
+      type: string
+      enum:
+      - pending
+      - succeeded
+      - request_timeout
+      - request_error
+      - tool_error
+      - cancelled
+      - superseded
+      - no_text
+      - not_editable
+      - interrupted
+      title: NotetakerChatMessageStatus
+      description: Notetaker-specific terminal and in-flight message outcomes.
+    NotetakerChatFeedback:
+      properties:
+        rating:
+          type: string
+          enum:
+          - up
+          - down
+          title: Rating
+        text:
+          anyOf:
+          - type: string
+            maxLength: 2000
+          - type: 'null'
+          title: Text
+      type: object
+      required:
+      - rating
+      title: NotetakerChatFeedback
+      description: Optional assistant-message rating and explanation.
     HTTPValidationError:
       properties:
         detail:
@@ -291,28 +286,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    ListNotetakerChatsResponse:
-      properties:
-        chats:
-          items:
-            $ref: '#/components/schemas/NotetakerChatRecord'
-          type: array
-          title: Chats
-        next_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Cursor
-      type: object
-      required:
-      - chats
-      title: ListNotetakerChatsResponse
-      description: 'Keyset-paginated Notetaker chat sessions (newest first).
-
-
-        ``next_cursor`` anchors the oldest row of this page and loads still-older
-
-        chats on the next request. ``null`` means there is no older page.'
     NotetakerChatRecord:
       properties:
         chat_id:
@@ -356,25 +329,167 @@ components:
       - modified_at
       title: NotetakerChatRecord
       description: One active Notetaker chat session.
-    NotetakerChatFeedback:
+    NotetakerChatUpload:
       properties:
-        rating:
+        chat_id:
           type: string
-          enum:
-          - up
-          - down
-          title: Rating
-        text:
+          format: uuid
+          title: Chat Id
+        kind:
+          $ref: '#/components/schemas/NotetakerChatKind'
+        meeting_id:
           anyOf:
           - type: string
-            maxLength: 2000
+            format: uuid
           - type: 'null'
-          title: Text
+          title: Meeting Id
+        title:
+          anyOf:
+          - type: string
+            maxLength: 120
+          - type: 'null'
+          title: Title
+        deleted:
+          type: boolean
+          title: Deleted
+          default: false
+        messages:
+          items:
+            $ref: '#/components/schemas/NotetakerChatMessageUpload'
+          type: array
+          title: Messages
       type: object
       required:
-      - rating
-      title: NotetakerChatFeedback
-      description: Optional assistant-message rating and explanation.
+      - chat_id
+      - kind
+      title: NotetakerChatUpload
+      description: One atomic chat mutation and its bounded message batch.
+    ListNotetakerChatsResponse:
+      properties:
+        chats:
+          items:
+            $ref: '#/components/schemas/NotetakerChatRecord'
+          type: array
+          title: Chats
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      type: object
+      required:
+      - chats
+      title: ListNotetakerChatsResponse
+      description: 'Keyset-paginated Notetaker chat sessions (newest first).
+
+
+        ``next_cursor`` anchors the oldest row of this page and loads still-older
+
+        chats on the next request. ``null`` means there is no older page.'
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    NotetakerChatMessageRole:
+      type: string
+      enum:
+      - user
+      - assistant
+      title: NotetakerChatMessageRole
+      description: Participant role for a persisted Notetaker chat message.
+    NotetakerChatMessageUpload:
+      properties:
+        message_id:
+          type: string
+          format: uuid
+          title: Message Id
+        turn_id:
+          type: string
+          format: uuid
+          title: Turn Id
+        role:
+          $ref: '#/components/schemas/NotetakerChatMessageRole'
+        status:
+          $ref: '#/components/schemas/NotetakerChatMessageStatus'
+        content:
+          additionalProperties:
+            $ref: '#/components/schemas/JsonValue'
+          type: object
+          title: Content
+        metadata:
+          anyOf:
+          - additionalProperties:
+              $ref: '#/components/schemas/JsonValue'
+            type: object
+          - type: 'null'
+          title: Metadata
+        feedback:
+          anyOf:
+          - $ref: '#/components/schemas/NotetakerChatFeedback'
+          - type: 'null'
+      type: object
+      required:
+      - message_id
+      - turn_id
+      - role
+      - status
+      - content
+      title: NotetakerChatMessageUpload
+      description: One client message mutation.
+    JsonValue: {}
+    NotetakerChatKind:
+      type: string
+      enum:
+      - L2
+      - meeting_chat
+      title: NotetakerChatKind
+      description: Product surface that owns a persisted Notetaker chat session.
+    ListNotetakerChatMessagesResponse:
+      properties:
+        messages:
+          items:
+            $ref: '#/components/schemas/NotetakerChatMessageRecord'
+          type: array
+          title: Messages
+        next_cursor:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Next Cursor
+      type: object
+      required:
+      - messages
+      title: ListNotetakerChatMessagesResponse
+      description: 'Keyset-paginated messages for one session.
+
+
+        Each page is chronological (oldest→newest within the page) so the client
+
+        can append the first page at the bottom and prepend later pages when
+
+        scrolling up. ``next_cursor`` is the oldest sequence index on this page.'
     NotetakerChatMessageRecord:
       properties:
         message_id:
@@ -425,6 +540,42 @@ components:
       - created_at
       title: NotetakerChatMessageRecord
       description: One canonical server-ordered chat message.
+    NotetakerChatUploadAck:
+      properties:
+        chat_id:
+          type: string
+          format: uuid
+          title: Chat Id
+        messages:
+          items:
+            $ref: '#/components/schemas/NotetakerChatMessageAck'
+          type: array
+          title: Messages
+      type: object
+      required:
+      - chat_id
+      - messages
+      title: NotetakerChatUploadAck
+      description: Canonical state acknowledged for one uploaded chat.
+    NotetakerChatScope:
+      type: string
+      enum:
+      - hub
+      - meeting
+      title: NotetakerChatScope
+      description: History filtering mode for listing Notetaker chat sessions.
+    UploadNotetakerChatsResponse:
+      properties:
+        chats:
+          items:
+            $ref: '#/components/schemas/NotetakerChatUploadAck'
+          type: array
+          title: Chats
+      type: object
+      required:
+      - chats
+      title: UploadNotetakerChatsResponse
+      description: Per-chat acknowledgements for an upload batch.
     UploadNotetakerChatsRequest:
       properties:
         chats:
@@ -446,157 +597,6 @@ components:
         mid-batch conflict can leave earlier chats persisted; retry the whole
 
         batch (revisions are idempotent).'
-    UploadNotetakerChatsResponse:
-      properties:
-        chats:
-          items:
-            $ref: '#/components/schemas/NotetakerChatUploadAck'
-          type: array
-          title: Chats
-      type: object
-      required:
-      - chats
-      title: UploadNotetakerChatsResponse
-      description: Per-chat acknowledgements for an upload batch.
-    NotetakerChatUpload:
-      properties:
-        chat_id:
-          type: string
-          format: uuid
-          title: Chat Id
-        kind:
-          $ref: '#/components/schemas/NotetakerChatKind'
-        meeting_id:
-          anyOf:
-          - type: string
-            format: uuid
-          - type: 'null'
-          title: Meeting Id
-        title:
-          anyOf:
-          - type: string
-            maxLength: 120
-          - type: 'null'
-          title: Title
-        deleted:
-          type: boolean
-          title: Deleted
-          default: false
-        messages:
-          items:
-            $ref: '#/components/schemas/NotetakerChatMessageUpload'
-          type: array
-          title: Messages
-      type: object
-      required:
-      - chat_id
-      - kind
-      title: NotetakerChatUpload
-      description: One atomic chat mutation and its bounded message batch.
-    NotetakerChatScope:
-      type: string
-      enum:
-      - hub
-      - meeting
-      title: NotetakerChatScope
-      description: History filtering mode for listing Notetaker chat sessions.
-    NotetakerChatKind:
-      type: string
-      enum:
-      - L2
-      - meeting_chat
-      title: NotetakerChatKind
-      description: Product surface that owns a persisted Notetaker chat session.
-    NotetakerChatUploadAck:
-      properties:
-        chat_id:
-          type: string
-          format: uuid
-          title: Chat Id
-        messages:
-          items:
-            $ref: '#/components/schemas/NotetakerChatMessageAck'
-          type: array
-          title: Messages
-      type: object
-      required:
-      - chat_id
-      - messages
-      title: NotetakerChatUploadAck
-      description: Canonical state acknowledged for one uploaded chat.
-    JsonValue: {}
-    ListNotetakerChatMessagesResponse:
-      properties:
-        messages:
-          items:
-            $ref: '#/components/schemas/NotetakerChatMessageRecord'
-          type: array
-          title: Messages
-        next_cursor:
-          anyOf:
-          - type: string
-          - type: 'null'
-          title: Next Cursor
-      type: object
-      required:
-      - messages
-      title: ListNotetakerChatMessagesResponse
-      description: 'Keyset-paginated messages for one session.
-
-
-        Each page is chronological (oldest→newest within the page) so the client
-
-        can append the first page at the bottom and prepend later pages when
-
-        scrolling up. ``next_cursor`` is the oldest sequence index on this page.'
-    NotetakerChatMessageRole:
-      type: string
-      enum:
-      - user
-      - assistant
-      title: NotetakerChatMessageRole
-      description: Participant role for a persisted Notetaker chat message.
-    NotetakerChatMessageStatus:
-      type: string
-      enum:
-      - pending
-      - succeeded
-      - request_timeout
-      - request_error
-      - tool_error
-      - cancelled
-      - superseded
-      - no_text
-      - not_editable
-      - interrupted
-      title: NotetakerChatMessageStatus
-      description: Notetaker-specific terminal and in-flight message outcomes.
-    ValidationError:
-      properties:
-        loc:
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-          type: array
-          title: Location
-        msg:
-          type: string
-          title: Message
-        type:
-          type: string
-          title: Error Type
-        input:
-          title: Input
-        ctx:
-          type: object
-          title: Context
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      title: ValidationError
   securitySchemes:
     ApiKeyHeaderPatched:
       type: apiKey
@@ -606,3 +606,6 @@ components:
       type: apiKey
       in: header
       name: X-API-Key
+x-refined-from:
+- wispr-ai-backend-openapi-original.json
+- wisprflow-ai-notetaker-chats-api-openapi.yml
