@@ -11,9 +11,13 @@ front_door_ai:
   owner: wispr-flow
   shares_host_with:
   - wispr-flow
+  - wisprflow-ai
   inherited_from: null
+  alias_of: null
   verdict: scored
   score: null
+  band: null
+  band_label: null
   host_score: 9
   density: null
   words: 2184
