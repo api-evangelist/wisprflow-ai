@@ -58,7 +58,7 @@ tags:
 - Productivity
 - Transcription
 apis:
-- aid: wispr-ai:wispr-ai-analytics-api
+- aid: wisprflow-ai:wisprflow-ai-analytics-api
   name: Wispr AI Analytics API
   description: The Analytics API from Wispr AI — 3 operation(s) for analytics.
   humanURL: https://wisprflow.ai/developers
@@ -67,8 +67,8 @@ apis:
   - Analytics
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-analytics-api-openapi.yml
-- aid: wispr-ai:wispr-ai-analytics-registry-api
+    url: openapi/wisprflow-ai-analytics-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-analytics-registry-api
   name: Wispr AI Analytics Registry API
   description: The Analytics Registry API from Wispr AI — 5 operation(s) for analytics registry.
   humanURL: https://wisprflow.ai/developers
@@ -77,8 +77,8 @@ apis:
   - Analytics Registry
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-analytics-registry-api-openapi.yml
-- aid: wispr-ai:wispr-ai-attribution-tracking-api
+    url: openapi/wisprflow-ai-analytics-registry-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-attribution-tracking-api
   name: Wispr AI Attribution Tracking API
   description: The Attribution Tracking API from Wispr AI — 1 operation(s) for attribution tracking.
   humanURL: https://wisprflow.ai/developers
@@ -87,8 +87,8 @@ apis:
   - Attribution Tracking
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-attribution-tracking-api-openapi.yml
-- aid: wispr-ai:wispr-ai-authentication-api
+    url: openapi/wisprflow-ai-attribution-tracking-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-authentication-api
   name: Wispr AI Authentication API
   description: The Authentication API from Wispr AI — 38 operation(s) for authentication.
   humanURL: https://wisprflow.ai/developers
@@ -97,20 +97,18 @@ apis:
   - Authentication
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-authentication-api-openapi.yml
-- aid: wispr-ai:wispr-ai-automations-api
+    url: openapi/wisprflow-ai-authentication-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-automations-api
   name: Wispr AI Automations API
   description: The Automations API from Wispr AI — 3 operation(s) for automations.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
-  - Automation
-  tags_raw:
   - Automations
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-automations-api-openapi.yml
-- aid: wispr-ai:wispr-ai-calendar-api
+    url: openapi/wisprflow-ai-automations-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-calendar-api
   name: Wispr AI Calendar API
   description: The Calendar API from Wispr AI — 6 operation(s) for calendar.
   humanURL: https://wisprflow.ai/developers
@@ -119,8 +117,8 @@ apis:
   - Calendar
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-calendar-api-openapi.yml
-- aid: wispr-ai:wispr-ai-connectors-api
+    url: openapi/wisprflow-ai-calendar-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-connectors-api
   name: Wispr AI Connectors API
   description: The Connectors API from Wispr AI — 6 operation(s) for connectors.
   humanURL: https://wisprflow.ai/developers
@@ -129,8 +127,8 @@ apis:
   - Connectors
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-connectors-api-openapi.yml
-- aid: wispr-ai:wispr-ai-cost-centers-api
+    url: openapi/wisprflow-ai-connectors-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-cost-centers-api
   name: Wispr AI Cost Centers API
   description: The Cost Centers API from Wispr AI — 4 operation(s) for cost centers.
   humanURL: https://wisprflow.ai/developers
@@ -139,20 +137,18 @@ apis:
   - Cost Centers
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-cost-centers-api-openapi.yml
-- aid: wispr-ai:wispr-ai-dash-api
+    url: openapi/wisprflow-ai-cost-centers-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-dash-api
   name: Wispr AI Dash API
   description: The Dash API from Wispr AI — 7 operation(s) for dash.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
   - Dash
-  tags_raw:
-  - Dash
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-dash-api-openapi.yml
-- aid: wispr-ai:wispr-ai-dictionary-api
+    url: openapi/wisprflow-ai-dash-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-dictionary-api
   name: Wispr AI Dictionary API
   description: The Dictionary API from Wispr AI — 5 operation(s) for dictionary.
   humanURL: https://wisprflow.ai/developers
@@ -161,8 +157,8 @@ apis:
   - Dictionary
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-dictionary-api-openapi.yml
-- aid: wispr-ai:wispr-ai-enterpret-api
+    url: openapi/wisprflow-ai-dictionary-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-enterpret-api
   name: Wispr AI Enterpret API
   description: The Enterpret API from Wispr AI — 1 operation(s) for enterpret.
   humanURL: https://wisprflow.ai/developers
@@ -171,8 +167,8 @@ apis:
   - Enterpret
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-enterpret-api-openapi.yml
-- aid: wispr-ai:wispr-ai-enterprise-api
+    url: openapi/wisprflow-ai-enterpret-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-enterprise-api
   name: Wispr AI Enterprise API
   description: The Enterprise API from Wispr AI — 41 operation(s) for enterprise.
   humanURL: https://wisprflow.ai/developers
@@ -181,8 +177,8 @@ apis:
   - Enterprise
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-enterprise-api-openapi.yml
-- aid: wispr-ai:wispr-ai-geo-api
+    url: openapi/wisprflow-ai-enterprise-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-geo-api
   name: Wispr AI Geo API
   description: The Geo API from Wispr AI — 3 operation(s) for geo.
   humanURL: https://wisprflow.ai/developers
@@ -191,8 +187,8 @@ apis:
   - Geo
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-geo-api-openapi.yml
-- aid: wispr-ai:wispr-ai-history-api
+    url: openapi/wisprflow-ai-geo-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-history-api
   name: Wispr AI History API
   description: The History API from Wispr AI — 8 operation(s) for history.
   humanURL: https://wisprflow.ai/developers
@@ -201,8 +197,8 @@ apis:
   - History
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-history-api-openapi.yml
-- aid: wispr-ai:wispr-ai-incidents-api
+    url: openapi/wisprflow-ai-history-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-incidents-api
   name: Wispr AI Incidents API
   description: The Incidents API from Wispr AI — 1 operation(s) for incidents.
   humanURL: https://wisprflow.ai/developers
@@ -211,8 +207,8 @@ apis:
   - Incidents
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-incidents-api-openapi.yml
-- aid: wispr-ai:wispr-ai-insights-api
+    url: openapi/wisprflow-ai-incidents-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-insights-api
   name: Wispr AI Insights API
   description: The Insights API from Wispr AI — 3 operation(s) for insights.
   humanURL: https://wisprflow.ai/developers
@@ -221,9 +217,9 @@ apis:
   - Insights
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-insights-api-openapi.yml
-- aid: wispr-ai:wispr-ai-instructhistory-api
-  name: Wispr AI InstructHistory API
+    url: openapi/wisprflow-ai-insights-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-instructhistory-api
+  name: Wispr AI Instruct History API
   description: The InstructHistory API from Wispr AI — 1 operation(s) for instructhistory.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
@@ -231,8 +227,8 @@ apis:
   - InstructHistory
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-instructhistory-api-openapi.yml
-- aid: wispr-ai:wispr-ai-internal-api
+    url: openapi/wisprflow-ai-instructhistory-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-internal-api
   name: Wispr AI Internal API
   description: The Internal API from Wispr AI — 69 operation(s) for internal.
   humanURL: https://wisprflow.ai/developers
@@ -241,8 +237,8 @@ apis:
   - Internal
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-internal-api-openapi.yml
-- aid: wispr-ai:wispr-ai-internal-marketing-api
+    url: openapi/wisprflow-ai-internal-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-internal-marketing-api
   name: Wispr AI Internal Marketing API
   description: The Internal Marketing API from Wispr AI — 6 operation(s) for internal marketing.
   humanURL: https://wisprflow.ai/developers
@@ -251,19 +247,28 @@ apis:
   - Internal Marketing
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-internal-marketing-api-openapi.yml
-- aid: wispr-ai:wispr-ai-keyboard-telemetry-api
-  name: Wispr AI keyboard_telemetry API
+    url: openapi/wisprflow-ai-internal-marketing-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-keyboard-telemetry-api
+  name: Wispr AI Keyboard Telemetry API
   description: The keyboard_telemetry API from Wispr AI — 1 operation(s) for keyboard_telemetry.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
-  tags: []
-  tags_raw:
+  tags:
   - keyboard_telemetry
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-keyboard-telemetry-api-openapi.yml
-- aid: wispr-ai:wispr-ai-llm-api
+    url: openapi/wisprflow-ai-keyboard-telemetry-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-linked-in-api
+  name: Wispr AI Linked In API
+  description: The Linked In API from Wispr AI — 3 operation(s) for linked in.
+  humanURL: https://wisprflow.ai/developers
+  baseURL: https://api.wisprflow.ai
+  tags:
+  - Linked In
+  properties:
+  - type: OpenAPI
+    url: openapi/wisprflow-ai-linked-in-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-llm-api
   name: Wispr AI LLM API
   description: The LLM API from Wispr AI — 20 operation(s) for llm.
   humanURL: https://wisprflow.ai/developers
@@ -272,8 +277,8 @@ apis:
   - LLM
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-llm-api-openapi.yml
-- aid: wispr-ai:wispr-ai-marketing-api
+    url: openapi/wisprflow-ai-llm-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-marketing-api
   name: Wispr AI Marketing API
   description: The Marketing API from Wispr AI — 6 operation(s) for marketing.
   humanURL: https://wisprflow.ai/developers
@@ -282,8 +287,8 @@ apis:
   - Marketing
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-marketing-api-openapi.yml
-- aid: wispr-ai:wispr-ai-meeting-share-api
+    url: openapi/wisprflow-ai-marketing-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-meeting-share-api
   name: Wispr AI Meeting Share API
   description: The Meeting Share API from Wispr AI — 7 operation(s) for meeting share.
   humanURL: https://wisprflow.ai/developers
@@ -292,8 +297,8 @@ apis:
   - Meeting Share
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-meeting-share-api-openapi.yml
-- aid: wispr-ai:wispr-ai-meetings-api
+    url: openapi/wisprflow-ai-meeting-share-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-meetings-api
   name: Wispr AI Meetings API
   description: The Meetings API from Wispr AI — 7 operation(s) for meetings.
   humanURL: https://wisprflow.ai/developers
@@ -302,20 +307,18 @@ apis:
   - Meetings
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-meetings-api-openapi.yml
-- aid: wispr-ai:wispr-ai-memory-api
-  name: Wispr AI memory API
+    url: openapi/wisprflow-ai-meetings-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-memory-api
+  name: Wispr AI Memory API
   description: The memory API from Wispr AI — 5 operation(s) for memory.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
-  - Memory
-  tags_raw:
   - memory
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-memory-api-openapi.yml
-- aid: wispr-ai:wispr-ai-notes-api
+    url: openapi/wisprflow-ai-memory-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-notes-api
   name: Wispr AI Notes API
   description: The Notes API from Wispr AI — 1 operation(s) for notes.
   humanURL: https://wisprflow.ai/developers
@@ -324,8 +327,8 @@ apis:
   - Notes
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-notes-api-openapi.yml
-- aid: wispr-ai:wispr-ai-notetaker-chats-api
+    url: openapi/wisprflow-ai-notes-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-notetaker-chats-api
   name: Wispr AI Notetaker Chats API
   description: The Notetaker Chats API from Wispr AI — 4 operation(s) for notetaker chats.
   humanURL: https://wisprflow.ai/developers
@@ -334,8 +337,8 @@ apis:
   - Notetaker Chats
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-notetaker-chats-api-openapi.yml
-- aid: wispr-ai:wispr-ai-notification-api
+    url: openapi/wisprflow-ai-notetaker-chats-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-notification-api
   name: Wispr AI Notification API
   description: The Notification API from Wispr AI — 8 operation(s) for notification.
   humanURL: https://wisprflow.ai/developers
@@ -344,8 +347,8 @@ apis:
   - Notification
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-notification-api-openapi.yml
-- aid: wispr-ai:wispr-ai-payments-api
+    url: openapi/wisprflow-ai-notification-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-payments-api
   name: Wispr AI Payments API
   description: The Payments API from Wispr AI — 22 operation(s) for payments.
   humanURL: https://wisprflow.ai/developers
@@ -354,8 +357,8 @@ apis:
   - Payments
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-payments-api-openapi.yml
-- aid: wispr-ai:wispr-ai-platform-api
+    url: openapi/wisprflow-ai-payments-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-platform-api
   name: Wispr AI Platform API
   description: The Platform API from Wispr AI — 12 operation(s) for platform.
   humanURL: https://wisprflow.ai/developers
@@ -364,8 +367,8 @@ apis:
   - Platform
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-platform-api-openapi.yml
-- aid: wispr-ai:wispr-ai-polish-api
+    url: openapi/wisprflow-ai-platform-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-polish-api
   name: Wispr AI Polish API
   description: The Polish API from Wispr AI — 1 operation(s) for polish.
   humanURL: https://wisprflow.ai/developers
@@ -374,8 +377,8 @@ apis:
   - Polish
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-polish-api-openapi.yml
-- aid: wispr-ai:wispr-ai-promotions-api
+    url: openapi/wisprflow-ai-polish-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-promotions-api
   name: Wispr AI Promotions API
   description: The Promotions API from Wispr AI — 6 operation(s) for promotions.
   humanURL: https://wisprflow.ai/developers
@@ -384,21 +387,19 @@ apis:
   - Promotions
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-promotions-api-openapi.yml
-- aid: wispr-ai:wispr-ai-referral-api
+    url: openapi/wisprflow-ai-promotions-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-referral-api
   name: Wispr AI Referral API
   description: The Referral API from Wispr AI — 9 operation(s) for referral.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
-  - Referrals
-  tags_raw:
   - Referral
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-referral-api-openapi.yml
-- aid: wispr-ai:wispr-ai-sandbox-user-api
-  name: Wispr AI sandbox-user API
+    url: openapi/wisprflow-ai-referral-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-sandbox-user-api
+  name: Wispr AI Sandbox User API
   description: The sandbox-user API from Wispr AI — 2 operation(s) for sandbox-user.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
@@ -406,8 +407,8 @@ apis:
   - sandbox-user
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-sandbox-user-api-openapi.yml
-- aid: wispr-ai:wispr-ai-sms-api
+    url: openapi/wisprflow-ai-sandbox-user-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-sms-api
   name: Wispr AI SMS API
   description: The SMS API from Wispr AI — 2 operation(s) for sms.
   humanURL: https://wisprflow.ai/developers
@@ -416,8 +417,8 @@ apis:
   - SMS
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-sms-api-openapi.yml
-- aid: wispr-ai:wispr-ai-support-api
+    url: openapi/wisprflow-ai-sms-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-support-api
   name: Wispr AI Support API
   description: The Support API from Wispr AI — 16 operation(s) for support.
   humanURL: https://wisprflow.ai/developers
@@ -426,8 +427,8 @@ apis:
   - Support
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-support-api-openapi.yml
-- aid: wispr-ai:wispr-ai-sync-api
+    url: openapi/wisprflow-ai-support-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-sync-api
   name: Wispr AI Sync API
   description: The Sync API from Wispr AI — 1 operation(s) for sync.
   humanURL: https://wisprflow.ai/developers
@@ -436,8 +437,8 @@ apis:
   - Sync
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-sync-api-openapi.yml
-- aid: wispr-ai:wispr-ai-sync-ws-api
+    url: openapi/wisprflow-ai-sync-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-sync-ws-api
   name: Wispr AI Sync WS API
   description: The Sync WS API from Wispr AI — 3 operation(s) for sync ws.
   humanURL: https://wisprflow.ai/developers
@@ -446,8 +447,8 @@ apis:
   - Sync WS
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-sync-ws-api-openapi.yml
-- aid: wispr-ai:wispr-ai-team-insights-api
+    url: openapi/wisprflow-ai-sync-ws-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-team-insights-api
   name: Wispr AI Team Insights API
   description: The Team Insights API from Wispr AI — 7 operation(s) for team insights.
   humanURL: https://wisprflow.ai/developers
@@ -456,20 +457,28 @@ apis:
   - Team Insights
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-team-insights-api-openapi.yml
-- aid: wispr-ai:wispr-ai-teams-api
+    url: openapi/wisprflow-ai-team-insights-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-teams-api
   name: Wispr AI Teams API
   description: The Teams API from Wispr AI — 8 operation(s) for teams.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
-  - Team
-  tags_raw:
   - Teams
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-teams-api-openapi.yml
-- aid: wispr-ai:wispr-ai-tracking-api
+    url: openapi/wisprflow-ai-teams-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-to-dos-api
+  name: Wispr AI To Dos API
+  description: The To Dos API from Wispr AI — 1 operation(s) for to dos.
+  humanURL: https://wisprflow.ai/developers
+  baseURL: https://api.wisprflow.ai
+  tags:
+  - To Dos
+  properties:
+  - type: OpenAPI
+    url: openapi/wisprflow-ai-to-dos-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-tracking-api
   name: Wispr AI Tracking API
   description: The Tracking API from Wispr AI — 1 operation(s) for tracking.
   humanURL: https://wisprflow.ai/developers
@@ -478,20 +487,18 @@ apis:
   - Tracking
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-tracking-api-openapi.yml
-- aid: wispr-ai:wispr-ai-transform-api
+    url: openapi/wisprflow-ai-tracking-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-transform-api
   name: Wispr AI Transform API
   description: The Transform API from Wispr AI — 8 operation(s) for transform.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
-  - Transforms
-  tags_raw:
   - Transform
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-transform-api-openapi.yml
-- aid: wispr-ai:wispr-ai-typing-test-api
+    url: openapi/wisprflow-ai-transform-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-typing-test-api
   name: Wispr AI Typing Test API
   description: The Typing Test API from Wispr AI — 3 operation(s) for typing test.
   humanURL: https://wisprflow.ai/developers
@@ -500,8 +507,8 @@ apis:
   - Typing Test
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-typing-test-api-openapi.yml
-- aid: wispr-ai:wispr-ai-user-context-api
+    url: openapi/wisprflow-ai-typing-test-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-user-context-api
   name: Wispr AI User Context API
   description: The User Context API from Wispr AI — 1 operation(s) for user context.
   humanURL: https://wisprflow.ai/developers
@@ -510,8 +517,8 @@ apis:
   - User Context
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-user-context-api-openapi.yml
-- aid: wispr-ai:wispr-ai-user-management-api
+    url: openapi/wisprflow-ai-user-context-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-user-management-api
   name: Wispr AI User Management API
   description: The User Management API from Wispr AI — 17 operation(s) for user management.
   humanURL: https://wisprflow.ai/developers
@@ -520,8 +527,8 @@ apis:
   - User Management
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-user-management-api-openapi.yml
-- aid: wispr-ai:wispr-ai-user-voice-preferences-api
+    url: openapi/wisprflow-ai-user-management-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-user-voice-preferences-api
   name: Wispr AI User Voice Preferences API
   description: >-
     The User Voice Preferences API from Wispr AI — 2 operation(s) for user voice preferences.
@@ -531,8 +538,8 @@ apis:
   - User Voice Preferences
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-user-voice-preferences-api-openapi.yml
-- aid: wispr-ai:wispr-ai-voice-actions-api
+    url: openapi/wisprflow-ai-user-voice-preferences-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-voice-actions-api
   name: Wispr AI Voice Actions API
   description: The Voice Actions API from Wispr AI — 2 operation(s) for voice actions.
   humanURL: https://wisprflow.ai/developers
@@ -541,8 +548,8 @@ apis:
   - Voice Actions
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-voice-actions-api-openapi.yml
-- aid: wispr-ai:wispr-ai-wispr-backend-api
+    url: openapi/wisprflow-ai-voice-actions-api-openapi.yml
+- aid: wisprflow-ai:wisprflow-ai-wispr-backend-api
   name: Wispr AI Wispr Backend API
   description: The Wispr Backend API from Wispr AI — 1 operation(s) for wispr backend.
   humanURL: https://wisprflow.ai/developers
@@ -551,31 +558,7 @@ apis:
   - Wispr Backend
   properties:
   - type: OpenAPI
-    url: openapi/wispr-ai-wispr-backend-api-openapi.yml
-- aid: wispr-ai:wispr-ai-linked-in-api
-  name: Wispr AI Linked In API
-  description: The Linked In API from Wispr AI — 3 operation(s) for linked in.
-  humanURL: https://wisprflow.ai/developers
-  baseURL: https://api.wisprflow.ai
-  tags:
-  - LinkedIn
-  tags_raw:
-  - Linked In
-  properties:
-  - type: OpenAPI
-    url: openapi/wispr-ai-linked-in-api-openapi.yml
-- aid: wispr-ai:wispr-ai-to-dos-api
-  name: Wispr AI To Dos API
-  description: The To Dos API from Wispr AI — 1 operation(s) for to dos.
-  humanURL: https://wisprflow.ai/developers
-  baseURL: https://api.wisprflow.ai
-  tags:
-  - To-Dos
-  tags_raw:
-  - To Dos
-  properties:
-  - type: OpenAPI
-    url: openapi/wispr-ai-to-dos-api-openapi.yml
+    url: openapi/wisprflow-ai-wispr-backend-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
