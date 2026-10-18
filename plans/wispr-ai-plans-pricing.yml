@@ -71,7 +71,7 @@ rate_limit_statements:
 - Free accounts have a weekly meeting limit
 - Quick recordings under five minutes don't count toward your limit
 x-canonical:
-  generated: '2026-10-08'
+  generated: '2026-10-18'
   vocabulary: all/0-working/economics/plans-canonical.yml
   models:
   - free
@@ -79,6 +79,54 @@ x-canonical:
   units:
   - seat
   plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Pro (monthly)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Pro (annual)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Growth (monthly)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Growth (annual)
+    access: other
+    model: seat
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - month
+  - name: Enterprise
+    access: other
+    model: unstated
+    model_how: derived
+    units:
+    - seat
+    periods:
+    - none
   - name: Free
     access: other
     model: free
