@@ -104,6 +104,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - Automation
+  tags_raw:
   - Automations
   properties:
   - type: OpenAPI
@@ -154,6 +156,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - Dictionaries
+  tags_raw:
   - Dictionary
   properties:
   - type: OpenAPI
@@ -253,7 +257,8 @@ apis:
   description: The keyboard_telemetry API from Wispr AI — 1 operation(s) for keyboard_telemetry.
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
-  tags:
+  tags: []
+  tags_raw:
   - keyboard_telemetry
   properties:
   - type: OpenAPI
@@ -264,6 +269,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - LinkedIn
+  tags_raw:
   - Linked In
   properties:
   - type: OpenAPI
@@ -314,6 +321,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - Memory
+  tags_raw:
   - memory
   properties:
   - type: OpenAPI
@@ -394,6 +403,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - Referrals
+  tags_raw:
   - Referral
   properties:
   - type: OpenAPI
@@ -464,6 +475,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - Team
+  tags_raw:
   - Teams
   properties:
   - type: OpenAPI
@@ -474,6 +487,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - To-Dos
+  tags_raw:
   - To Dos
   properties:
   - type: OpenAPI
@@ -494,6 +509,8 @@ apis:
   humanURL: https://wisprflow.ai/developers
   baseURL: https://api.wisprflow.ai
   tags:
+  - Transforms
+  tags_raw:
   - Transform
   properties:
   - type: OpenAPI
