@@ -9,129 +9,132 @@ artifacts:
   capabilities/wispr-ai-capability-edges.yml:
     method: unknown
     evidence: no authorship recorded
+  capabilities/wisprflow-ai-capability-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/wispr-ai-changelog.yml:
     method: searched
     evidence: declared in the artifact
   collections/wispr-ai-analytics-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-analytics-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-analytics-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-analytics-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-analytics-registry-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-analytics-registry-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-analytics-registry-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-analytics-registry-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-attribution-tracking-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-attribution-tracking-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-attribution-tracking-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-attribution-tracking-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-authentication-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-authentication-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-authentication-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-authentication-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-automations-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-automations-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-automations-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-automations-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-calendar-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-calendar-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-calendar-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-calendar-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-connectors-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-connectors-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-connectors-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-connectors-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-cost-centers-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-cost-centers-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-cost-centers-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-cost-centers-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-dash-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-dash-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-dash-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-dash-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-dictionary-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-dictionary-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-dictionary-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-dictionary-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-enterpret-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-enterpret-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-enterpret-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-enterpret-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-enterprise-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-enterprise-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-enterprise-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-enterprise-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-geo-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-geo-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-geo-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-geo-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-history-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-history-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-history-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-history-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-incidents-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-incidents-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-incidents-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-incidents-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-insights-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-insights-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-insights-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-insights-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-instructhistory-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-instructhistory-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-instructhistory-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-instructhistory-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-internal-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-internal-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-internal-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-internal-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-internal-marketing-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-internal-marketing-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-internal-marketing-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-internal-marketing-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-keyboard-telemetry-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-keyboard-telemetry-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-keyboard-telemetry-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-keyboard-telemetry-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-linkedin-api.opencollection.json:
     method: unknown
     evidence: no authorship recorded
@@ -139,125 +142,125 @@ artifacts:
     method: unknown
     evidence: no authorship recorded
   collections/wispr-ai-llm-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-llm-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-llm-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-llm-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-marketing-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-marketing-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-marketing-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-marketing-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-meeting-share-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-meeting-share-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-meeting-share-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-meeting-share-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-meetings-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-meetings-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-meetings-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-meetings-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-memory-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-memory-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-memory-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-memory-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-notes-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-notes-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-notes-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-notes-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-notetaker-chats-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-notetaker-chats-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-notetaker-chats-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-notetaker-chats-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-notification-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-notification-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-notification-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-notification-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-payments-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-payments-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-payments-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-payments-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-platform-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-platform-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-platform-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-platform-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-polish-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-polish-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-polish-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-polish-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-promotions-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-promotions-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-promotions-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-promotions-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-referral-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-referral-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-referral-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-referral-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-sandbox-user-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-sandbox-user-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-sandbox-user-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-sandbox-user-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-sms-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-sms-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-sms-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-sms-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-support-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-support-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-support-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-support-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-sync-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-sync-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-sync-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-sync-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-sync-ws-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-sync-ws-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-sync-ws-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-sync-ws-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-team-insights-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-team-insights-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-team-insights-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-team-insights-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-teams-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-teams-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-teams-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-teams-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-todos-api.opencollection.json:
     method: unknown
     evidence: no authorship recorded
@@ -265,53 +268,53 @@ artifacts:
     method: unknown
     evidence: no authorship recorded
   collections/wispr-ai-tracking-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-tracking-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-tracking-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-tracking-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-transform-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-transform-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-transform-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-transform-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-typing-test-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-typing-test-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-typing-test-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-typing-test-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-user-context-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-user-context-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-user-context-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-user-context-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-user-management-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-user-management-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-user-management-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-user-management-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-user-voice-preferences-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-user-voice-preferences-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-user-voice-preferences-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-user-voice-preferences-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-voice-actions-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-voice-actions-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-voice-actions-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-voice-actions-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-wispr-backend-api.opencollection.json:
-    method: derived
-    evidence: openapi/wispr-ai-wispr-backend-api
+    method: unknown
+    evidence: no authorship recorded
   collections/wispr-ai-wispr-backend-api.postman_collection.json:
-    method: derived
-    evidence: openapi/wispr-ai-wispr-backend-api
+    method: unknown
+    evidence: no authorship recorded
   conformance/wispr-ai-conformance.yml:
     method: searched
     evidence: declared in the artifact
@@ -330,124 +333,10 @@ artifacts:
   kin/checks-2026-09-24T064009.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T125852.yml:
+  kin/checks-2026-10-03T024842.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T133943.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T143147.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-25T154045.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-26T215308.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T094438.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T103455.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T123021.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T132314.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-27T140727.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-28T221322.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T213958.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-29T230545.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T203505.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-30T220315.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-08-31T223420.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T063623.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T210448.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-01T222808.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-02T224043.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T161828.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-03T174231.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T062714.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T212454.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-04T224856.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T055819.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T072335.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T144739.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T195450.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T211839.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T011047.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T224210.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T200636.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T213054.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T214843.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T232836.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T204815.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -516,7 +405,34 @@ artifacts:
   kin/score-2026-09-21T233935.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-22T213221.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-23T000603.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-24T064009.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-24T090406.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-24T161608.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   lifecycle/wispr-ai-lifecycle.yml:
@@ -528,164 +444,770 @@ artifacts:
   mcp/wispr-ai-mcp.yml:
     method: derived
     evidence: declared in the artifact
+  openapi/_original/wispr-ai-analytics-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-analytics-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-analytics-registry-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-analytics-registry-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-attribution-tracking-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-attribution-tracking-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-authentication-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-authentication-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-automations-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-automations-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
   openapi/_original/wispr-ai-backend-openapi-original.json:
     method: harvested
     evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
       to the provider's source is unverified
-  openapi/wispr-ai-analytics-api-openapi.yml:
+  openapi/_original/wispr-ai-calendar-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-calendar-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-connectors-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-connectors-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-cost-centers-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-cost-centers-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-dash-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-dash-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-dictionary-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-dictionary-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-enterpret-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-enterpret-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-enterprise-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-enterprise-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-geo-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-geo-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-history-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-history-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-incidents-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-incidents-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-insights-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-insights-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-instructhistory-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-instructhistory-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-internal-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-internal-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-internal-marketing-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-internal-marketing-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-keyboard-telemetry-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-keyboard-telemetry-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-linked-in-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-linked-in-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-llm-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-llm-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-marketing-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-marketing-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-meeting-share-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-meeting-share-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-meetings-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-meetings-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-memory-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-memory-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-notes-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-notes-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-notetaker-chats-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-notetaker-chats-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-notification-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-notification-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-payments-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-payments-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-platform-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-platform-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-polish-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-polish-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-promotions-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-promotions-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-referral-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-referral-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-sandbox-user-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-sandbox-user-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-sms-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-sms-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-support-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-support-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-sync-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-sync-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-sync-ws-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-sync-ws-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-team-insights-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-team-insights-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-teams-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-teams-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-to-dos-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-to-dos-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-tracking-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-tracking-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-transform-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-transform-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-typing-test-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-typing-test-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-user-context-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-user-context-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-user-management-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-user-management-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-user-voice-preferences-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-user-voice-preferences-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-voice-actions-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-voice-actions-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-wispr-backend-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wispr-ai-wispr-backend-api-openapi_2.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-analytics-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-analytics-registry-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-attribution-tracking-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-authentication-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-automations-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-calendar-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-connectors-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-cost-centers-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-dash-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-dictionary-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-enterpret-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-enterprise-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-geo-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-history-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-incidents-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-insights-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-instructhistory-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-internal-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-internal-marketing-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-keyboard-telemetry-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-linked-in-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-llm-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-marketing-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-meeting-share-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-meetings-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-memory-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-notes-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-notetaker-chats-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-notification-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-payments-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-platform-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-polish-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-promotions-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-referral-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-sandbox-user-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-sms-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-support-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-sync-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-sync-ws-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-team-insights-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-teams-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-to-dos-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-tracking-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-transform-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-typing-test-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-user-context-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-user-management-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-user-voice-preferences-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-voice-actions-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/_original/wisprflow-ai-wispr-backend-api-openapi.yml:
+    method: harvested
+    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
+      to the provider's source is unverified
+  openapi/wisprflow-ai-analytics-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-analytics-registry-api-openapi.yml:
+  openapi/wisprflow-ai-analytics-registry-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-attribution-tracking-api-openapi.yml:
+  openapi/wisprflow-ai-attribution-tracking-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-authentication-api-openapi.yml:
+  openapi/wisprflow-ai-authentication-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-automations-api-openapi.yml:
+  openapi/wisprflow-ai-automations-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-calendar-api-openapi.yml:
+  openapi/wisprflow-ai-calendar-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-connectors-api-openapi.yml:
+  openapi/wisprflow-ai-connectors-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-cost-centers-api-openapi.yml:
+  openapi/wisprflow-ai-cost-centers-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-dash-api-openapi.yml:
+  openapi/wisprflow-ai-dash-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-dictionary-api-openapi.yml:
+  openapi/wisprflow-ai-dictionary-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-enterpret-api-openapi.yml:
+  openapi/wisprflow-ai-enterpret-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-enterprise-api-openapi.yml:
+  openapi/wisprflow-ai-enterprise-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-geo-api-openapi.yml:
+  openapi/wisprflow-ai-geo-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-history-api-openapi.yml:
+  openapi/wisprflow-ai-history-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-incidents-api-openapi.yml:
+  openapi/wisprflow-ai-incidents-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-insights-api-openapi.yml:
+  openapi/wisprflow-ai-insights-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-instructhistory-api-openapi.yml:
+  openapi/wisprflow-ai-instructhistory-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-internal-api-openapi.yml:
+  openapi/wisprflow-ai-internal-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-internal-marketing-api-openapi.yml:
+  openapi/wisprflow-ai-internal-marketing-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-keyboard-telemetry-api-openapi.yml:
+  openapi/wisprflow-ai-keyboard-telemetry-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-linked-in-api-openapi.yml:
+  openapi/wisprflow-ai-linked-in-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-llm-api-openapi.yml:
+  openapi/wisprflow-ai-llm-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-marketing-api-openapi.yml:
+  openapi/wisprflow-ai-marketing-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-meeting-share-api-openapi.yml:
+  openapi/wisprflow-ai-meeting-share-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-meetings-api-openapi.yml:
+  openapi/wisprflow-ai-meetings-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-memory-api-openapi.yml:
+  openapi/wisprflow-ai-memory-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-notes-api-openapi.yml:
+  openapi/wisprflow-ai-notes-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-notetaker-chats-api-openapi.yml:
+  openapi/wisprflow-ai-notetaker-chats-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-notification-api-openapi.yml:
+  openapi/wisprflow-ai-notification-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-payments-api-openapi.yml:
+  openapi/wisprflow-ai-payments-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-platform-api-openapi.yml:
+  openapi/wisprflow-ai-platform-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-polish-api-openapi.yml:
+  openapi/wisprflow-ai-polish-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-promotions-api-openapi.yml:
+  openapi/wisprflow-ai-promotions-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-referral-api-openapi.yml:
+  openapi/wisprflow-ai-referral-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-sandbox-user-api-openapi.yml:
+  openapi/wisprflow-ai-sandbox-user-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-sms-api-openapi.yml:
+  openapi/wisprflow-ai-sms-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-support-api-openapi.yml:
+  openapi/wisprflow-ai-support-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-sync-api-openapi.yml:
+  openapi/wisprflow-ai-sync-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-sync-ws-api-openapi.yml:
+  openapi/wisprflow-ai-sync-ws-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-team-insights-api-openapi.yml:
+  openapi/wisprflow-ai-team-insights-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-teams-api-openapi.yml:
+  openapi/wisprflow-ai-teams-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-to-dos-api-openapi.yml:
+  openapi/wisprflow-ai-to-dos-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-tracking-api-openapi.yml:
+  openapi/wisprflow-ai-tracking-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-transform-api-openapi.yml:
+  openapi/wisprflow-ai-transform-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-typing-test-api-openapi.yml:
+  openapi/wisprflow-ai-typing-test-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-user-context-api-openapi.yml:
+  openapi/wisprflow-ai-user-context-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-user-management-api-openapi.yml:
+  openapi/wisprflow-ai-user-management-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-user-voice-preferences-api-openapi.yml:
+  openapi/wisprflow-ai-user-voice-preferences-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-voice-actions-api-openapi.yml:
+  openapi/wisprflow-ai-voice-actions-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
-  openapi/wispr-ai-wispr-backend-api-openapi.yml:
+  openapi/wisprflow-ai-wispr-backend-api-openapi.yml:
     method: derived
     evidence: paths are a subset of openapi/_original/ (split from the harvested spec)
   overlays/wispr-ai-backend-overlay.yaml:
-    method: unknown
-    evidence: no authorship recorded
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   packages/wispr-ai-packages.yml:
+    method: searched
+    evidence: declared in the artifact
+  plans/wispr-ai-plans-pricing.yml:
+    method: searched
+    evidence: declared in the artifact
+  plans/wisprflow-ai-plans-pricing.yml:
     method: searched
     evidence: declared in the artifact
   security/wispr-ai-domain-security.yml:
